@@ -1,431 +1,919 @@
 [
   {
-    "id": 1,
-    "channel_number": "01",
-    "name": "Alfold TV (1080p)",
-    "tvg_id": "AlfoldTV.hu@SD",
-    "logo": "https://i.imgur.com/W6jg8iM.png",
-    "group": "Szórakozás",
-    "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream006.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",BBC Earth Hungary",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fbbce_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/nGSsUd4.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "BBCEarth.uk@Hungary"
   },
   {
-    "id": 2,
-    "channel_number": "02",
-    "name": "Love Nature HD (1080p)",
-    "tvg_id": "LoveNature.ca@HD",
-    "logo": "https://tv.lovenature.com/wp-content/uploads/2024/10/LoveNature2024_Logo_full_colour-copy.png",
-    "group": "Szabadidő & Vadászat/Halászat",
-    "url": "https://mumbai-edge.smartplaytv.in/LoveNature/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",History (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fhistory_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/OWIK7FJ.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "History.hu@SD"
   },
   {
-    "id": 3,
-    "channel_number": "03",
-    "name": "7.TV (360p)",
-    "tvg_id": "7TV.hu@SD",
-    "logo": "https://i.imgur.com/CnUhAlK.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://stream.y5.hu/stream/stream_bekescsaba/stream.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "Investigation Discovery (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fid_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/InvestigationDiscoveryLogo2020.svg/960px-InvestigationDiscoveryLogo2020.svg.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "InvestigationDiscovery.hu@SD"
   },
   {
-    "id": 4,
-    "channel_number": "04",
-    "name": "Euronews Hungarian (720p)",
-    "tvg_id": "EuronewsHungarian.fr@SD",
-    "logo": "https://i.imgur.com/8t9mdg9.png",
-    "group": "Hírek",
-    "url": "https://cdn-euronews.akamaized.net/live/eds/euronews-hu/25075/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",National Geographic (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fngc_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Natgeologo.svg/960px-Natgeologo.svg.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "NationalGeographic.hu@SD"
   },
   {
-    "id": 5,
-    "channel_number": "05",
-    "name": "Galaxy4",
-    "tvg_id": "Galaxy4.hu@SD",
-    "logo": "https://i.imgur.com/fTG99xh.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://budapest-cache-1.antik.sk/live/test_galaxy_4_atk_1200/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",National Geographic Wild (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fngw_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/National_Geographic_Wild_logo.svg/960px-National_Geographic_Wild_logo.svg.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "NationalGeographicWild.hu@SD"
   },
   {
-    "id": 6,
-    "channel_number": "06",
-    "name": "RTL Gold (Hungary)",
-    "tvg_id": "RTLGold.hu@SD",
-    "logo": "https://i.imgur.com/PwbLDUQ.png",
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Spektrum (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fspektrum_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/GmFRQ82.png",
+    "group": "Dokumentum & Természet",
+    "tvg_id": "Spektrum.hu@SD"
+  },
+  {
+    "name": "Animal Planet (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fanimal_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://static.wikia.nocookie.net/logopedia/images/3/30/Animal_Planet_2018_II.svg/revision/latest?cb=20191206182106",
     "group": "Egyéb / Tematikus",
-    "url": "https://budapest-cache-1.antik.sk/live/test_film_plus_2_hungary_1200_atk/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "AnimalPlanet.hu@SD"
   },
   {
-    "id": 7,
-    "channel_number": "07",
-    "name": "Berente TV (1080p)",
-    "tvg_id": "BerenteTV.hu@SD",
-    "logo": "https://i.imgur.com/3H3Ct9f.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/BerenteTV/index.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 8,
-    "channel_number": "08",
-    "name": "Kapos TV (1080p)",
-    "tvg_id": "KaposTV.hu@SD",
-    "logo": "https://i.imgur.com/ZMrj2C5.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront63.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 9,
-    "channel_number": "09",
-    "name": "Hevizi TV (1080p)",
-    "tvg_id": "HeviziTV.hu@SD",
-    "logo": "https://i.imgur.com/zuWQKDm.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 10,
-    "channel_number": "10",
-    "name": "Szolnok TV (1080p)",
-    "tvg_id": "SzolnokTV.hu@SD",
-    "logo": "https://i.imgur.com/Eiab9MP.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/livestream004.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 11,
-    "channel_number": "11",
-    "name": "Tatai TV (1080p)",
-    "tvg_id": "TataiTV.hu@SD",
-    "logo": "https://i.imgur.com/skXYntc.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast006.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 12,
-    "channel_number": "12",
-    "name": "City TV (Hungary)",
-    "tvg_id": "CityTV.hu@SD",
-    "logo": "https://i.imgur.com/u0AKhzj.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://citytv.hu/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 13,
-    "channel_number": "13",
-    "name": "Bajai TV (720p)",
-    "tvg_id": "BajaiTV.hu@SD",
-    "logo": "https://i.imgur.com/cyReGWh.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront41.lexanetwork.com:1344/relay01/livestream002.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 14,
-    "channel_number": "14",
-    "name": "Karcag TV (720p)",
-    "tvg_id": "KarcagTV.hu@SD",
-    "logo": "https://i.imgur.com/QcrVj3Q.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront41.lexanetwork.com:1344/relay03/livestream003.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 15,
-    "channel_number": "15",
-    "name": "Oxygen Music (1080p)",
-    "tvg_id": "OxygenMusic.hu@HD",
-    "logo": "https://oxygenmusic.hu/static/media/logo.png",
-    "group": "Zene",
-    "url": "https://oxygenmusic.hu:2443/hls/oxygenmusic.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 16,
-    "channel_number": "16",
-    "name": "BabyFirst (720p)",
-    "tvg_id": "BabyFirst.us@US",
-    "logo": "https://i.imgur.com/WxLHBwu.png",
-    "group": "Gyermek & Rajzfilm",
-    "url": "https://cdn.fast.jwp.services/v1/channel/1_jB6940Ei_TvhvIHDL/manifest.m3u8",
-    "ua": "",
-    "referrer": ""
-  },
-  {
-    "id": 17,
-    "channel_number": "17",
     "name": "Balaton TV (432p)",
-    "tvg_id": "BalatonTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.iptvservice.eu%2Fhls%2Fbalatontv.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://balatontelevizio.hu/wp-content/uploads/2020/05/balaton_tv_logo.png",
     "group": "Egyéb / Tematikus",
-    "url": "https://stream.iptvservice.eu/hls/balatontv.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "BalatonTV.hu@SD"
   },
   {
-    "id": 18,
-    "channel_number": "18",
-    "name": "Apostol TV (576p)",
-    "tvg_id": "ApostolTV.hu@SD",
-    "logo": "https://i.imgur.com/C43Cc9N.png",
-    "group": "Vallás",
-    "url": "https://live.apostoltv.hu/live/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Prime (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fprime%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/VvZEP4s.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Prime.hu@SD"
   },
   {
-    "id": 19,
-    "channel_number": "19",
-    "name": "EbS (1080p)",
-    "tvg_id": "EbS.be@SD",
-    "logo": "https://i.imgur.com/DIIRPNN.png",
-    "group": "Közélet & Országgyűlés",
-    "url": "https://streams.prd.commavservices.eu/live/ebs/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",RTL (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_rtl_klub_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/ruRshE1.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "RTL.hu@SD"
   },
   {
-    "id": 20,
-    "channel_number": "20",
-    "name": "EbS+ (1080p)",
-    "tvg_id": "EbSPlus.be@SD",
-    "logo": "https://i.imgur.com/7V012zQ.png",
-    "group": "Közélet & Országgyűlés",
-    "url": "https://streams.prd.commavservices.eu/live/ebsplus/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "RTL Gold (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fbudapest-cache-1.antik.sk%2Flive%2Ftest_film_plus_2_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/PwbLDUQ.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "RTLGold.hu@SD"
   },
   {
-    "id": 21,
-    "channel_number": "21",
-    "name": "EWTN/Bonum TV",
-    "tvg_id": "EWTNBonumTV.hu@SD",
-    "logo": "https://i.imgur.com/LdsRz2E.png",
-    "group": "Vallás",
-    "url": "https://dash2.antik.sk/live/ewtn_bonum/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",RTL Harom",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_rtl_plus_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/c4Hhhzs.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "RTLHarom.hu@SD"
   },
   {
-    "id": 22,
-    "channel_number": "22",
-    "name": "16tv Budapest (360p)",
-    "tvg_id": "16tvBudapest.hu@SD",
-    "logo": "https://i.imgur.com/04fCzHl.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/16tv.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",RTL Ketto",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_rtl2_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/IVv0qrI.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "RTLKetto.hu@SD"
   },
   {
-    "id": 23,
-    "channel_number": "23",
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Sorozat+",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_sorozat_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/KsxWZIw.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "SorozatPlus.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.36\",Story4",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_story_4_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F149.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/pJsLyiv.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Story4.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Story4 Czechia",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fstory_4_cze_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/pJsLyiv.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Story4.hu@Czechia"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Super TV2",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_super_tv2_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/JCu1u2v.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "SuperTV2.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",TV2 (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_tv_2_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/TV2_2008.svg/960px-TV2_2008.svg.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "TV2.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",TV2 Sef",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_lichi_tv_atk_tv%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/8GFj3XP.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "TV2Sef.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",TV4 (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_tv_4_hun_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/cjypCfu.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "TV4.hu@SD"
+  },
+  {
+    "name": "Travel Channel (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftravel_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://static.wikia.nocookie.net/logopedia/images/a/a3/Travel_Channel_2D_2014.svg/revision/latest?cb=20180112215118",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "TravelChannel.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Viasat 3",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fviasat3%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/ehx7R3A.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Viasat3.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Viasat 6",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fviasat6%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/kypSbFX.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Viasat6.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Viasat2",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fviasat2%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/lEAhKPa.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Viasat2.hu@SD"
+  },
+  {
     "name": "Zalaegerszegi TV (360p)",
-    "tvg_id": "ZalaegerszegiTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fzegtv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/MLVPf0i.png",
     "group": "Egyéb / Tematikus",
-    "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/zegtv.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "ZalaegerszegiTV.hu@SD"
   },
   {
-    "id": 24,
-    "channel_number": "24",
-    "name": "Budapest Europa Televizio (576p)",
-    "tvg_id": "BudapestEuropaTelevizio.hu@SD",
-    "logo": "https://i.imgur.com/CqqWtzo.png",
-    "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/bpetv.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Zenebutik",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fzenebutik%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/xGUlF78.png",
+    "group": "Egyéb / Tematikus",
+    "tvg_id": "Zenebutik.hu@SD"
   },
   {
-    "id": 25,
-    "channel_number": "25",
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",AMC Europe Hungary",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Famc_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/AMC_logo_2019.svg/960px-AMC_logo_2019.svg.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "AMCEurope.uk@Hungary"
+  },
+  {
+    "name": "AXN Black (United States) Hungary (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F141.94.193.53%3A80%2Faxn_black%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/Peo1QiZ.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "AXNBlack.us@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",AXN CEE",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.15.50%2Flive%2Faxn_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/AXN_logo_%282015%29.svg/960px-AXN_logo_%282015%29.svg.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "AXNCEE.es@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.36\",FILMBOX+ Comedy Magyar (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.15.50%2Flive%2Ftest_filmbox_family_hun_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F149.0.0.0+Safari%2F537.36",
+    "logo": "https://spiintl.com/data/files/kcfinderUploadDir/images/filmboxplus/filmbox%2Bcomedy.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FILMBOXPlusComedy.pl@Magyar"
+  },
+  {
+    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.36\",FILMBOX+ Emotion Hungary (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.15.50%2Flive%2Ftest_filmbox_extra_hd_hun_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F149.0.0.0+Safari%2F537.36",
+    "logo": "https://spiintl.com/data/files/kcfinderUploadDir/images/filmboxplus/filmbox%2Bemotion.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FILMBOXPlusEmotion.pl@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",FILMBOX+ Hits Hungary",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffb_premium_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://spiintl.com/data/files/kcfinderUploadDir/images/filmboxplus/filmbox%2Bhits.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FILMBOXPlusHits.pl@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/149.0.0.0 Safari/537.36\",FILMBOX+ Love & Crime Magyar",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_filmbox_plus_hun_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F149.0.0.0+Safari%2F537.36",
+    "logo": "https://spiintl.com/data/files/kcfinderUploadDir/images/filmboxplus/filmbox%2Blove-and-crime.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FILMBOXPlusLoveCrime.pl@Magyar"
+  },
+  {
+    "name": "FILMBOX+ One Magyar",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffilmbox_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://spiintl.com/data/files/kcfinderUploadDir/images/filmboxplus/filmbox%2Bone.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FILMBOXPlusOne.pl@Magyar"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Film Cafe",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffilm_cafe%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/jaKRnzU.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FilmCafe.hu@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Film+ (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffilm_plus_hun_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/OWqzJyy.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "FilmPlus.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Film4",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffilm4_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/X5N8CHf.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "Film4.hu@SD"
+  },
+  {
+    "name": "MAX4 (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F141.94.193.53%3A80%2FMAX4_HD%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Max4_logo.png/960px-Max4_logo.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "MAX4.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Magyar Mozi TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fmozi%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/cXajs8V.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "MagyarMoziTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Mozi+",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fmozi_plusz%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/LtCnPFJ.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "MoziPlus.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Moziverzum",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fmoziverzum%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/NMifecQ.png",
+    "group": "Filmek & Sorozatok",
+    "tvg_id": "Moziverzum.hu@SD"
+  },
+  {
+    "name": "Food Network (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffn_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Food_Network_New_Logo.png/960px-Food_Network_New_Logo.png",
+    "group": "Gasztronómia",
+    "tvg_id": "FoodNetwork.hu@SD"
+  },
+  {
+    "name": "BabyFirst (720p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcdn.fast.jwp.services%2Fv1%2Fchannel%2F1_jB6940Ei_TvhvIHDL%2Fmanifest.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/WxLHBwu.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "BabyFirst.us@US"
+  },
+  {
+    "name": "Disney Channel (Czech Republic)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.15.50%2Flive%2Ftest_disney%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/3/3d/2022_Disney_Channel_logo.svg",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "DisneyChannel.cz@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Disney Channel (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fdisney_channel_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/aOa73uT.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "DisneyChannel.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",JimJam",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fjim_jam_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/ODhkYyx.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "JimJam.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Kolyokklub",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fkolyokklub_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/K%C3%B6ly%C3%B6kklub_II.svg/1920px-K%C3%B6ly%C3%B6kklub_II.svg.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "Kolyokklub.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Minimax (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fminimax_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/WWOlm1x.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "Minimax.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Nick Jr. (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fnick_junior_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Nick_Jr._logo_2023_(outline).svg/960px-Nick_Jr._logo_2023_(outline).svg.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "NickJr.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Nickelodeon (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_nickelodeon_hu_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/fXs8f6a.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "Nickelodeon.hu@SD"
+  },
+  {
+    "name": "Nicktoons (Czech Republic)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.15.50%2Flive%2Ftest_nicktoons%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Nicktoons_UK_Logo_2014.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "Nicktoons.cz@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Nicktoons (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fnicktoons_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Nicktoons_UK_Logo_2014.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "Nicktoons.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",TV2 Kids",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftv2_kids%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/Zltlezm.png",
+    "group": "Gyermek & Rajzfilm",
+    "tvg_id": "TV2Kids.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",TV2 Comedy",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftv2_comedy%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/B02hbcV.png",
+    "group": "Humor & Vígjáték",
+    "tvg_id": "TV2Comedy.hu@SD"
+  },
+  {
+    "name": "Euronews Hungarian (720p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcdn-euronews.akamaized.net%2Flive%2Feds%2Feuronews-hu%2F25075%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/8t9mdg9.png",
+    "group": "Hírek",
+    "tvg_id": "EuronewsHungarian.fr@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",M1 (Hungary) HD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_m_1_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/r4tgKZK.png",
+    "group": "Hírek",
+    "tvg_id": "M1.hu@HD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Dikh TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fdikh%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/aAcORTL.png",
+    "group": "Kultúra",
+    "tvg_id": "DikhTV.hu@SD"
+  },
+  {
+    "name": "EbS (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstreams.prd.commavservices.eu%2Flive%2Febs%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/DIIRPNN.png",
+    "group": "Közélet & Országgyűlés",
+    "tvg_id": "EbS.be@SD"
+  },
+  {
+    "name": "EbS+ (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstreams.prd.commavservices.eu%2Flive%2Febsplus%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/7V012zQ.png",
+    "group": "Közélet & Országgyűlés",
+    "tvg_id": "EbSPlus.be@SD"
+  },
+  {
+    "name": "Liceum TV (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F193.225.32.62%3A8890%2Flive.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/Hf122ZD.png",
+    "group": "Oktatás",
+    "tvg_id": "LiceumTV.hu@SD"
+  },
+  {
+    "name": "M5 (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_m_5_hun_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/y21wFd0.png",
+    "group": "Oktatás",
+    "tvg_id": "M5.hu@SD"
+  },
+  {
+    "name": "Arena4",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Farena4%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/uAaQDr6.png",
+    "group": "Sport",
+    "tvg_id": "Arena4.hu@SD"
+  },
+  {
+    "name": "Eurosport 1 Hungary",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fesp1_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/olQJgm7.png",
+    "group": "Sport",
+    "tvg_id": "Eurosport1.fr@Hungary"
+  },
+  {
+    "name": "Eurosport 2 Hungary",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fesp2_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/f56dHgR.png",
+    "group": "Sport",
+    "tvg_id": "Eurosport2.fr@Hungary"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",M4 Sport (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fuatlmvixrr%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/TQ4uJZk.png",
+    "group": "Sport",
+    "tvg_id": "M4Sport.hu@SD"
+  },
+  {
+    "name": "Match4 (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F141.94.193.53%3A80%2FMatch4_HD%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/hzexBLX.png",
+    "group": "Sport",
+    "tvg_id": "Match4.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Spiler 1",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fspiler1%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/pbk8c4x.png",
+    "group": "Sport",
+    "tvg_id": "Spiler1.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Spiler 2",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fspiler2%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/1e0VsVH.png",
+    "group": "Sport",
+    "tvg_id": "Spiler2.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Sport 1 (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fsport1_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/X5X3tKC.png",
+    "group": "Sport",
+    "tvg_id": "Sport1.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Sport 2 (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fsport2_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/UxflVoU.png",
+    "group": "Sport",
+    "tvg_id": "Sport2.hu@SD"
+  },
+  {
     "name": "Love Nature (1080p)",
-    "tvg_id": "LoveNature.ca@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Faegis-cloudfront-1.tubi.video%2F6d6d0f24-8445-4b4c-bdf6-44f9e38beaa4%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://tv.lovenature.com/wp-content/uploads/2024/10/LoveNature2024_Logo_full_colour-copy.png",
     "group": "Szabadidő & Vadászat/Halászat",
-    "url": "https://aegis-cloudfront-1.tubi.video/6d6d0f24-8445-4b4c-bdf6-44f9e38beaa4/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "LoveNature.ca@SD"
   },
   {
-    "id": 26,
-    "channel_number": "26",
+    "name": "Love Nature HD (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fmumbai-edge.smartplaytv.in%2FLoveNature%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://tv.lovenature.com/wp-content/uploads/2024/10/LoveNature2024_Logo_full_colour-copy.png",
+    "group": "Szabadidő & Vadászat/Halászat",
+    "tvg_id": "LoveNature.ca@HD"
+  },
+  {
+    "name": "The Fishing & Hunting Channel",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_fishing_hunting%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/KcTTnUA.png",
+    "group": "Szabadidő & Vadászat/Halászat",
+    "tvg_id": "TheFishingHuntingChannel.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",The Fishing & Hunting Channel HD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ffishing_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/KcTTnUA.png",
+    "group": "Szabadidő & Vadászat/Halászat",
+    "tvg_id": "TheFishingHuntingChannel.hu@HD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36 VLC/3.0.18 LibVLC/3.0.18\" http-referrer=\"https://cool-tv.net/\",AXN Spin (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcronos.mangora1.cfd%2Fspyn%2Fusergencs85ja0j1rrnd.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36+VLC%2F3.0.18+LibVLC%2F3.0.18&ref=https%3A%2F%2Fcool-tv.net%2F",
+    "logo": "https://i.imgur.com/uVFenKm.png",
+    "group": "Szórakozás",
+    "tvg_id": "AXNSpin.hu@SD"
+  },
+  {
+    "name": "Alfold TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay01%2Flivestream006.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/W6jg8iM.png",
+    "group": "Szórakozás",
+    "tvg_id": "AlfoldTV.hu@SD"
+  },
+  {
+    "name": "Discovery Channel (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fdiscovery_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/2019_Discovery_logo.svg/960px-2019_Discovery_logo.svg.png",
+    "group": "Szórakozás",
+    "tvg_id": "DiscoveryChannel.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",FEM3",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_fem3_atktv%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/AF4Sz8Z.png",
+    "group": "Szórakozás",
+    "tvg_id": "FEM3.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Izaura TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fizaura%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/p9YFnpw.png",
+    "group": "Szórakozás",
+    "tvg_id": "IzauraTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Jocky TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fjocky%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/wLawFVP.png",
+    "group": "Szórakozás",
+    "tvg_id": "JockyTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Life TV (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Flifetv%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/3znYv1N.png",
+    "group": "Szórakozás",
+    "tvg_id": "LifeTV.hu@SD"
+  },
+  {
+    "name": "M2 (Hungary) (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fm2_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/B0nYT0l.png",
+    "group": "Szórakozás",
+    "tvg_id": "M2.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Moziklub",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fmoziklub_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Moziklub.svg/1920px-Moziklub.svg.png",
+    "group": "Szórakozás",
+    "tvg_id": "Moziklub.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",RTL Otthon",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Frtl_otthon_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/RTL_Otthon.svg/1920px-RTL_Otthon.svg.png",
+    "group": "Szórakozás",
+    "tvg_id": "RTLOtthon.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Sorozatklub",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fsorozatklub_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Sorozatklub.svg/1920px-Sorozatklub.svg.png",
+    "group": "Szórakozás",
+    "tvg_id": "Sorozatklub.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Spektrum Home (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fspektrum_home_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/VaVi65F.png",
+    "group": "Szórakozás",
+    "tvg_id": "SpektrumHome.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",Ozone TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fozone%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/eSNF9qt.png",
+    "group": "Tudomány & Technika",
+    "tvg_id": "OzoneTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/120.0.0.0 Safari/537.36\",TV Paprika (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fparpika_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/KLpZIS6.png",
+    "group": "Utazás",
+    "tvg_id": "TVPaprika.hu@SD"
+  },
+  {
+    "name": "Apostol TV (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Flive.apostoltv.hu%2Flive%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/C43Cc9N.png",
+    "group": "Vallás",
+    "tvg_id": "ApostolTV.hu@SD"
+  },
+  {
+    "name": "EWTN/Bonum TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fdash2.antik.sk%2Flive%2Fewtn_bonum%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/LdsRz2E.png",
+    "group": "Vallás",
+    "tvg_id": "EWTNBonumTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Muzsika TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_muzsika_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/kmQ5vYC.png",
+    "group": "Zene",
+    "tvg_id": "MuzsikaTV.hu@SD"
+  },
+  {
+    "name": "Oxygen Music (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Foxygenmusic.hu%3A2443%2Fhls%2Foxygenmusic.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://oxygenmusic.hu/static/media/logo.png",
+    "group": "Zene",
+    "tvg_id": "OxygenMusic.hu@HD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Slager TV",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_slager_tv_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/qDNRgSQ.png",
+    "group": "Zene",
+    "tvg_id": "SlagerTV.hu@SD"
+  },
+  {
     "name": "TV Bozsike Hamburg HD (1080p)",
-    "tvg_id": "TVBozsikeHamburgHD.de@HD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Frtmp.radiobozsike.com%2Fhls%2Fstream1.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://radiobozsike.com/img/icons/android-chrome-512x512.png",
     "group": "Zene",
-    "url": "https://rtmp.radiobozsike.com/hls/stream1.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "TVBozsikeHamburgHD.de@HD"
   },
   {
-    "id": 27,
-    "channel_number": "27",
+    "name": "16tv Budapest (360p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2F16tv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/04fCzHl.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "16tvBudapest.hu@SD"
+  },
+  {
+    "name": "7.TV (360p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.y5.hu%2Fstream%2Fstream_bekescsaba%2Fstream.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/CnUhAlK.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "7TV.hu@SD"
+  },
+  {
+    "name": "BTV (Hungary) (360p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fbabolnatv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/0PKqn3V.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "BTV.hu@SD"
+  },
+  {
+    "name": "Bajai TV (720p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay01%2Flivestream002.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/cyReGWh.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "BajaiTV.hu@SD"
+  },
+  {
+    "name": "Berente TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FBerenteTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/3H3Ct9f.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "BerenteTV.hu@SD"
+  },
+  {
+    "name": "Budapest Europa Televizio (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fbpetv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/CqqWtzo.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "BudapestEuropaTelevizio.hu@SD"
+  },
+  {
+    "name": "City TV (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcitytv.hu%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/u0AKhzj.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "CityTV.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Duna",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fduna_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/oPbsSlp.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "Duna.hu@SD"
+  },
+  {
+    "name": "like Gecko) Chrome/130.0.0.0 Safari/537.36\",Duna World",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fduna_world_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/uOBQJZS.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "DunaWorld.hu@SD"
+  },
+  {
+    "name": "ESTV (Hungary) (420p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE032.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/OCZ8CfK.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "ESTV.hu@SD"
+  },
+  {
+    "name": "Galaxy4",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fbudapest-cache-1.antik.sk%2Flive%2Ftest_galaxy_4_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/fTG99xh.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "Galaxy4.hu@SD"
+  },
+  {
     "name": "Globo TV (Hungary) (720p) [Geo-blocked]",
-    "tvg_id": "GloboTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FGloboTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/PJ4c4jq.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/GloboTV/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "GloboTV.hu@SD"
   },
   {
-    "id": 28,
-    "channel_number": "28",
+    "name": "Gyongyosi TV (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay02%2Flivestream005.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/RHgaPCk.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "GyongyosiTV.hu@SD"
+  },
+  {
+    "name": "Hevizi TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay03%2Flivestream003.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/zuWQKDm.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "HeviziTV.hu@SD"
+  },
+  {
+    "name": "Jaszsagi Tersegi TV (440p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast007.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/bsDN0lH.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "JaszsagiTersegiTV.hu@SD"
+  },
+  {
     "name": "Kanizsa TV (400p)",
-    "tvg_id": "KanizsaTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fkanizsavtv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/l02znlE.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/kanizsavtv.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "KanizsaTV.hu@SD"
   },
   {
-    "id": 29,
-    "channel_number": "29",
+    "name": "Kapos TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront63.lexanetwork.com%3A1344%2Frelay01%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/ZMrj2C5.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "KaposTV.hu@SD"
+  },
+  {
+    "name": "Karcag TV (720p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay03%2Flivestream003.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/QcrVj3Q.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "KarcagTV.hu@SD"
+  },
+  {
+    "name": "Kecskemeti TV (416p) [Not 24/7]",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2Frtmp1.40e.hu%3A8000%2Flive%2Fktv.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/yxwrX2N.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "KecskemetiTV.hu@SD"
+  },
+  {
     "name": "Komaromi Televizio (400p)",
-    "tvg_id": "KomaromiTelevizio.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE017.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/DifVZkz.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE017.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "KomaromiTelevizio.hu@SD"
   },
   {
-    "id": 30,
-    "channel_number": "30",
     "name": "Komlos TV (1080p) [Not 24/7]",
-    "tvg_id": "KomlosTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FKomlosTV%2Ftracks-v1a1%2Fmono.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/dnITSUz.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/KomlosTV/tracks-v1a1/mono.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "KomlosTV.hu@SD"
   },
   {
-    "id": 31,
-    "channel_number": "31",
+    "name": "Makoi Varosi Televizio (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2Fmakomedia.mikrohalo.hu%2Fhls%2Fmakotv.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/PF3BP4X.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "MakoiVarosiTelevizio.hu@SD"
+  },
+  {
     "name": "Mora-Net TV (576p)",
-    "tvg_id": "MoraNetTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.moranettv.hu%2Flive%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/yT0RmKi.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.moranettv.hu/live/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "MoraNetTV.hu@SD"
   },
   {
-    "id": 32,
-    "channel_number": "32",
     "name": "Oroszlanyi Varosi Televizio (720p)",
-    "tvg_id": "OroszlanyiVarosiTelevizio.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast002.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/P0fxUH5.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/broadcast002.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "OroszlanyiVarosiTelevizio.hu@SD"
   },
   {
-    "id": 33,
-    "channel_number": "33",
+    "name": "Ozdi Varosi TV (720p) [Not 24/7]",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2Fstream.nmih.hu%3A7980%2Flive.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/t0Aq3UD.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "OzdiVarosiTV.hu@SD"
+  },
+  {
     "name": "PilisTV (1080p) [Geo-blocked]",
-    "tvg_id": "PilisTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FPilisTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/5L01wRi.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/PilisTV/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "PilisTV.hu@SD"
   },
   {
-    "id": 34,
-    "channel_number": "34",
     "name": "RegioPlusz TV (1080p) [Geo-blocked]",
-    "tvg_id": "RegioPluszTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FRegioPluszTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/VXPpukf.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/RegioPluszTV/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "RegioPluszTV.hu@SD"
   },
   {
-    "id": 35,
-    "channel_number": "35",
     "name": "SIXO TV (360p)",
-    "tvg_id": "SIXOTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE038.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.ibb.co/GTPs9Xy/9068.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE038.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "SIXOTV.hu@SD"
   },
   {
-    "id": 36,
-    "channel_number": "36",
+    "name": "Szolnok TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/Eiab9MP.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "SzolnokTV.hu@SD"
+  },
+  {
     "name": "TV Keszthely (360p)",
-    "tvg_id": "TVKeszthely.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fkeszthelyivtv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/2LE8xSW.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/freerelay/keszthelyivtv.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "TVKeszthely.hu@SD"
   },
   {
-    "id": 37,
-    "channel_number": "37",
+    "name": "Tatai TV (1080p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast006.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/skXYntc.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "TataiTV.hu@SD"
+  },
+  {
     "name": "TelePaks (396p)",
-    "tvg_id": "TelePaks.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay02%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/T8ueztB.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay02/livestream004.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "TelePaks.hu@SD"
   },
   {
-    "id": 38,
-    "channel_number": "38",
     "name": "Trimedio TV (1080p) [Geo-blocked]",
-    "tvg_id": "TrimedioTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FTriMedioTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/P4hxWVZ.png",
     "group": "Általános & Helyi TV",
-    "url": "https://stream.streaming4u.hu/TriMedioTV/index.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "TrimedioTV.hu@SD"
   },
   {
-    "id": 39,
-    "channel_number": "39",
+    "name": "Vasarhelyi Televizio (576p)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fstream.vasarhelyitelevizio.hu%2Fstream%2Fstream.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/WOEqdmx.png",
+    "group": "Általános & Helyi TV",
+    "tvg_id": "VasarhelyiTelevizio.hu@SD"
+  },
+  {
     "name": "XV TV (480p)",
-    "tvg_id": "XVTV.hu@SD",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE051.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.ibb.co/hH2KF6W/4792.png",
     "group": "Általános & Helyi TV",
-    "url": "https://cloudfront44.lexanetwork.com:1344/relay01/HDE051.sdp/playlist.m3u8",
-    "ua": "",
-    "referrer": ""
+    "tvg_id": "XVTV.hu@SD"
+  },
+  {
+    "name": "HGTV (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fhgtv_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://i.imgur.com/KMcR9z9.png",
+    "group": "Életmód",
+    "tvg_id": "HGTV.hu@SD"
+  },
+  {
+    "name": "TLC (Hungary)",
+    "url": "https://light-clouds-stop.loca.lt/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftlc_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/TLC_Logo.svg/960px-TLC_Logo.svg.png",
+    "group": "Életmód",
+    "tvg_id": "TLC.hu@SD"
   }
 ]
