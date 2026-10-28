@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZsirafVision - Videoton Retro IPTV</title>
+  <title>ZsirafVision - Videoton Retro TV (Tökéletes HD Kép)</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <!-- HLS.js for cross-browser M3U8 playback -->
+  <!-- HLS.js for modern cross-browser M3U8 playback -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
@@ -19,7 +19,8 @@
     <div class="vintage-slogan">A televíziózás újra életre kel.</div>
     <div class="header-badges">
       <span class="badge live-badge"><span class="pulse-dot"></span> ÉLŐ IPTV</span>
-      <span class="badge count-badge" id="channel-count-badge">131 CSATORNA</span>
+      <span class="badge hd-badge">✨ KRISTÁLYTISZTA HD KÉP</span>
+      <span class="badge count-badge" id="channel-count-badge">39 CSATORNA</span>
     </div>
   </header>
 
@@ -29,35 +30,24 @@
       
       <!-- Screen Area (Positioned precisely to fit the wooden bezel cutout) -->
       <div class="crt-screen-container" id="crt-screen-container">
-        <!-- HTML5 Video Stream -->
-        <video id="tv-video" playsinline></video>
-        
-        <!-- CRT Static Noise Canvas (Snow) -->
-        <canvas id="static-canvas"></canvas>
-
-        <!-- CRT Glass & Scanline Overlays -->
-        <div class="crt-scanlines"></div>
-        <div class="crt-vignette"></div>
-        <div class="crt-glare"></div>
-
-        <!-- CRT Off Screen Simulation Layer -->
-        <div class="crt-power-layer" id="crt-power-layer"></div>
+        <!-- Pure, crystal-clear HTML5 Video Stream - No retro filters, no scanlines -->
+        <video id="tv-video" playsinline autoplay></video>
 
         <!-- On Screen Display (OSD) -->
         <div class="osd-container" id="osd-container">
           <div class="osd-top-row">
-            <div class="osd-channel-badge" id="osd-name">M1 HD</div>
+            <div class="osd-channel-badge" id="osd-name">ALFÖLD TV</div>
           </div>
           <div class="osd-number-row">
             <span class="osd-number" id="osd-number">01</span>
           </div>
           <div class="osd-bottom-row">
             <span class="osd-live-tag"><span class="osd-red-dot"></span> ÉLŐ ADÁS</span>
-            <span class="osd-category-tag" id="osd-category">Általános & Helyi TV</span>
+            <span class="osd-category-tag" id="osd-category">Szórakozás & Helyi TV</span>
           </div>
         </div>
 
-        <!-- Adjustment OSD Banner (Volume, Brightness, Contrast) -->
+        <!-- Adjustment OSD Banner (Volume, Mute) -->
         <div class="osd-adjustment-banner" id="osd-adjustment">
           <span id="adjustment-label">HANGERŐ</span>
           <div class="adjustment-bar-container">
@@ -69,7 +59,7 @@
         <!-- Status / Tuning Indicator -->
         <div class="tuning-indicator" id="tuning-indicator">
           <div class="tuning-spinner"></div>
-          <span id="tuning-text">HANGOLÁS...</span>
+          <span id="tuning-text">ADÁS BETÖLTÉSE...</span>
         </div>
 
       </div>
@@ -77,51 +67,12 @@
       <!-- TV Cabinet Wooden Overlay Frame with transparent screen cutout -->
       <img src="assets/tv_frame_cutout.png" alt="Videoton Retro TV" class="tv-frame-img" id="tv-frame-img" draggable="false">
 
-      <!-- Interactive Controls Placed Over the TV Panel -->
-      <div class="tv-controls-overlay">
-        
-        <!-- Rotary Channel Selector Knob (Rotatable Dial) -->
-        <div class="knob-container knob-rotary-channel" id="channel-knob" title="Csatornaváltó (Forgatás vagy kattintás)">
-          <div class="rotary-dial" id="rotary-dial">
-            <div class="dial-notch"></div>
-          </div>
-        </div>
-
-        <!-- Volume Knob (HANGERŐ) -->
-        <div class="knob-container knob-volume" id="knob-volume" title="Hangerő szabályzó (Görgetés vagy fel/le húzás)">
-          <div class="mini-knob" id="dial-volume">
-            <div class="mini-notch"></div>
-          </div>
-        </div>
-
-        <!-- Brightness Knob (FÉNYERŐ) -->
-        <div class="knob-container knob-brightness" id="knob-brightness" title="Fényerő szabályzó">
-          <div class="mini-knob" id="dial-brightness">
-            <div class="mini-notch"></div>
-          </div>
-        </div>
-
-        <!-- Contrast Knob (KONTRASZT) -->
-        <div class="knob-container knob-contrast" id="knob-contrast" title="Kontraszt szabályzó">
-          <div class="mini-knob" id="dial-contrast">
-            <div class="mini-notch"></div>
-          </div>
-        </div>
-
-        <!-- Power Button -->
-        <button class="tv-power-button" id="power-button" title="Be- és kikapcsolás (Szóköz)"></button>
-
-        <!-- Red Power Indicator LED -->
-        <div class="power-led active" id="power-led" title="Bekapcsolt állapot jelző"></div>
-
-      </div>
-
     </div>
 
-    <!-- Quick Navigation / TV Remote bar below the cabinet -->
+    <!-- Modern Clean Controls Bar below the cabinet (the analog knobs on the TV are non-functional) -->
     <nav class="quick-nav-bar">
       <button class="nav-btn prev-btn" id="btn-prev" title="Előző csatorna (Balra nyíl)">◀ ELŐZŐ</button>
-      <button class="nav-btn guide-btn" id="btn-open-guide">📋 CSATORNALISTA & MŰSORÚJSÁG</button>
+      <button class="nav-btn guide-btn" id="btn-open-guide">📋 CSATORNALISTA & MŰSOROK</button>
       <button class="nav-btn next-btn" id="btn-next" title="Következő csatorna (Jobbra nyíl)">KÖVETKEZŐ ▶</button>
       <button class="nav-btn icon-btn" id="btn-mute" title="Némítás (M)">🔊</button>
       <button class="nav-btn icon-btn" id="btn-fullscreen" title="Teljes képernyő (F)">⛶</button>
@@ -133,19 +84,19 @@
     <div class="drawer-header">
       <div class="drawer-title">
         <span class="retro-badge">VIDEOTON</span>
-        <h3>MAGYAR CSATORNALISTA</h3>
+        <h3>MAGYAR CSATORNÁK (ONLINE)</h3>
       </div>
       <button class="drawer-close-btn" id="btn-close-guide" title="Bezárás">✕</button>
     </div>
 
     <!-- Filter & Search Controls -->
     <div class="drawer-search-bar">
-      <input type="text" id="channel-search-input" placeholder="🔍 Keresés (pl. RTL, Sport, Mozi, Duna)..." autocomplete="off">
+      <input type="text" id="channel-search-input" placeholder="🔍 Keresés (pl. Alföld, Euronews, Galaxy4, Love Nature)..." autocomplete="off">
     </div>
 
     <!-- Category Pills -->
     <div class="category-pills" id="category-pills">
-      <button class="cat-pill active" data-category="ALL">Mind (131)</button>
+      <button class="cat-pill active" data-category="ALL">Mind</button>
     </div>
 
     <!-- Channel Items List -->
@@ -157,16 +108,16 @@
   <!-- Help & Keyboard Shortcuts Modal / Footer -->
   <footer class="app-footer">
     <div class="shortcuts-legend">
-      <span>Billentyűparancsok:</span>
-      <kbd>Fel/Le</kbd> Csatornaváltás &bull;
+      <span>Irányítás:</span>
+      <kbd>Nyilak Fel/Le/Balra/Jobbra</kbd> Csatornaváltás &bull;
       <kbd>+/-</kbd> Hangerő &bull;
-      <kbd>Szóköz</kbd> Be/Kikapcsolás &bull;
       <kbd>M</kbd> Némítás &bull;
       <kbd>F</kbd> Teljes képernyő &bull;
-      <kbd>C</kbd> Csatornalista
+      <kbd>C</kbd> Csatornalista &bull;
+      <kbd>Számok (0-9)</kbd> Közvetlen választás
     </div>
     <div class="footer-credit">
-      <strong>ZsirafVision</strong> &bull; Retro Videoton TV Élmény &bull; 131 Élő Stream
+      <strong>ZsirafVision</strong> &bull; Videoton Dizájn &bull; Tökéletes HD Képminőség &bull; Valós Online Működés
     </div>
   </footer>
 

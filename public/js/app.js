@@ -1,5 +1,5 @@
 /**
- * ZsirafVision - Videoton Retro IPTV Player Application
+ * ZsirafVision - Videoton TV Player (Tökéletes, Éles HD Kép, Inaktív Analóg Gombok)
  */
 
 (function () {
@@ -8,23 +8,14 @@
   // State
   let channels = [];
   let currentChannelIndex = 0;
-  let isPoweredOn = true;
   let isMuted = false;
-  let currentVolume = 0.8;
-  let currentBrightness = 1.0;
-  let currentContrast = 1.0;
-  let dialAngle = 0;
+  let currentVolume = 1.0;
   let hls = null;
-  let staticAnimFrame = null;
   let osdTimeout = null;
   let adjustmentTimeout = null;
-  let isTuning = false;
-  let audioCtx = null;
 
   // DOM Elements
   const video = document.getElementById('tv-video');
-  const staticCanvas = document.getElementById('static-canvas');
-  const crtPowerLayer = document.getElementById('crt-power-layer');
   const osdContainer = document.getElementById('osd-container');
   const osdName = document.getElementById('osd-name');
   const osdNumber = document.getElementById('osd-number');
@@ -35,17 +26,6 @@
   const adjustmentValue = document.getElementById('adjustment-value');
   const tuningIndicator = document.getElementById('tuning-indicator');
   const tuningText = document.getElementById('tuning-text');
-
-  const powerButton = document.getElementById('power-button');
-  const powerLed = document.getElementById('power-led');
-  const rotaryDial = document.getElementById('rotary-dial');
-  const channelKnob = document.getElementById('channel-knob');
-  const knobVolume = document.getElementById('knob-volume');
-  const dialVolume = document.getElementById('dial-volume');
-  const knobBrightness = document.getElementById('knob-brightness');
-  const dialBrightness = document.getElementById('dial-brightness');
-  const knobContrast = document.getElementById('knob-contrast');
-  const dialContrast = document.getElementById('dial-contrast');
 
   const btnPrev = document.getElementById('btn-prev');
   const btnNext = document.getElementById('btn-next');
@@ -59,116 +39,16 @@
   const channelListScroll = document.getElementById('channel-list-scroll');
   const channelCountBadge = document.getElementById('channel-count-badge');
 
-  // Check if running on local proxy server
-  const isLocalServer = window.location.hostname === 'localhost' || 
-                        window.location.hostname === '127.0.0.1' || 
-                        window.location.port === '8888' ||
-                        window.location.protocol === 'http:';
-
-  // Initialize Web Audio API for Retro Sound Effects
-  function initAudioContext() {
-    if (!audioCtx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) {
-        audioCtx = new AudioContext();
-      }
-    }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
+  function showLoading(msg = 'ADÁS BETÖLTÉSE...') {
+    tuningText.textContent = msg;
+    tuningIndicator.classList.add('active');
   }
 
-  // Synthesize rotary switch click sound
-  function playClickSound() {
-    initAudioContext();
-    if (!audioCtx) return;
-    try {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(120, audioCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(30, audioCtx.currentTime + 0.04);
-      gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.04);
-    } catch (e) {}
-  }
-
-  // Synthesize CRT turn on pop
-  function playPowerSound(turnOn) {
-    initAudioContext();
-    if (!audioCtx) return;
-    try {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      if (turnOn) {
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(60, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(15734, audioCtx.currentTime + 0.25); // 15.7kHz CRT whistle!
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
-      } else {
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(300, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.15);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
-      }
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.35);
-    } catch (e) {}
-  }
-
-  // Canvas-based Static Snow Animation
-  function initStaticNoise() {
-    const ctx = staticCanvas.getContext('2d');
-    let width = (staticCanvas.width = 240);
-    let height = (staticCanvas.height = 180);
-
-    function renderNoise() {
-      if (isTuning && isPoweredOn) {
-        const imgData = ctx.createImageData(width, height);
-        const data = imgData.data;
-        for (let i = 0; i < data.length; i += 4) {
-          const val = (Math.random() * 255) | 0;
-          data[i] = val;
-          data[i + 1] = val;
-          data[i + 2] = val;
-          data[i + 3] = 255;
-        }
-        ctx.putImageData(imgData, 0, 0);
-      }
-      staticAnimFrame = requestAnimationFrame(renderNoise);
-    }
-    renderNoise();
-  }
-
-  function startStatic(showTuningText = true, message = 'HANGOLÁS...') {
-    isTuning = true;
-    staticCanvas.classList.add('active');
-    if (showTuningText) {
-      tuningText.textContent = message;
-      tuningIndicator.classList.add('active');
-    }
-  }
-
-  function stopStatic() {
-    isTuning = false;
-    staticCanvas.classList.remove('active');
+  function hideLoading() {
     tuningIndicator.classList.remove('active');
   }
 
-  // Update CRT video filters (brightness, contrast)
-  function updateVideoFilters() {
-    video.style.filter = `brightness(${currentBrightness}) contrast(${currentContrast})`;
-  }
-
-  // Show adjustment banner
+  // Show adjustment banner (volume, mute)
   function showAdjustment(label, valueText, percentage) {
     adjustmentLabel.textContent = label;
     adjustmentValue.textContent = valueText;
@@ -180,43 +60,19 @@
     }, 1800);
   }
 
-  // Build Proxy URL when running on local server or fallback
-  function getStreamUrl(channel) {
-    const rawUrl = channel.url;
-    if (isLocalServer) {
-      let p = `/api/proxy?url=${encodeURIComponent(rawUrl)}`;
-      if (channel.ua) p += `&ua=${encodeURIComponent(channel.ua)}`;
-      if (channel.referrer) p += `&ref=${encodeURIComponent(channel.referrer)}`;
-      return p;
-    }
-    // Running on GitHub Pages:
-    // If stream is HTTPS, use direct URL
-    if (rawUrl.startsWith('https://')) {
-      return rawUrl;
-    }
-    // If stream is HTTP and we are on HTTPS, browser blocks it.
-    // We try a public CORS proxy
-    return `https://corsproxy.io/?url=${encodeURIComponent(rawUrl)}`;
-  }
-
   // Play Channel
-  function playChannel(index, triggerSound = true) {
-    if (!channels.length || !isPoweredOn) return;
+  function playChannel(index) {
+    if (!channels.length) return;
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
     currentChannelIndex = index;
 
     const channel = channels[currentChannelIndex];
-    if (triggerSound) playClickSound();
-
-    // Rotate dial by 30 degrees per channel
-    dialAngle = (currentChannelIndex % 12) * 30;
-    rotaryDial.style.transform = `rotate(${dialAngle}deg)`;
 
     // Update OSD
     osdName.textContent = channel.name;
     osdNumber.textContent = channel.channel_number || String(channel.id).padStart(2, '0');
-    osdCategory.textContent = channel.group || 'Általános';
+    osdCategory.textContent = channel.group || 'Magyar TV';
     osdContainer.classList.remove('fade-out');
     clearTimeout(osdTimeout);
     osdTimeout = setTimeout(() => {
@@ -226,10 +82,10 @@
     // Update Active item in Drawer
     highlightActiveDrawerItem();
 
-    // Start static noise while tuning
-    startStatic(true, `${channel.name} BETÖLTÉSE...`);
+    showLoading(`${channel.name} BETÖLTÉSE...`);
 
-    const streamUrl = getStreamUrl(channel);
+    // Direct stream playback (all curated channels are verified HTTPS with CORS)
+    const streamUrl = channel.url;
 
     // Destroy previous Hls instance
     if (hls) {
@@ -241,17 +97,15 @@
       hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
-        manifestLoadingTimeOut: 10000,
-        manifestLoadingMaxRetry: 2,
-        levelLoadingTimeOut: 10000,
-        fragLoadingTimeOut: 15000
+        manifestLoadingTimeOut: 8000,
+        manifestLoadingMaxRetry: 2
       });
 
       hls.loadSource(streamUrl);
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        stopStatic();
+        hideLoading();
         video.play().catch(() => {});
       });
 
@@ -259,16 +113,16 @@
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              tuningText.textContent = 'JELVESZTÉS / HÁLÓZATI HIBA';
+              tuningText.textContent = 'HÁLÓZATI HIBA';
               hls.startLoad();
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
-              tuningText.textContent = 'ADÁSHIBA (Helyreállítás...)';
+              tuningText.textContent = 'HELYREÁLLÍTÁS...';
               hls.recoverMediaError();
               break;
             default:
-              tuningText.textContent = 'A CSATORNA JELENLEG NEM ELÉRHETŐ';
-              setTimeout(stopStatic, 4000);
+              tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
+              setTimeout(hideLoading, 3000);
               hls.destroy();
               break;
           }
@@ -278,41 +132,13 @@
       // Native Safari HLS
       video.src = streamUrl;
       video.addEventListener('loadedmetadata', () => {
-        stopStatic();
+        hideLoading();
         video.play().catch(() => {});
       });
       video.addEventListener('error', () => {
         tuningText.textContent = 'JELVESZTÉS';
+        setTimeout(hideLoading, 3000);
       });
-    }
-  }
-
-  // Toggle TV Power
-  function togglePower() {
-    isPoweredOn = !isPoweredOn;
-    playPowerSound(isPoweredOn);
-
-    if (isPoweredOn) {
-      powerLed.classList.add('active');
-      crtPowerLayer.classList.remove('power-off');
-      crtPowerLayer.classList.add('animating-on');
-      setTimeout(() => {
-        crtPowerLayer.classList.remove('animating-on');
-      }, 550);
-      playChannel(currentChannelIndex, false);
-    } else {
-      powerLed.classList.remove('active');
-      crtPowerLayer.classList.add('animating-off');
-      setTimeout(() => {
-        crtPowerLayer.classList.remove('animating-off');
-        crtPowerLayer.classList.add('power-off');
-      }, 450);
-      if (hls) {
-        hls.destroy();
-        hls = null;
-      }
-      video.pause();
-      stopStatic();
     }
   }
 
@@ -323,29 +149,7 @@
     video.muted = false;
     isMuted = false;
     btnMute.textContent = currentVolume === 0 ? '🔇' : '🔊';
-    const deg = (currentVolume - 0.5) * 180;
-    dialVolume.style.transform = `rotate(${deg}deg)`;
     showAdjustment('HANGERŐ', `${Math.round(currentVolume * 100)}%`, currentVolume * 100);
-  }
-
-  // Brightness Adjustment
-  function setBrightness(val) {
-    currentBrightness = Math.max(0.4, Math.min(1.8, val));
-    updateVideoFilters();
-    const deg = ((currentBrightness - 0.4) / 1.4 - 0.5) * 180;
-    dialBrightness.style.transform = `rotate(${deg}deg)`;
-    const pct = Math.round(((currentBrightness - 0.4) / 1.4) * 100);
-    showAdjustment('FÉNYERŐ', `${pct}%`, pct);
-  }
-
-  // Contrast Adjustment
-  function setContrast(val) {
-    currentContrast = Math.max(0.4, Math.min(2.0, val));
-    updateVideoFilters();
-    const deg = ((currentContrast - 0.4) / 1.6 - 0.5) * 180;
-    dialContrast.style.transform = `rotate(${deg}deg)`;
-    const pct = Math.round(((currentContrast - 0.4) / 1.6) * 100);
-    showAdjustment('KONTRASZT', `${pct}%`, pct);
   }
 
   // Drawer & Categories Rendering
@@ -439,7 +243,6 @@
       categoryPillsContainer.appendChild(pill);
     });
 
-    // Click on Category Pill
     categoryPillsContainer.addEventListener('click', (e) => {
       if (e.target.classList.contains('cat-pill')) {
         categoryPillsContainer.querySelectorAll('.cat-pill').forEach((p) => p.classList.remove('active'));
@@ -476,7 +279,7 @@
       renderDrawer(channels);
 
       // Start on first channel
-      playChannel(0, false);
+      playChannel(0);
     } catch (e) {
       console.error('Failed to load channels:', e);
       osdName.textContent = 'HIBA';
@@ -484,42 +287,7 @@
     }
   }
 
-  // Event Listeners for Physical Controls
-  powerButton.addEventListener('click', togglePower);
-
-  // Rotary Knob Click / Turn
-  channelKnob.addEventListener('click', () => {
-    playChannel(currentChannelIndex + 1);
-  });
-
-  channelKnob.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    if (e.deltaY < 0) {
-      playChannel(currentChannelIndex + 1);
-    } else {
-      playChannel(currentChannelIndex - 1);
-    }
-  });
-
-  // Volume Knob Wheel
-  knobVolume.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    setVolume(currentVolume + (e.deltaY < 0 ? 0.05 : -0.05));
-  });
-
-  // Brightness Knob Wheel
-  knobBrightness.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    setBrightness(currentBrightness + (e.deltaY < 0 ? 0.05 : -0.05));
-  });
-
-  // Contrast Knob Wheel
-  knobContrast.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    setContrast(currentContrast + (e.deltaY < 0 ? 0.05 : -0.05));
-  });
-
-  // Quick Nav Buttons
+  // Navigation Buttons
   btnPrev.addEventListener('click', () => playChannel(currentChannelIndex - 1));
   btnNext.addEventListener('click', () => playChannel(currentChannelIndex + 1));
 
@@ -531,10 +299,13 @@
   });
 
   btnFullscreen.addEventListener('click', () => {
-    const cabinet = document.getElementById('tv-cabinet');
+    // Fullscreen for the video itself for crystal clear fullscreen viewing!
     if (!document.fullscreenElement) {
-      if (cabinet.requestFullscreen) {
-        cabinet.requestFullscreen();
+      if (video.requestFullscreen) {
+        video.requestFullscreen();
+      } else {
+        const cabinet = document.getElementById('tv-cabinet');
+        if (cabinet.requestFullscreen) cabinet.requestFullscreen();
       }
     } else {
       if (document.exitFullscreen) {
@@ -576,10 +347,6 @@
         e.preventDefault();
         playChannel(currentChannelIndex - 1);
         break;
-      case ' ':
-        e.preventDefault();
-        togglePower();
-        break;
       case '+':
       case '=':
         e.preventDefault();
@@ -615,7 +382,6 @@
         guideDrawer.classList.remove('open');
         break;
       default:
-        // Direct number entry
         if (e.key >= '0' && e.key <= '9') {
           const num = parseInt(e.key, 10);
           if (num > 0 && num <= channels.length) {
@@ -626,7 +392,5 @@
     }
   });
 
-  // Start static generator and load data on launch
-  initStaticNoise();
   loadChannels();
 })();
