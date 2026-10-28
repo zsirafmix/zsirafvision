@@ -36,6 +36,20 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
 
+    def do_HEAD(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if parsed.path == "/api/proxy":
+            query = urllib.parse.parse_qs(parsed.query)
+            target_url = query.get("url", [None])[0]
+            if not target_url:
+                self.send_error(400, "Missing 'url' query parameter")
+                return
+            custom_ua = query.get("ua", [DEFAULT_UA])[0]
+            custom_ref = query.get("ref", [None])[0]
+            self.handle_proxy(target_url, custom_ua, custom_ref, is_head=True)
+            return
+        return super().do_HEAD()
+
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         
@@ -49,13 +63,13 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
 
             custom_ua = query.get("ua", [DEFAULT_UA])[0]
             custom_ref = query.get("ref", [None])[0]
-            self.handle_proxy(target_url, custom_ua, custom_ref)
+            self.handle_proxy(target_url, custom_ua, custom_ref, is_head=False)
             return
 
         # Serve static files
         return super().do_GET()
 
-    def handle_proxy(self, target_url, ua, ref):
+    def handle_proxy(self, target_url, ua, ref, is_head=False):
         headers = {"User-Agent": ua or DEFAULT_UA}
         if ref:
             headers["Referer"] = ref
@@ -105,7 +119,8 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
                 self.send_header("Content-Type", content_type)
                 self.send_header("Content-Length", str(len(body)))
                 self.end_headers()
-                self.wfile.write(body)
+                if not is_head:
+                    self.wfile.write(body)
 
         except Exception as e:
             err_msg = f"Proxy error fetching {target_url}: {e}"
