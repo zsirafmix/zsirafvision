@@ -284,7 +284,7 @@
   // Load Channels Data
   async function loadChannels() {
     try {
-      const res = await fetch('channels.json');
+      const res = await fetch(`channels.json?t=${Date.now()}`);
       channels = await res.json();
       channelCountBadge.textContent = `${channels.length} CSATORNA`;
       setupCategories();
