@@ -11,7 +11,7 @@ import urllib.parse
 import ssl
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-PORT = 8080
+PORT = int(os.environ.get("PORT", 8888))
 PUBLIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "public")
 
 # Disable SSL verification for misconfigured / self-signed IPTV stream certificates

@@ -45,7 +45,7 @@ Autentikus magyar **Videoton retro televízió** élmény böngészőben, 131 ig
    python3 server.py
    ```
 3. Nyisd meg a böngésződben:
-   👉 **http://localhost:8080**
+   👉 **http://localhost:8888**
 
 ---
 

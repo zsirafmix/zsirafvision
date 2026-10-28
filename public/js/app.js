@@ -62,7 +62,8 @@
   // Check if running on local proxy server
   const isLocalServer = window.location.hostname === 'localhost' || 
                         window.location.hostname === '127.0.0.1' || 
-                        window.location.port === '8080';
+                        window.location.port === '8888' ||
+                        window.location.protocol === 'http:';
 
   // Initialize Web Audio API for Retro Sound Effects
   function initAudioContext() {
