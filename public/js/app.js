@@ -106,7 +106,13 @@
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         hideLoading();
-        video.play().catch(() => {});
+        video.play().catch((err) => {
+          console.warn('Autoplay blocked, muting video to allow playback:', err);
+          video.muted = true;
+          isMuted = true;
+          btnMute.textContent = '🔇';
+          video.play().catch((e) => console.error('Play failed completely:', e));
+        });
       });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
@@ -162,13 +168,17 @@
 
     const fragment = document.createDocumentFragment();
     channelsToRender.forEach((ch) => {
+      // Find actual index in global channels array
+      const globalIdx = channels.findIndex((c) => c.id === ch.id || c.name === ch.name);
+      const actualIdx = globalIdx !== -1 ? globalIdx : (ch.id ? ch.id - 1 : 0);
+
       const item = document.createElement('div');
-      item.className = `channel-item ${ch.id - 1 === currentChannelIndex ? 'active' : ''}`;
-      item.dataset.index = ch.id - 1;
+      item.className = `channel-item ${actualIdx === currentChannelIndex ? 'active' : ''}`;
+      item.dataset.index = actualIdx;
 
       const numSpan = document.createElement('span');
       numSpan.className = 'channel-item-num';
-      numSpan.textContent = ch.channel_number || String(ch.id).padStart(2, '0');
+      numSpan.textContent = ch.channel_number || (ch.id ? String(ch.id).padStart(2, '0') : '00');
 
       const logoImg = document.createElement('img');
       logoImg.className = 'channel-item-logo';
@@ -198,7 +208,9 @@
 
       item.addEventListener('click', () => {
         const idx = parseInt(item.dataset.index, 10);
-        playChannel(idx);
+        if (!isNaN(idx) && idx >= 0 && idx < channels.length) {
+          playChannel(idx);
+        }
         guideDrawer.classList.remove('open');
       });
 
