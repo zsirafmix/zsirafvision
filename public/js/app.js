@@ -200,12 +200,59 @@
       hls = null;
     }
 
+    // Clean up any direct video element event handlers from MP4
+    video.onloadeddata = null;
+    video.oncanplay = null;
+    video.onerror = null;
+
+    const isMp4 = streamUrl.toLowerCase().includes('.mp4');
+
+    if (isMp4) {
+      video.removeAttribute('src');
+      video.load();
+
+      video.src = streamUrl;
+      video.muted = isMuted;
+
+      let started = false;
+      const onReady = () => {
+        if (started) return;
+        started = true;
+        hideLoading();
+        video.play().then(() => {
+          if (playOverlay) playOverlay.classList.remove('active');
+        }).catch((err) => {
+          console.warn('Autoplay requires user interaction:', err);
+          if (playOverlay) playOverlay.classList.add('active');
+        });
+      };
+
+      video.onloadeddata = onReady;
+      video.oncanplay = onReady;
+      video.onerror = (e) => {
+        console.error('MP4 playback error:', e);
+        tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
+        setTimeout(hideLoading, 3000);
+      };
+      video.load();
+      return;
+    }
+
+    // HLS stream (.m3u8)
+    if (video.src) {
+      video.removeAttribute('src');
+      video.load();
+    }
+
     if (Hls.isSupported()) {
       hls = new Hls({
         enableWorker: true,
-        lowLatencyMode: true,
-        manifestLoadingTimeOut: 10000,
-        manifestLoadingMaxRetry: 2
+        lowLatencyMode: false,
+        manifestLoadingTimeOut: 15000,
+        manifestLoadingMaxRetry: 3,
+        levelLoadingTimeOut: 15000,
+        fragLoadingTimeOut: 20000,
+        defaultAudioCodec: 'mp4a.40.2'
       });
 
       hls.loadSource(streamUrl);
@@ -214,9 +261,7 @@
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         hideLoading();
         // Modern browsers require muted autoplay for un-interacted pages
-        video.muted = true;
-        isMuted = true;
-        btnMute.textContent = '🔇';
+        video.muted = isMuted;
         
         video.play().then(() => {
           if (playOverlay) playOverlay.classList.remove('active');
@@ -394,9 +439,22 @@
         }
       }
       if (adultChannels) {
-        channels = adultChannels;
-        renderDrawer(adultChannels);
+        if (channels !== adultChannels) {
+          channels = adultChannels;
+          setupCategories();
+        }
+        let filtered = adultChannels;
+        if (selectedCategory !== 'ALL') {
+          filtered = filtered.filter((c) => c.group === selectedCategory);
+        }
+        renderDrawer(filtered);
         return;
+      }
+    } else {
+      // If user typed something else, restore base channels (Hungarian or World)
+      if (channels === adultChannels) {
+        channels = (sourceSelect.value === 'WORLD' && worldChannels) ? worldChannels : hungarianChannels;
+        setupCategories();
       }
     }
 
