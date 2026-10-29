@@ -1396,3 +1396,259 @@ body.is-smart-tv #tv-video {
   border-radius: 0 !important;
   z-index: 999999 !important;
 }
+
+/* ==========================================================================
+   Comprehensive User Manual & Help Modal (v4.0)
+   ========================================================================== */
+.help-modal-box {
+  max-width: 860px;
+  max-height: 88vh;
+  background: #171412;
+  border: 1px solid #4a3b33;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.95), 0 0 30px rgba(212, 175, 55, 0.1);
+}
+
+.help-header-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-version-pill {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--brass-accent);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  letter-spacing: 1px;
+}
+
+.help-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-toolbar {
+  padding: 12px 20px;
+  background: #1e1915;
+  border-bottom: 1px solid #2e2621;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.help-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.help-search-wrapper input {
+  width: 100%;
+  padding: 10px 36px 10px 14px;
+  background: #27201a;
+  border: 1px solid #4a3b33;
+  border-radius: 6px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.help-search-wrapper input:focus {
+  border-color: var(--brass-accent);
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.25);
+}
+
+.help-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #777;
+  font-size: 1rem;
+  cursor: pointer;
+  display: none;
+  padding: 4px;
+}
+
+.help-search-clear.visible {
+  display: block;
+}
+
+.help-search-clear:hover {
+  color: #fff;
+}
+
+.help-category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.help-chip {
+  background: #221c17;
+  border: 1px solid #382c24;
+  color: #bbb;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.help-chip:hover {
+  background: #2c241e;
+  color: #fff;
+  border-color: var(--brass-accent);
+}
+
+.help-chip.active {
+  background: var(--brass-accent);
+  color: #1a140f;
+  border-color: var(--brass-gold);
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.35);
+}
+
+.help-modal-body {
+  padding: 16px 20px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.help-card {
+  background: #211b16;
+  border: 1px solid #3d3129;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.2s, transform 0.15s;
+}
+
+.help-card:hover {
+  border-color: var(--brass-accent);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.help-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.help-card-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.help-card-title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.05rem;
+  color: var(--brass-gold);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.help-card-summary {
+  font-size: 0.88rem;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+.help-card-details {
+  list-style: none;
+  padding: 0;
+  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.help-card-details li {
+  font-size: 0.83rem;
+  color: #aaa;
+  line-height: 1.45;
+  padding-left: 14px;
+  position: relative;
+}
+
+.help-card-details li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--brass-accent);
+  font-size: 0.85rem;
+}
+
+.help-card-details strong {
+  color: #f0e6d6;
+}
+
+.help-card-details kbd {
+  background: #2e2620;
+  border: 1px solid #4f3f34;
+  color: #ffeedd;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.5);
+}
+
+.help-empty-result {
+  text-align: center;
+  padding: 30px 10px;
+  color: #888;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+}
+
+.help-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-footer-tip {
+  font-size: 0.8rem;
+  color: #999;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .help-modal-box {
+    max-height: 94vh;
+    padding: 0;
+  }
+  .help-toolbar {
+    padding: 10px 12px;
+  }
+  .help-modal-body {
+    padding: 12px;
+  }
+  .help-card {
+    padding: 12px;
+  }
+  .help-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .help-footer-tip {
+    text-align: center;
+  }
+}
+

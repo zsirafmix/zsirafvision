@@ -1,7 +1,7 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 3.9
- * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
+ * Version: 4.0
+ * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
 (function () {
@@ -120,6 +120,19 @@
   const remoteStatusMsg = document.getElementById('remote-status-msg');
   const remoteDirectLink = document.getElementById('remote-direct-link');
 
+  // Help & User Manual Elements (v4.0)
+  const btnHelp = document.getElementById('btn-help');
+  const helpModal = document.getElementById('help-modal');
+  const btnCloseHelp = document.getElementById('btn-close-help');
+  const btnCancelHelp = document.getElementById('btn-cancel-help');
+  const helpLangSelect = document.getElementById('help-lang-select');
+  const helpSearchInput = document.getElementById('help-search-input');
+  const btnHelpClear = document.getElementById('btn-help-clear');
+  const helpCategoryChips = document.getElementById('help-category-chips');
+  const helpContentContainer = document.getElementById('help-content-container');
+  let helpActiveCategory = 'all';
+  let helpFilterText = '';
+
   // Multi-Language Management (i18n)
   let currentLang = 'hu';
 
@@ -154,6 +167,7 @@
     document.documentElement.lang = lang;
     if (langSelect && langSelect.value !== lang) langSelect.value = lang;
     if (drawerLangSelect && drawerLangSelect.value !== lang) drawerLangSelect.value = lang;
+    if (helpLangSelect && helpLangSelect.value !== lang) helpLangSelect.value = lang;
 
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.getAttribute('data-i18n');
@@ -187,6 +201,9 @@
     if (osdFavBtn && channels[currentChannelIndex]) {
       const isFav = favorites.includes(channels[currentChannelIndex].name);
       osdFavBtn.title = isFav ? t('favRemove') : t('favAdd');
+    }
+    if (helpModal && helpModal.classList.contains('open')) {
+      renderHelpContent();
     }
   }
 
@@ -346,6 +363,118 @@
         setSleepTimer(isNaN(min) ? 0 : min);
         closeSleepModal();
       });
+    });
+  }
+
+  // ==========================================================================
+  // Comprehensive User Manual & Help System (v4.0)
+  // ==========================================================================
+  function openHelpModal() {
+    if (!helpModal) return;
+    helpModal.classList.add('open');
+    if (helpLangSelect) helpLangSelect.value = currentLang;
+    renderHelpContent();
+  }
+
+  function closeHelpModal() {
+    if (!helpModal) return;
+    helpModal.classList.remove('open');
+  }
+
+  function formatHelpText(text) {
+    if (!text) return '';
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  function renderHelpContent() {
+    if (!helpContentContainer) return;
+    const guide = (window.ZsirafI18N && window.ZsirafI18N.getHelpGuide)
+      ? window.ZsirafI18N.getHelpGuide(currentLang)
+      : [];
+
+    const query = helpFilterText.trim().toLowerCase();
+
+    const filtered = guide.filter(item => {
+      if (helpActiveCategory !== 'all' && item.category !== helpActiveCategory) {
+        return false;
+      }
+      if (!query) return true;
+      const titleMatch = item.title && item.title.toLowerCase().includes(query);
+      const summaryMatch = item.summary && item.summary.toLowerCase().includes(query);
+      const detailsMatch = item.details && item.details.some(d => d.toLowerCase().includes(query));
+      return titleMatch || summaryMatch || detailsMatch;
+    });
+
+    if (filtered.length === 0) {
+      helpContentContainer.innerHTML = `
+        <div class="help-empty-result">
+          <p>⚠️ ${currentLang === 'hu' ? 'Nincs a keresésnek megfelelő találat az útmutatóban.' : (currentLang === 'de' ? 'Keine passenden Einträge in der Anleitung gefunden.' : (currentLang === 'fr' ? 'Aucun résultat trouvé dans le guide.' : (currentLang === 'es' ? 'No se encontraron resultados en la guía.' : (currentLang === 'ru' ? 'В руководстве ничего не найдено.' : 'No matching results found in the user guide.'))))}</p>
+        </div>
+      `;
+      return;
+    }
+
+    const cardsHtml = filtered.map(item => {
+      const detailsHtml = (item.details || []).map(step => {
+        return `<li>${formatHelpText(step)}</li>`;
+      }).join('');
+
+      return `
+        <article class="help-card" data-category="${item.category}">
+          <div class="help-card-header">
+            <span class="help-card-icon">${item.icon}</span>
+            <h4 class="help-card-title">${item.title}</h4>
+          </div>
+          <div class="help-card-summary">${item.summary}</div>
+          <ul class="help-card-details">
+            ${detailsHtml}
+          </ul>
+        </article>
+      `;
+    }).join('');
+
+    helpContentContainer.innerHTML = cardsHtml;
+  }
+
+  if (btnHelp) btnHelp.addEventListener('click', openHelpModal);
+  if (btnCloseHelp) btnCloseHelp.addEventListener('click', closeHelpModal);
+  if (btnCancelHelp) btnCancelHelp.addEventListener('click', closeHelpModal);
+  if (helpModal) {
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) closeHelpModal();
+    });
+  }
+  if (helpLangSelect) {
+    helpLangSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+  }
+  if (helpSearchInput) {
+    helpSearchInput.addEventListener('input', (e) => {
+      helpFilterText = e.target.value;
+      if (btnHelpClear) {
+        btnHelpClear.classList.toggle('visible', !!helpFilterText);
+      }
+      renderHelpContent();
+    });
+  }
+  if (btnHelpClear) {
+    btnHelpClear.addEventListener('click', () => {
+      if (helpSearchInput) {
+        helpSearchInput.value = '';
+        helpFilterText = '';
+        btnHelpClear.classList.remove('visible');
+        renderHelpContent();
+        helpSearchInput.focus();
+      }
+    });
+  }
+  if (helpCategoryChips) {
+    helpCategoryChips.addEventListener('click', (e) => {
+      const chip = e.target.closest('.help-chip');
+      if (!chip) return;
+      helpCategoryChips.querySelectorAll('.help-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      helpActiveCategory = chip.getAttribute('data-cat') || 'all';
+      renderHelpContent();
     });
   }
 
@@ -1485,12 +1614,13 @@
         e.preventDefault();
         return;
       }
-      if (guideDrawer.classList.contains('open') || epgSidebar.classList.contains('open') || reportModal.classList.contains('open') || statsModal.classList.contains('open') || sleepModal.classList.contains('open') || remoteModal.classList.contains('open')) {
+      if (guideDrawer.classList.contains('open') || epgSidebar.classList.contains('open') || reportModal.classList.contains('open') || statsModal.classList.contains('open') || sleepModal.classList.contains('open') || remoteModal.classList.contains('open') || (helpModal && helpModal.classList.contains('open'))) {
         closeSidebars();
         closeReportModal();
         closeStatsModal();
         closeSleepModal();
         closeRemoteModal();
+        closeHelpModal();
         e.preventDefault();
         return;
       }
@@ -1507,13 +1637,14 @@
       return;
     }
 
-    if (document.activeElement === searchInput || document.activeElement === reportUserNote) {
+    if (document.activeElement === searchInput || document.activeElement === reportUserNote || document.activeElement === helpSearchInput) {
       if (e.key === 'Escape') {
         closeSidebars();
         closeReportModal();
         closeStatsModal();
         closeSleepModal();
         closeRemoteModal();
+        closeHelpModal();
         document.activeElement.blur();
       }
       return;
@@ -1590,12 +1721,23 @@
           btnToggleEpg.click();
         }
         break;
+      case 'h':
+      case 'H':
+      case '?':
+        e.preventDefault();
+        if (helpModal && helpModal.classList.contains('open')) {
+          closeHelpModal();
+        } else {
+          openHelpModal();
+        }
+        break;
       case 'Escape':
         closeSidebars();
         closeReportModal();
         closeStatsModal();
         closeSleepModal();
         closeRemoteModal();
+        closeHelpModal();
         break;
       default:
         if (e.key >= '0' && e.key <= '9') {
@@ -1685,13 +1827,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v3.9)
+  // Service Worker Registration for PWA (v4.0)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=3.9').then((reg) => {
-        console.log('[ZsirafVision v3.9] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.0').then((reg) => {
+        console.log('[ZsirafVision v4.0] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v3.9] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.0] Service Worker hiba:', err);
       });
     });
   }

@@ -1,15 +1,22 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v3.9)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.0)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v3.9`
+* **Aktuális verzió:** `v4.0`
 
 ---
 
 ## 🚀 Főbb funkciók és képességek
+
+* **❓ Többnyelvű Használati Útmutató & Súgó Rendszer (v4.0):**
+  * Egyetlen kattintással az alsó sávban lévő `❓ SÚGÓ` gombra vagy a billentyűzeten a `H` / `?` billentyűre kinyílik a teljes körű retro használati útmutató.
+  * **6 Nyelven elérhető:** Magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven, valós idejű nyelvváltással.
+  * **11 Részletes Témakör:** Élő adások, csatornalista és keresés, kedvencek, műsorújság (EPG), elalvásidőzítő & készenlét, mobil távirányító, telepíthető PWA zsebtévé, többnyelvű felület, billentyűzet és okostévé vezérlés, technikai statisztikák & hibajelentő, titkos felnőtt mód.
+  * **Azonnali Keresés és Kategóriaszűrők:** Valós idejű szűrés címre, összefoglalóra és billentyűkre.
+  * **Automatikus és Moduláris Jövőbeli Bővíthetőség:** A súgó adatai az `i18n.js` `HELP_GUIDE` struktúrájából renderelődnek. Új funkciók beépítésekor elegendő egyetlen új bejegyzést felvenni a 6 nyelven, és a felület automatikusan, HTML szerkesztés nélkül leköveti és megjeleníti azt!
 
 * **⭐ Kedvencek (Favorites) rendszer (v3.7):**
   * Egykattintásos csillagozás közvetlenül a képernyőn (OSD csillag gomb) vagy a csatornalistában minden adó mellett.
@@ -91,10 +98,20 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 | `F` | Teljes képernyős mód (Full HD) |
 | `C` | Csatornalista megnyitása |
 | `P` | Műsorújság megnyitása |
+| `H` / `?` / `F1` | Használati útmutató & Súgó megnyitása / bezárása |
 
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.0] - 2026-10-29
+* **Új**: **❓ Többnyelvű Használati Útmutató és Súgó Rendszer**:
+  * Új `❓ SÚGÓ` gomb az alsó vezérlősávban és azonnali gyorsbillentyűk (`H`, `?`, `F1`) a súgó megnyitásához.
+  * **6 Nyelvű Fordítás:** Magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven elérhető teljes körű útmutató, beépített azonnali nyelvváltóval a fejlécben.
+  * **11 Részletes Témakör:** Élő adások navigációja, csatornalista és keresés, kedvencek, műsorújság (EPG), elalvásidőzítő & készenlét, mobil távirányító, telepíthető PWA zsebtévé, többnyelvű felület, billentyűzet és okostévé vezérlés, technikai statisztikák & hibajelentő, titkos felnőtt mód.
+  * **Interaktív Kereső és Kategóriaszűrők:** Valós idejű gépelési szűrőmező törlés gombbal, valamint kategória-chipek (Mind, Irányítás, Funkciók, Távirányító, Tippek & Trükkök).
+  * **Jövőbiztos és Dinamikus Architektúra:** A súgó adatai az `i18n.js` `HELP_GUIDE` adatbázisából töltődnek be. Ha a jövőben új funkciókkal bővül az alkalmazás, csupán az `i18n.js`-ben kell új témakört felvenni mind a 6 nyelven, és a felület automatikusan, sablonmódosítás nélkül azonnal megjeleníti azt.
+* **Update**: Service Worker gyorsítótár verzió léptetése (`zsirafvision-v4.0`) az azonnali és tiszta frissüléshez.
 
 ### [v3.9] - 2026-10-29
 * **Fix**: **Mobil távirányító azonnali kapcsolódása (MQTT over WSS felhős híd)**:
