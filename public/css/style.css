@@ -558,6 +558,33 @@ body {
   color: #fff;
 }
 
+/* Language Selector */
+.lang-select-box {
+  display: flex;
+  align-items: center;
+}
+
+.lang-select {
+  padding: 8px 12px;
+  cursor: pointer;
+  background: linear-gradient(180deg, #221d2b 0%, #17131e 100%);
+  border-color: #4b395f;
+  color: #d6c6e8;
+  outline: none;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.85rem;
+}
+
+.lang-select:hover {
+  border-color: #9b72cf;
+  color: #fff;
+}
+
+.lang-select option {
+  background: #191421;
+  color: #e8dccb;
+}
+
 /* ==========================================================================
    Channel Guide Drawer Modal
    ========================================================================== */
@@ -586,8 +613,31 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 14px 18px;
   border-bottom: 1px solid #2e2621;
+  gap: 10px;
+}
+
+.drawer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drawer-lang-select {
+  background: #241e1a;
+  border: 1px solid #4a3b33;
+  color: #e8dccb;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.drawer-lang-select:hover {
+  border-color: var(--brass-accent);
 }
 
 .drawer-title h3 {

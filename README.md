@@ -1,33 +1,36 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v3.5)
+# 📺 ZsirafVision - Online IPTV & Web Player (v3.6)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, valós idejű **EPG műsorújságot**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v3.5`
+* **Aktuális verzió:** `v3.6`
 
 ---
 
 ## 🚀 Főbb funkciók és képességek
 
+* **Utolsóként nézett csatorna és ország megjegyzése (v3.6):**
+  * A lejátszó a `localStorage` segítségével automatikusan megjegyzi az utolsóként nézett csatornát és a forrást (`HU`, `WORLD`, `XXX`).
+  * Következő megnyitáskor azonnal az utoljára nézett adó indul el, és a forrásválasztó is automatikusan a megfelelő országra/listára áll át.
+* **6 Nyelvű Kezelőfelület (i18n) (v3.6):**
+  * Teljes felületi fordítás: 🇭🇺 Magyar (`hu`), 🇬🇧 Angol (`en`), 🇩🇪 Német (`de`), 🇫🇷 Francia (`fr`), 🇪🇸 Spanyol (`es`) és 🇷🇺 Orosz (`ru`).
+  * Automatikus böngészőnyelv-felismerés és azonnali, mentett nyelvváltó az alsó vezérlősávban és a csatornalista fejlécében.
+* **Minden Csatornára Kiterjesztett Műsorújság (EPG) (v3.6):**
+  * Részletes XMLTV adatok a hazai adókhoz + intelligens, időpont- és műfajfüggő valós idejű műsorfolyam-generátor nemzetközi és egyéb csatornákhoz.
+  * A műsorcímek és leírások a kiválasztott felületi nyelven jelennek meg, aktuális „ÉLŐBEN / LIVE” jelöléssel.
+* **Mobilos Billentyűzet Felugrásának Megakadályozása (v3.6):**
+  * A csatornalista és az alkalmazás megnyitásakor mobilon/tableten nem ugrik fel zavaróan a virtuális billentyűzet; csak akkor jelenik meg, ha a felhasználó közvetlenül a keresőmezőbe kattint.
 * **131 Élő Magyar IPTV Csatorna (24/7):**
   * Országos, közszolgálati, film-, sorozat-, sport-, hír-, zenei, gyermek- és ismeretterjesztő csatornák kristálytiszta digitális minőségben.
-  * Helyi és regionális televíziók elérhetősége.
-* **Valós idejű EPG Műsorújság:**
-  * Az éppen játszott csatorna aktuális műsorfolyama idősávokkal és leírásokkal (XMLTV forrásból generálva).
-  * Asztali képernyőn bal oldali sávban azonnal olvasható, mobilon és tableten a 📅 **MŰSORÚJSÁG** gombbal kinyitható.
-* **Samsung Smart TV (Tizen OS) & Okostévé Teljes Kompatibilitás (v3.5):**
-  * Megoldva a tipikus okostévés „csak hang van, kép nincs” hiba.
-  * Hardveres videósík rétegpromóció (`transform: translateZ(0)`).
-  * Fő szálon futó, stabil HLS demuxolás (`enableWorker: false`), memóriakorlátos TV-puffereléssel.
-  * Intelligens videófelügyelő (Watchdog) natív HLS automatikus tartalék-lejátszással.
-  * TV távirányító gombok támogatása (Nyilak, Enter/OK, Vissza/Return, Csatorna Fel/Le, Lejátszás/Szünet).
+* **Samsung Smart TV (Tizen OS) & Okostévé Teljes Kompatibilitás:**
+  * Hardveres videósík rétegpromóció (`transform: translateZ(0)`), főszálon futó demuxolás (`enableWorker: false`), Smart TV watchdog és távirányító támogatás (Return: `10009`, Csatornaváltás: `427`/`428`).
 * **Felhő alapú Vercel Proxy (`/api/proxy`):**
   * Teljes CORS és Mixed Content feloldás, M3U8 és TS URL-ek dinamikus átírása.
-  * **HTTP 206 Partial Content & Range fejlécek támogatása:** villámgyors indítás és beletekerési lehetőség.
-  * Zéró helyi függőség: **nem kell futnia semmilyen szervernek a felhasználó számítógépén**, a lejátszás 24 órában működik.
+  * **HTTP 206 Partial Content & Range fejlécek támogatása:** azonnali lejátszásindítás.
+  * Zéró helyi függőség: **nem kell futnia semmilyen szervernek a felhasználó számítógépén**.
 * **Telemetria és Hibajelentő (`HIBAJELENTŐ` gomb):**
-  * A tévékészülék káváján elhelyezett piros gomb megnyomásával az adáshibákról szóló diagnosztikai adatok (felbontás, képkockavesztés, hálózati puffer, TV típus) beküldhetők a felhőbe (`/api/report`).
+  * A tévékészülék káváján elhelyezett piros gomb megnyomásával az adáshibákról szóló diagnosztikai adatok felküldhetők a felhőbe (`/api/report`).
 * **Valós idejű Technikai Statisztikák (⚙ Gomb):**
   * Élő ping mérés a Vercel szerverhez, stream felbontás, bitráta, puffer és eldobott képkockák kijelzése.
 * **Nemzetközi Adások és Titkos Felnőtt Mód:**
@@ -71,6 +74,13 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v3.6] - 2026-10-29
+* **Új**: **Utolsóként nézett csatorna és ország megjegyzése**: A lejátszó `localStorage` segítségével elmenti az utoljára nézett adót és forrást (`HU`, `WORLD`, `XXX`), és a legközelebbi indításkor pontosan azzal indul el, automatikusan beállítva az országválasztót is.
+* **Új**: **6 Nyelvű Kezelőfelület (i18n)**: Teljes felületi fordítás magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven. Két helyen elérhető gyorsváltóval (alsó vezérlősáv és csatornalista fejléc), valamint automatikus böngészőnyelv-felismeréssel.
+* **Új**: **Bővített műsorújság (EPG)**: Minden csatornához – beleértve a külföldi és nemzetközi adókat is – elérhető a strukturált, több idősávos műsorújság. A magyar XMLTV adatbázis mellett intelligens, valós idejű műsorfolyam-generátor biztosítja a műsorokat a kiválasztott nyelven.
+* **Fix**: **Mobilos billentyűzet felugrásának megakadályozása**: A csatornalista (`btnOpenGuide`) megnyitásakor eltávolításra került a `searchInput.focus()` hívás, így érintőképernyős eszközökön (mobil, tablet) nem ugrik fel zavaróan a virtuális billentyűzet.
+* **Modul**: Önálló, tisztán strukturált `i18n.js` modul bevezetése a könnyű bővíthetőségért.
 
 ### [v3.5] - 2026-10-29
 * **Fix**: Samsung Smart TV (Tizen OS) „nincs kép, csak hang” hiba teljeskörű elhárítása.

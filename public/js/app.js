@@ -1,6 +1,7 @@
 /**
  * ZsirafVision - Online TV Player
- * Műsorújság (EPG), Hibajelentő (Red Button), Technikai adatok, iptv-org és Secret XXX támogatással
+ * Version: 3.6
+ * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Hibajelentő, iptv-org és Secret XXX támogatással
  */
 
 (function () {
@@ -25,7 +26,7 @@
   const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
   if (isSmartTV) {
     document.body.classList.add('is-smart-tv');
-    console.log('[ZsirafVision v3.5] Smart TV mód aktiválva:', navigator.userAgent);
+    console.log('[ZsirafVision v3.6] Smart TV mód aktiválva:', navigator.userAgent);
   }
 
   let videoWatchdogTimer = null;
@@ -62,6 +63,8 @@
   const sourceSelect = document.getElementById('source-select');
   const categoryPillsContainer = document.getElementById('category-pills');
   const channelListScroll = document.getElementById('channel-list-scroll');
+  const langSelect = document.getElementById('lang-select');
+  const drawerLangSelect = document.getElementById('drawer-lang-select');
 
   // Red Report Button & Modal
   const btnRedReport = document.getElementById('btn-red-report');
@@ -87,8 +90,77 @@
   const statDroppedFrames = document.getElementById('stat-dropped-frames');
   const statPing = document.getElementById('stat-ping');
 
-  function showLoading(msg = 'ADÁS BETÖLTÉSE...') {
-    tuningText.textContent = msg;
+  // Multi-Language Management (i18n)
+  let currentLang = 'hu';
+
+  function t(key) {
+    if (window.ZsirafI18N && window.ZsirafI18N.t) {
+      return window.ZsirafI18N.t(key, currentLang);
+    }
+    return key;
+  }
+
+  function detectInitialLanguage() {
+    try {
+      const saved = localStorage.getItem('zsirafvision_lang');
+      if (saved && window.ZsirafI18N && window.ZsirafI18N.DICTIONARY[saved]) return saved;
+      const navLang = (navigator.language || navigator.userLanguage || 'hu').toLowerCase();
+      if (navLang.startsWith('en')) return 'en';
+      if (navLang.startsWith('de')) return 'de';
+      if (navLang.startsWith('fr')) return 'fr';
+      if (navLang.startsWith('es')) return 'es';
+      if (navLang.startsWith('ru')) return 'ru';
+    } catch (e) {}
+    return 'hu';
+  }
+
+  function setLanguage(lang) {
+    if (!window.ZsirafI18N || !window.ZsirafI18N.DICTIONARY[lang]) lang = 'hu';
+    currentLang = lang;
+    try {
+      localStorage.setItem('zsirafvision_lang', lang);
+    } catch (e) {}
+
+    document.documentElement.lang = lang;
+    if (langSelect && langSelect.value !== lang) langSelect.value = lang;
+    if (drawerLangSelect && drawerLangSelect.value !== lang) drawerLangSelect.value = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = window.ZsirafI18N.t(key, lang);
+      if (val) el.textContent = val;
+    });
+
+    document.querySelectorAll('[data-i18n-title]').forEach(el => {
+      const key = el.getAttribute('data-i18n-title');
+      const val = window.ZsirafI18N.t(key, lang);
+      if (val) el.title = val;
+    });
+
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      const val = window.ZsirafI18N.t(key, lang);
+      if (val) el.placeholder = val;
+    });
+
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      const val = window.ZsirafI18N.t(key, lang);
+      if (val) el.innerHTML = val;
+    });
+
+    updateEpgForCurrentChannel();
+  }
+
+  if (langSelect) {
+    langSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+  }
+  if (drawerLangSelect) {
+    drawerLangSelect.addEventListener('change', (e) => setLanguage(e.target.value));
+  }
+
+  function showLoading(msg) {
+    tuningText.textContent = msg || t('tuning');
     tuningIndicator.classList.add('active');
   }
 
@@ -142,6 +214,11 @@
       }
     }
 
+    // If no static XMLTV data, dynamically generate a realistic, rich schedule!
+    if ((!programs || !programs.length) && window.ZsirafI18N && window.ZsirafI18N.generateSchedule) {
+      programs = window.ZsirafI18N.generateSchedule(channel, currentLang);
+    }
+
     if (programs && programs.length) {
       programs.forEach((p, idx) => {
         const item = document.createElement('div');
@@ -149,7 +226,7 @@
 
         const timeRow = document.createElement('div');
         timeRow.className = 'epg-time-row';
-        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${idx === 0 ? '<span class="epg-live-indicator">ÉLŐBEN</span>' : ''}`;
+        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${idx === 0 ? `<span class="epg-live-indicator">${t('epgLive')}</span>` : ''}`;
 
         const titleDiv = document.createElement('div');
         titleDiv.className = 'epg-prog-title';
@@ -170,15 +247,15 @@
     } else {
       epgProgramsList.innerHTML = `
         <div class="epg-empty">
-          <p>Ehhez a csatornához jelenleg nem áll rendelkezésre részletes műsorinformáció.</p>
-          <p style="margin-top: 8px; font-size: 0.75rem; color: #555;">(Folyamatos adás)</p>
+          <p>${t('epgNoInfo')}</p>
+          <p style="margin-top: 8px; font-size: 0.75rem; color: #555;">${t('epgContinuous')}</p>
         </div>
       `;
     }
   }
 
   // ==========================================================================
-  // Channel Playback
+  // Channel Playback & State Persistence
   // ==========================================================================
   function playChannel(index) {
     if (!channels.length) return;
@@ -187,6 +264,23 @@
     currentChannelIndex = index;
 
     const channel = channels[currentChannelIndex];
+
+    // Save last watched channel and current source/country in localStorage
+    try {
+      if (channel) {
+        let src = 'HU';
+        if (channels === adultChannels) {
+          src = 'XXX';
+        } else if (sourceSelect.value === 'WORLD') {
+          src = 'WORLD';
+        }
+        localStorage.setItem('zsirafvision_last_channel_name', channel.name);
+        if (channel.url) localStorage.setItem('zsirafvision_last_channel_url', channel.url);
+        localStorage.setItem('zsirafvision_last_source', src);
+      }
+    } catch (e) {
+      console.warn('Could not save channel to localStorage:', e);
+    }
 
     // Update OSD
     osdName.textContent = channel.name;
@@ -200,7 +294,7 @@
 
     highlightActiveDrawerItem();
     updateEpgForCurrentChannel();
-    showLoading(`${channel.name} BETÖLTÉSE...`);
+    showLoading(`${channel.name} ${t('tuning')}`);
 
     const streamUrl = channel.url;
 
@@ -244,7 +338,7 @@
       video.oncanplay = onReady;
       video.onerror = (e) => {
         console.error('MP4 playback error:', e);
-        tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
+        tuningText.textContent = t('streamUnavailable');
         setTimeout(hideLoading, 3000);
       };
       video.load();
@@ -339,7 +433,7 @@
                 video.load();
                 video.play().catch(() => {});
               } else {
-                tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
+                tuningText.textContent = t('streamUnavailable');
                 setTimeout(hideLoading, 3000);
                 hls.destroy();
                 hls = null;
@@ -533,13 +627,17 @@
   // ==========================================================================
   sourceSelect.addEventListener('change', async () => {
     const selected = sourceSelect.value;
+    try {
+      localStorage.setItem('zsirafvision_last_source', selected);
+    } catch (e) {}
+
     if (selected === 'HU') {
       channels = hungarianChannels;
       setupCategories();
       applyFilter();
       playChannel(0);
     } else if (selected === 'WORLD') {
-      showLoading('VILÁG CSATORNÁK BETÖLTÉSE...');
+      showLoading(t('loadingWorld'));
       if (!worldChannels) {
         try {
           const res = await fetch('https://iptv-org.github.io/iptv/index.country.m3u');
@@ -548,7 +646,7 @@
           worldChannels = parsed;
         } catch (e) {
           console.error('Failed to fetch world channels:', e);
-          tuningText.textContent = 'HIBA A VILÁG CSATORNÁK BETÖLTÉSEKOR';
+          tuningText.textContent = t('errorLoadingWorld');
           setTimeout(hideLoading, 3000);
           return;
         }
@@ -777,7 +875,7 @@
     guideDrawer.classList.add('open');
     sidebarBackdrop.classList.add('active');
     highlightActiveDrawerItem();
-    searchInput.focus();
+    // Intentionally no searchInput.focus() so mobile virtual keyboard does not pop up automatically!
   });
 
   btnCloseGuide.addEventListener('click', closeSidebars);
@@ -798,7 +896,7 @@
     isMuted = !isMuted;
     video.muted = isMuted;
     btnMute.textContent = isMuted ? '🔇' : '🔊';
-    showAdjustment('NÉMÍTÁS', isMuted ? 'BE' : 'KI', isMuted ? 0 : currentVolume * 100);
+    showAdjustment(t('mute'), isMuted ? t('muteOn') : t('muteOff'), isMuted ? 0 : currentVolume * 100);
   });
 
   btnFullscreen.addEventListener('click', () => {
@@ -946,15 +1044,67 @@
     }
   });
 
-  // Initial Load
+  // Initial Load with Last Channel and Country Memory
   async function loadChannels() {
     try {
+      // Set initial language
+      const initLang = detectInitialLanguage();
+      setLanguage(initLang);
+
       const res = await fetch(`channels.json?t=${Date.now()}`);
       hungarianChannels = await res.json();
-      channels = hungarianChannels;
+
+      // Read saved channel and country/source
+      const savedSource = localStorage.getItem('zsirafvision_last_source') || 'HU';
+      const savedChannelName = localStorage.getItem('zsirafvision_last_channel_name');
+      const savedChannelUrl = localStorage.getItem('zsirafvision_last_channel_url');
+
+      if (savedSource === 'WORLD') {
+        sourceSelect.value = 'WORLD';
+        showLoading(t('loadingWorld'));
+        try {
+          const wRes = await fetch('https://iptv-org.github.io/iptv/index.country.m3u');
+          const wText = await wRes.text();
+          worldChannels = parseM3uWorld(wText);
+          channels = worldChannels;
+        } catch (we) {
+          console.warn('Fallback to HU channels:', we);
+          channels = hungarianChannels;
+          sourceSelect.value = 'HU';
+        }
+      } else if (savedSource === 'XXX') {
+        try {
+          const aRes = await fetch(`adult.json?t=${Date.now()}`);
+          if (aRes.ok) {
+            adultChannels = await aRes.json();
+            channels = adultChannels;
+          } else {
+            channels = hungarianChannels;
+          }
+        } catch (ae) {
+          channels = hungarianChannels;
+        }
+      } else {
+        sourceSelect.value = 'HU';
+        channels = hungarianChannels;
+      }
+
       setupCategories();
       renderDrawer(channels);
-      playChannel(0);
+
+      // Locate previously watched channel
+      let targetIndex = 0;
+      if (savedChannelName || savedChannelUrl) {
+        const found = channels.findIndex(c =>
+          (savedChannelName && c.name.toLowerCase() === savedChannelName.toLowerCase()) ||
+          (savedChannelUrl && c.url === savedChannelUrl)
+        );
+        if (found !== -1) {
+          targetIndex = found;
+        }
+      }
+
+      playChannel(targetIndex);
       loadEpgDatabase();
     } catch (e) {
       console.error('Failed to load channels:', e);
