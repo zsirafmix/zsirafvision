@@ -295,7 +295,6 @@
       const logoImg = document.createElement('img');
       logoImg.className = 'channel-item-logo';
       logoImg.referrerPolicy = 'no-referrer';
-      logoImg.crossOrigin = 'anonymous';
       const fallbackSvg = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222"/><text y="55" x="50" font-size="30" text-anchor="middle" fill="%23666">TV</text></svg>';
       logoImg.src = ch.logo || fallbackSvg;
       logoImg.loading = 'lazy';
