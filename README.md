@@ -1,11 +1,11 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.0)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.1)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v4.0`
+* **Aktuális verzió:** `v4.1`
 
 ---
 
@@ -103,6 +103,14 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.1] - 2026-10-29
+* **Fix**: **Súgó ablak megnyitásának javítása (DOM struktúra helyreállítása)**:
+  * **Hiba oka:** A `public/index.html` sablonban a `#remote-modal` párosító ablak lezáró `</div>` címkéje hiányzott, emiatt a `#help-modal` a távirányító ablakának belsejébe ágyazódott be. Amikor a távirányító ablaka rejtve volt (`display: none`), a súgó ablak hiába kapta meg a `.open` osztályt, a rejtett szülőelem miatt fizikailag láthatatlan maradt.
+  * **Megoldás:** A modálok DOM hierarchiájának szétválasztása, különálló háttérelemek biztosítása.
+* **Fix**: **CSS Teljes képernyő szelektorok szétbontása**:
+  * A `:fullscreen` és `:-webkit-full-screen` szelektorok önálló szabályokba rendezése, megakadályozva a böngészők (pl. Firefox) szelektor-érvénytelenítési figyelmeztetését.
+* **Update**: Konzol logok és PWA Service Worker gyorsítótár egységes verziófrissítése (`v4.1`).
 
 ### [v4.0] - 2026-10-29
 * **Új**: **❓ Többnyelvű Használati Útmutató és Súgó Rendszer**:

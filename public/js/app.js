@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.0
+ * Version: 4.1
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -37,7 +37,7 @@
   const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
   if (isSmartTV) {
     document.body.classList.add('is-smart-tv');
-    console.log('[ZsirafVision v3.9] Smart TV mód aktiválva:', navigator.userAgent);
+    console.log('[ZsirafVision v4.1] Smart TV mód aktiválva:', navigator.userAgent);
   }
 
   let videoWatchdogTimer = null;
@@ -535,7 +535,7 @@
           timeout: 5,
           keepAliveInterval: 30,
           onSuccess: () => {
-            console.log('[ZsirafVision v3.8] MQTT TV Bridge online on', host);
+            console.log('[ZsirafVision v4.1] MQTT TV Bridge online on', host);
             mqttTvClient.subscribe('zsirafvision/' + roomCode + '/cmd');
             if (remoteStatusMsg && !remoteConn) {
               remoteStatusMsg.textContent = t('remoteWaiting');
@@ -591,7 +591,7 @@
       });
 
       tvPeer.on('open', (id) => {
-        console.log('[ZsirafVision v3.8] PeerJS TV server online. Peer ID:', id);
+        console.log('[ZsirafVision v4.1] PeerJS TV server online. Peer ID:', id);
         if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
         if (remoteStatusMsg && !remoteConn) {
           remoteStatusMsg.textContent = t('remoteWaiting');
@@ -601,7 +601,7 @@
 
       tvPeer.on('connection', (conn) => {
         remoteConn = conn;
-        console.log('[ZsirafVision v3.8] Remote connected from mobile via WebRTC!');
+        console.log('[ZsirafVision v4.1] Remote connected from mobile via WebRTC!');
         if (remoteStatusMsg) {
           remoteStatusMsg.textContent = '🟢 ' + t('remoteConnected');
           remoteStatusMsg.classList.add('connected');
@@ -616,7 +616,7 @@
         });
 
         conn.on('close', () => {
-          console.log('[ZsirafVision v3.8] Remote disconnected');
+          console.log('[ZsirafVision v4.1] Remote disconnected');
           remoteConn = null;
           if (remoteStatusMsg) {
             remoteStatusMsg.textContent = t('remoteWaiting');
@@ -626,7 +626,7 @@
       });
 
       tvPeer.on('error', (err) => {
-        console.warn('[ZsirafVision v3.8] PeerJS error:', err);
+        console.warn('[ZsirafVision v4.1] PeerJS error:', err);
         if (err.type === 'unavailable-id') {
           roomCode = generateRoomCode();
           if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
@@ -1827,13 +1827,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v4.0)
+  // Service Worker Registration for PWA (v4.1)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.0').then((reg) => {
-        console.log('[ZsirafVision v4.0] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.1').then((reg) => {
+        console.log('[ZsirafVision v4.1] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.0] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.1] Service Worker hiba:', err);
       });
     });
   }

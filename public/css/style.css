@@ -1378,7 +1378,13 @@ body.is-smart-tv #tv-video {
 }
 
 /* Fullscreen support on Smart TV and desktop */
-:fullscreen #tv-video,
+:fullscreen #tv-video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: contain !important;
+  background-color: #000 !important;
+}
+
 :-webkit-full-screen #tv-video {
   width: 100vw !important;
   height: 100vh !important;
@@ -1386,7 +1392,16 @@ body.is-smart-tv #tv-video {
   background-color: #000 !important;
 }
 
-:fullscreen .crt-screen-container,
+:fullscreen .crt-screen-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  z-index: 999999 !important;
+}
+
 :-webkit-full-screen .crt-screen-container {
   position: fixed !important;
   top: 0 !important;
