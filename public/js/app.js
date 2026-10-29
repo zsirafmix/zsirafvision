@@ -1,5 +1,6 @@
 /**
- * ZsirafVision - Videoton TV Player (Tökéletes, Éles HD Kép, Inaktív Analóg Gombok)
+ * ZsirafVision - Online TV Player
+ * Műsorújság (EPG), Hibajelentő (Red Button), Technikai adatok, iptv-org és Secret XXX támogatással
  */
 
 (function () {
@@ -7,12 +8,18 @@
 
   // State
   let channels = [];
+  let hungarianChannels = [];
+  let worldChannels = null;
+  let adultChannels = null;
+  let epgDatabase = {};
   let currentChannelIndex = 0;
   let isMuted = false;
   let currentVolume = 1.0;
   let hls = null;
   let osdTimeout = null;
   let adjustmentTimeout = null;
+  let statsInterval = null;
+  let lastDroppedFrames = 0;
 
   // DOM Elements
   const video = document.getElementById('tv-video');
@@ -27,17 +34,48 @@
   const tuningIndicator = document.getElementById('tuning-indicator');
   const tuningText = document.getElementById('tuning-text');
 
+  // Controls & Modals
   const btnPrev = document.getElementById('btn-prev');
   const btnNext = document.getElementById('btn-next');
   const btnOpenGuide = document.getElementById('btn-open-guide');
   const btnCloseGuide = document.getElementById('btn-close-guide');
   const btnMute = document.getElementById('btn-mute');
   const btnFullscreen = document.getElementById('btn-fullscreen');
+  const btnToggleEpg = document.getElementById('btn-toggle-epg');
+  const btnCloseEpg = document.getElementById('btn-close-epg');
+  const epgSidebar = document.getElementById('epg-sidebar');
+  const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+  const epgChannelName = document.getElementById('epg-channel-name');
+  const epgProgramsList = document.getElementById('epg-programs-list');
   const guideDrawer = document.getElementById('channel-guide-drawer');
   const searchInput = document.getElementById('channel-search-input');
+  const sourceSelect = document.getElementById('source-select');
   const categoryPillsContainer = document.getElementById('category-pills');
   const channelListScroll = document.getElementById('channel-list-scroll');
-  const channelCountBadge = document.getElementById('channel-count-badge');
+
+  // Red Report Button & Modal
+  const btnRedReport = document.getElementById('btn-red-report');
+  const reportModal = document.getElementById('report-modal');
+  const btnCloseReport = document.getElementById('btn-close-report');
+  const btnCancelReport = document.getElementById('btn-cancel-report');
+  const btnSubmitReport = document.getElementById('btn-submit-report');
+  const reportPreview = document.getElementById('report-preview');
+  const reportUserNote = document.getElementById('report-user-note');
+  const reportStatusMsg = document.getElementById('report-status-msg');
+
+  // Technical Stats Modal
+  const btnToggleStats = document.getElementById('btn-toggle-stats');
+  const statsModal = document.getElementById('stats-modal');
+  const btnCloseStats = document.getElementById('btn-close-stats');
+  const btnRefreshStats = document.getElementById('btn-refresh-stats');
+  const statServerStatus = document.getElementById('stat-server-status');
+  const statServerRegion = document.getElementById('stat-server-region');
+  const statChName = document.getElementById('stat-ch-name');
+  const statVideoRes = document.getElementById('stat-video-res');
+  const statVideoBitrate = document.getElementById('stat-video-bitrate');
+  const statVideoBuffer = document.getElementById('stat-video-buffer');
+  const statDroppedFrames = document.getElementById('stat-dropped-frames');
+  const statPing = document.getElementById('stat-ping');
 
   function showLoading(msg = 'ADÁS BETÖLTÉSE...') {
     tuningText.textContent = msg;
@@ -48,7 +86,6 @@
     tuningIndicator.classList.remove('active');
   }
 
-  // Show adjustment banner (volume, mute)
   function showAdjustment(label, valueText, percentage) {
     adjustmentLabel.textContent = label;
     adjustmentValue.textContent = valueText;
@@ -60,7 +97,79 @@
     }, 1800);
   }
 
-  // Play Channel
+  // ==========================================================================
+  // EPG / Műsorújság Logic
+  // ==========================================================================
+  async function loadEpgDatabase() {
+    try {
+      const res = await fetch(`epg.json?t=${Date.now()}`);
+      if (res.ok) {
+        epgDatabase = await res.json();
+        updateEpgForCurrentChannel();
+      }
+    } catch (e) {
+      console.warn('EPG fetch failed:', e);
+    }
+  }
+
+  function updateEpgForCurrentChannel() {
+    if (!channels.length) return;
+    const channel = channels[currentChannelIndex];
+    if (!channel) return;
+
+    epgChannelName.textContent = channel.name;
+    epgProgramsList.innerHTML = '';
+
+    // Search programs for channel
+    let programs = epgDatabase[channel.name];
+    if (!programs) {
+      // Try loose match
+      for (const [k, v] of Object.entries(epgDatabase)) {
+        if (k.toLowerCase().includes(channel.name.toLowerCase()) || channel.name.toLowerCase().includes(k.toLowerCase())) {
+          programs = v;
+          break;
+        }
+      }
+    }
+
+    if (programs && programs.length) {
+      programs.forEach((p, idx) => {
+        const item = document.createElement('div');
+        item.className = `epg-prog-item ${idx === 0 ? 'active' : ''}`;
+
+        const timeRow = document.createElement('div');
+        timeRow.className = 'epg-time-row';
+        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${idx === 0 ? '<span class="epg-live-indicator">ÉLŐBEN</span>' : ''}`;
+
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'epg-prog-title';
+        titleDiv.textContent = p.title;
+
+        item.appendChild(timeRow);
+        item.appendChild(titleDiv);
+
+        if (p.desc) {
+          const descDiv = document.createElement('div');
+          descDiv.className = 'epg-prog-desc';
+          descDiv.textContent = p.desc;
+          item.appendChild(descDiv);
+        }
+
+        epgProgramsList.appendChild(item);
+      });
+    } else {
+      epgProgramsList.innerHTML = `
+        <div class="epg-empty">
+          <p>Ehhez a csatornához jelenleg nem áll rendelkezésre részletes műsorinformáció.</p>
+          <p style="margin-top: 8px; font-size: 0.75rem; color: #555;">(Folyamatos adás)</p>
+        </div>
+      `;
+    }
+  }
+
+  // ==========================================================================
+  // Channel Playback
+  // ==========================================================================
   function playChannel(index) {
     if (!channels.length) return;
     if (index < 0) index = channels.length - 1;
@@ -71,23 +180,20 @@
 
     // Update OSD
     osdName.textContent = channel.name;
-    osdNumber.textContent = channel.channel_number || String(channel.id).padStart(2, '0');
-    osdCategory.textContent = channel.group || 'Magyar TV';
+    osdNumber.textContent = channel.channel_number || (channel.id ? String(channel.id).padStart(2, '0') : '00');
+    osdCategory.textContent = channel.group || 'Online TV';
     osdContainer.classList.remove('fade-out');
     clearTimeout(osdTimeout);
     osdTimeout = setTimeout(() => {
       osdContainer.classList.add('fade-out');
     }, 4500);
 
-    // Update Active item in Drawer
     highlightActiveDrawerItem();
-
+    updateEpgForCurrentChannel();
     showLoading(`${channel.name} BETÖLTÉSE...`);
 
-    // Direct stream playback (all curated channels are verified HTTPS with CORS)
     const streamUrl = channel.url;
 
-    // Destroy previous Hls instance
     if (hls) {
       hls.destroy();
       hls = null;
@@ -97,7 +203,7 @@
       hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
-        manifestLoadingTimeOut: 8000,
+        manifestLoadingTimeOut: 10000,
         manifestLoadingMaxRetry: 2
       });
 
@@ -107,7 +213,7 @@
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         hideLoading();
         video.play().catch((err) => {
-          console.warn('Autoplay blocked, muting video to allow playback:', err);
+          console.warn('Autoplay blocked, muting video:', err);
           video.muted = true;
           isMuted = true;
           btnMute.textContent = '🔇';
@@ -135,7 +241,7 @@
         }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native Safari HLS
+      // Safari iOS/macOS
       video.src = streamUrl;
       video.addEventListener('loadedmetadata', () => {
         hideLoading();
@@ -148,7 +254,7 @@
     }
   }
 
-  // Volume Adjustment
+  // Volume
   function setVolume(val) {
     currentVolume = Math.max(0, Math.min(1, val));
     video.volume = currentVolume;
@@ -158,7 +264,9 @@
     showAdjustment('HANGERŐ', `${Math.round(currentVolume * 100)}%`, currentVolume * 100);
   }
 
-  // Drawer & Categories Rendering
+  // ==========================================================================
+  // Drawer & Filter Logic
+  // ==========================================================================
   function renderDrawer(channelsToRender) {
     channelListScroll.innerHTML = '';
     if (!channelsToRender.length) {
@@ -168,12 +276,11 @@
 
     const fragment = document.createDocumentFragment();
     channelsToRender.forEach((ch) => {
-      // Find actual index in global channels array
       const globalIdx = channels.findIndex((c) => c.id === ch.id || c.name === ch.name);
-      const actualIdx = globalIdx !== -1 ? globalIdx : (ch.id ? ch.id - 1 : 0);
+      const actualIdx = globalIdx !== -1 ? globalIdx : 0;
 
       const item = document.createElement('div');
-      item.className = `channel-item ${actualIdx === currentChannelIndex ? 'active' : ''}`;
+      item.className = `channel-item ${actualIdx === currentChannelIndex ? 'active' : ''} ${ch.is_adult ? 'adult-channel' : ''}`;
       item.dataset.index = actualIdx;
 
       const numSpan = document.createElement('span');
@@ -211,7 +318,7 @@
         if (!isNaN(idx) && idx >= 0 && idx < channels.length) {
           playChannel(idx);
         }
-        guideDrawer.classList.remove('open');
+        closeSidebars();
       });
 
       fragment.appendChild(item);
@@ -232,7 +339,6 @@
     });
   }
 
-  // Setup Categories
   function setupCategories() {
     const groups = new Set();
     channels.forEach((c) => {
@@ -264,10 +370,26 @@
     });
   }
 
-  function applyFilter() {
+  async function applyFilter() {
     const activePill = categoryPillsContainer.querySelector('.cat-pill.active');
     const selectedCategory = activePill ? activePill.dataset.category : 'ALL';
     const query = searchInput.value.toLowerCase().trim();
+
+    // Check for secret XXX query
+    if (query === 'xxx' || query === ':xxx') {
+      if (!adultChannels) {
+        try {
+          const res = await fetch('adult.json');
+          adultChannels = await res.json();
+        } catch (e) {
+          console.error('Failed to load adult channels:', e);
+        }
+      }
+      if (adultChannels) {
+        renderDrawer(adultChannels);
+        return;
+      }
+    }
 
     let filtered = channels;
     if (selectedCategory !== 'ALL') {
@@ -281,25 +403,257 @@
     renderDrawer(filtered);
   }
 
-  // Load Channels Data
-  async function loadChannels() {
-    try {
-      const res = await fetch(`channels.json?t=${Date.now()}`);
-      channels = await res.json();
-      channelCountBadge.textContent = `${channels.length} CSATORNA`;
+  // ==========================================================================
+  // Source / Country Selector (Hungarian default vs iptv-org World)
+  // ==========================================================================
+  sourceSelect.addEventListener('change', async () => {
+    const selected = sourceSelect.value;
+    if (selected === 'HU') {
+      channels = hungarianChannels;
       setupCategories();
-      renderDrawer(channels);
-
-      // Start on first channel
+      applyFilter();
       playChannel(0);
+    } else if (selected === 'WORLD') {
+      showLoading('VILÁG CSATORNÁK BETÖLTÉSE...');
+      if (!worldChannels) {
+        try {
+          const res = await fetch('https://iptv-org.github.io/iptv/index.country.m3u');
+          const text = await res.text();
+          const parsed = parseM3uWorld(text);
+          worldChannels = parsed;
+        } catch (e) {
+          console.error('Failed to fetch world channels:', e);
+          tuningText.textContent = 'HIBA A VILÁG CSATORNÁK BETÖLTÉSEKOR';
+          setTimeout(hideLoading, 3000);
+          return;
+        }
+      }
+      channels = worldChannels;
+      hideLoading();
+      setupCategories();
+      applyFilter();
+      playChannel(0);
+    }
+  });
+
+  function parseM3uWorld(m3uText) {
+    const lines = m3uText.split('\n');
+    const list = [];
+    let idCounter = 1;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith('#EXTINF')) {
+        const lastComma = line.rfind ? line.rfind(',') : line.lastIndexOf(',');
+        const name = lastComma !== -1 ? line.substring(lastComma + 1).trim() : 'Világ Csatorna';
+        const groupMatch = line.match(/group-title="([^"]+)"/);
+        const group = groupMatch ? groupMatch[1] : 'Nemzetközi';
+        const logoMatch = line.match(/tvg-logo="([^"]+)"/);
+        const logo = logoMatch ? logoMatch[1] : '';
+
+        // Next line url
+        let j = i + 1;
+        while (j < lines.length && lines[j].trim().startsWith('#')) j++;
+        if (j < lines.length && lines[j].trim().startsWith('http')) {
+          const rawUrl = lines[j].trim();
+          // Route through Vercel Proxy
+          const proxyUrl = `https://zsirafvision-vercel.vercel.app/api/proxy?url=${encodeURIComponent(rawUrl)}`;
+          list.push({
+            id: `w_${idCounter}`,
+            channel_number: String(idCounter).padStart(3, '0'),
+            name,
+            url: proxyUrl,
+            logo,
+            group
+          });
+          idCounter++;
+          i = j;
+        }
+      }
+    }
+    return list;
+  }
+
+  // ==========================================================================
+  // Red Report Button & Diagnostics Gathering
+  // ==========================================================================
+  function gatherDiagnostics() {
+    const ch = channels[currentChannelIndex] || {};
+    let resolution = 'Ismeretlen';
+    if (video.videoWidth && video.videoHeight) {
+      resolution = `${video.videoWidth}x${video.videoHeight}`;
+    }
+
+    let bufferSec = 0;
+    if (video.buffered && video.buffered.length > 0) {
+      bufferSec = Math.round(video.buffered.end(video.buffered.length - 1) - video.currentTime);
+    }
+
+    let dropped = 0;
+    if (video.getVideoPlaybackQuality) {
+      dropped = video.getVideoPlaybackQuality().droppedVideoFrames || 0;
+    }
+
+    return {
+      channelName: ch.name || 'Ismeretlen',
+      channelNumber: ch.channel_number || '00',
+      category: ch.group || '',
+      streamUrl: ch.url || '',
+      resolution,
+      readyState: video.readyState,
+      networkState: video.networkState,
+      currentTime: Math.round(video.currentTime),
+      bufferedSeconds: bufferSec,
+      droppedFrames: dropped,
+      isPaused: video.paused,
+      isMuted: video.muted,
+      volume: Math.round(video.volume * 100),
+      userAgent: navigator.userAgent,
+      screenWidth: window.innerWidth,
+      screenHeight: window.innerHeight,
+      hlsStats: hls ? {
+        levels: hls.levels ? hls.levels.length : 0,
+        currentLevel: hls.currentLevel,
+        liveSyncPosition: hls.liveSyncPosition
+      } : null
+    };
+  }
+
+  btnRedReport.addEventListener('click', () => {
+    const diag = gatherDiagnostics();
+    reportPreview.textContent = JSON.stringify(diag, null, 2);
+    reportUserNote.value = '';
+    reportStatusMsg.textContent = '';
+    reportModal.classList.add('open');
+  });
+
+  function closeReportModal() {
+    reportModal.classList.remove('open');
+  }
+
+  btnCloseReport.addEventListener('click', closeReportModal);
+  btnCancelReport.addEventListener('click', closeReportModal);
+
+  btnSubmitReport.addEventListener('click', async () => {
+    btnSubmitReport.disabled = true;
+    reportStatusMsg.style.color = '#ffeedd';
+    reportStatusMsg.textContent = 'Adatok küldése folyamatban...';
+
+    const diag = gatherDiagnostics();
+    diag.userNote = reportUserNote.value.trim();
+
+    try {
+      const res = await fetch('https://zsirafvision-vercel.vercel.app/api/report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(diag)
+      });
+      const data = await res.json();
+      if (data.success) {
+        reportStatusMsg.style.color = 'var(--crt-phosphor)';
+        reportStatusMsg.textContent = `✓ Sikeres feltöltés! Azononosító: ${data.id}. Köszönjük a visszajelzést!`;
+        setTimeout(() => {
+          closeReportModal();
+          btnSubmitReport.disabled = false;
+        }, 2200);
+      } else {
+        throw new Error(data.error || 'Hiba a feltöltés során');
+      }
+    } catch (err) {
+      reportStatusMsg.style.color = '#ff6b77';
+      reportStatusMsg.textContent = `Sikertelen küldés: ${err.message}`;
+      btnSubmitReport.disabled = false;
+    }
+  });
+
+  // ==========================================================================
+  // Technical Stats Modal
+  // ==========================================================================
+  async function refreshStats() {
+    const startTime = performance.now();
+    try {
+      const res = await fetch('https://zsirafvision-vercel.vercel.app/api/stats');
+      const pingMs = Math.round(performance.now() - startTime);
+      if (res.ok) {
+        const data = await res.json();
+        statServerStatus.textContent = data.status || 'ONLINE';
+        statServerRegion.textContent = data.region || 'iad1';
+        statPing.textContent = `${pingMs} ms`;
+      }
     } catch (e) {
-      console.error('Failed to load channels:', e);
-      osdName.textContent = 'HIBA';
-      osdCategory.textContent = 'channels.json nem található';
+      statServerStatus.textContent = 'OFFLINE / Hiba';
+      statServerStatus.className = 'stat-value text-red';
+    }
+
+    const ch = channels[currentChannelIndex];
+    statChName.textContent = ch ? ch.name : '-';
+    statVideoRes.textContent = video.videoWidth ? `${video.videoWidth}x${video.videoHeight} HD` : 'Betöltés...';
+
+    if (hls && hls.levels && hls.currentLevel >= 0 && hls.levels[hls.currentLevel]) {
+      const lvl = hls.levels[hls.currentLevel];
+      statVideoBitrate.textContent = `${Math.round(lvl.bitrate / 1000)} kbps`;
+    } else {
+      statVideoBitrate.textContent = 'Automatikus (VBR)';
+    }
+
+    if (video.buffered && video.buffered.length > 0) {
+      const buf = Math.round(video.buffered.end(video.buffered.length - 1) - video.currentTime);
+      statVideoBuffer.textContent = `${buf} mp`;
+    } else {
+      statVideoBuffer.textContent = '0 mp';
+    }
+
+    if (video.getVideoPlaybackQuality) {
+      const q = video.getVideoPlaybackQuality();
+      statDroppedFrames.textContent = q.droppedVideoFrames || 0;
     }
   }
 
-  // Navigation Buttons
+  btnToggleStats.addEventListener('click', () => {
+    statsModal.classList.add('open');
+    refreshStats();
+    if (statsInterval) clearInterval(statsInterval);
+    statsInterval = setInterval(refreshStats, 2000);
+  });
+
+  function closeStatsModal() {
+    statsModal.classList.remove('open');
+    if (statsInterval) {
+      clearInterval(statsInterval);
+      statsInterval = null;
+    }
+  }
+
+  btnCloseStats.addEventListener('click', closeStatsModal);
+  btnRefreshStats.addEventListener('click', refreshStats);
+
+  // ==========================================================================
+  // Mobile / Sidebar Navigation
+  // ==========================================================================
+  function closeSidebars() {
+    guideDrawer.classList.remove('open');
+    epgSidebar.classList.remove('open');
+    sidebarBackdrop.classList.remove('active');
+  }
+
+  btnOpenGuide.addEventListener('click', () => {
+    closeSidebars();
+    guideDrawer.classList.add('open');
+    sidebarBackdrop.classList.add('active');
+    highlightActiveDrawerItem();
+    searchInput.focus();
+  });
+
+  btnCloseGuide.addEventListener('click', closeSidebars);
+
+  btnToggleEpg.addEventListener('click', () => {
+    closeSidebars();
+    epgSidebar.classList.add('open');
+    sidebarBackdrop.classList.add('active');
+  });
+
+  btnCloseEpg.addEventListener('click', closeSidebars);
+  sidebarBackdrop.addEventListener('click', closeSidebars);
+
   btnPrev.addEventListener('click', () => playChannel(currentChannelIndex - 1));
   btnNext.addEventListener('click', () => playChannel(currentChannelIndex + 1));
 
@@ -311,7 +665,6 @@
   });
 
   btnFullscreen.addEventListener('click', () => {
-    // Fullscreen for the video itself for crystal clear fullscreen viewing!
     if (!document.fullscreenElement) {
       if (video.requestFullscreen) {
         video.requestFullscreen();
@@ -320,30 +673,20 @@
         if (cabinet.requestFullscreen) cabinet.requestFullscreen();
       }
     } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      }
+      if (document.exitFullscreen) document.exitFullscreen();
     }
-  });
-
-  btnOpenGuide.addEventListener('click', () => {
-    guideDrawer.classList.add('open');
-    highlightActiveDrawerItem();
-    searchInput.focus();
-  });
-
-  btnCloseGuide.addEventListener('click', () => {
-    guideDrawer.classList.remove('open');
   });
 
   searchInput.addEventListener('input', applyFilter);
 
   // Keyboard Shortcuts
   window.addEventListener('keydown', (e) => {
-    if (document.activeElement === searchInput) {
+    if (document.activeElement === searchInput || document.activeElement === reportUserNote) {
       if (e.key === 'Escape') {
-        guideDrawer.classList.remove('open');
-        searchInput.blur();
+        closeSidebars();
+        closeReportModal();
+        closeStatsModal();
+        document.activeElement.blur();
       }
       return;
     }
@@ -385,13 +728,24 @@
       case 'L':
         e.preventDefault();
         if (guideDrawer.classList.contains('open')) {
-          guideDrawer.classList.remove('open');
+          closeSidebars();
         } else {
           btnOpenGuide.click();
         }
         break;
+      case 'p':
+      case 'P':
+        e.preventDefault();
+        if (epgSidebar.classList.contains('open')) {
+          closeSidebars();
+        } else {
+          btnToggleEpg.click();
+        }
+        break;
       case 'Escape':
-        guideDrawer.classList.remove('open');
+        closeSidebars();
+        closeReportModal();
+        closeStatsModal();
         break;
       default:
         if (e.key >= '0' && e.key <= '9') {
@@ -403,6 +757,23 @@
         break;
     }
   });
+
+  // Initial Load
+  async function loadChannels() {
+    try {
+      const res = await fetch(`channels.json?t=${Date.now()}`);
+      hungarianChannels = await res.json();
+      channels = hungarianChannels;
+      setupCategories();
+      renderDrawer(channels);
+      playChannel(0);
+      loadEpgDatabase();
+    } catch (e) {
+      console.error('Failed to load channels:', e);
+      osdName.textContent = 'HIBA';
+      osdCategory.textContent = 'channels.json nem található';
+    }
+  }
 
   loadChannels();
 })();

@@ -3,26 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZsirafVision - Videoton Retro TV (Tökéletes HD Kép)</title>
+  <title>ZsirafVision - Online TV</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3.0">
   <!-- HLS.js for modern cross-browser M3U8 playback -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
   <div class="ambient-background"></div>
 
-  <header class="app-header">
-    <div class="vintage-slogan">A televíziózás újra életre kel.</div>
-    <div class="header-badges">
-      <span class="badge live-badge"><span class="pulse-dot"></span> ÉLŐ IPTV</span>
-      <span class="badge hd-badge">✨ KRISTÁLYTISZTA HD KÉP</span>
-      <span class="badge count-badge" id="channel-count-badge">131 CSATORNA</span>
+  <!-- Left Side: Electronic Program Guide (EPG / Műsorújság) -->
+  <aside class="epg-sidebar" id="epg-sidebar">
+    <div class="epg-header">
+      <div class="epg-title">
+        <span class="epg-icon">📅</span>
+        <h3>MŰSORÚJSÁG</h3>
+      </div>
+      <button class="epg-close-btn" id="btn-close-epg" title="Bezárás">✕</button>
     </div>
-  </header>
+    <div class="epg-channel-header">
+      <div class="epg-channel-name" id="epg-channel-name">Csatorna betöltése...</div>
+      <div class="epg-now-badge">ÉPPEN MEGY & KÖVETKEZŐK</div>
+    </div>
+    <div class="epg-programs-list" id="epg-programs-list">
+      <div class="epg-loading">Műsorinformációk betöltése...</div>
+    </div>
+  </aside>
+
+  <!-- Mobile Overlay Backdrop for Sidebars -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
   <main class="tv-viewport">
     <!-- Main TV Unit Container -->
@@ -43,7 +55,7 @@
           </div>
           <div class="osd-bottom-row">
             <span class="osd-live-tag"><span class="osd-red-dot"></span> ÉLŐ ADÁS</span>
-            <span class="osd-category-tag" id="osd-category">Szórakozás & Helyi TV</span>
+            <span class="osd-category-tag" id="osd-category">Magyar TV</span>
           </div>
         </div>
 
@@ -65,17 +77,26 @@
       </div>
 
       <!-- TV Cabinet Wooden Overlay Frame with transparent screen cutout -->
-      <img src="assets/tv_frame_cutout.png" alt="Videoton Retro TV" class="tv-frame-img" id="tv-frame-img" draggable="false">
+      <img src="assets/tv_frame_cutout.png" alt="Retro TV" class="tv-frame-img" id="tv-frame-img" draggable="false">
+
+      <!-- RED REPORT BUTTON directly on the TV cabinet -->
+      <button class="tv-red-report-btn" id="btn-red-report" title="Adáshiba bejelentése és adatok elküldése">
+        <span class="red-btn-light"></span>
+        <span class="red-btn-text">HIBAJELENTŐ</span>
+      </button>
 
     </div>
 
-    <!-- Modern Clean Controls Bar below the cabinet (the analog knobs on the TV are non-functional) -->
+    <!-- Clean Controls Bar below the cabinet -->
     <nav class="quick-nav-bar">
+      <!-- Mobile / Tablet EPG toggle button -->
+      <button class="nav-btn epg-toggle-btn" id="btn-toggle-epg" title="Műsorújság megnyitása">📅 MŰSORÚJSÁG</button>
       <button class="nav-btn prev-btn" id="btn-prev" title="Előző csatorna (Balra nyíl)">◀ ELŐZŐ</button>
-      <button class="nav-btn guide-btn" id="btn-open-guide">📋 CSATORNALISTA & MŰSOROK</button>
+      <button class="nav-btn guide-btn" id="btn-open-guide">📋 CSATORNALISTA</button>
       <button class="nav-btn next-btn" id="btn-next" title="Következő csatorna (Jobbra nyíl)">KÖVETKEZŐ ▶</button>
       <button class="nav-btn icon-btn" id="btn-mute" title="Némítás (M)">🔊</button>
       <button class="nav-btn icon-btn" id="btn-fullscreen" title="Teljes képernyő (F)">⛶</button>
+      <button class="nav-btn stats-btn" id="btn-toggle-stats" title="Technikai adatok és szerverstátusz">⚙ TECHNIKAI ADATOK</button>
     </nav>
   </main>
 
@@ -83,15 +104,23 @@
   <aside class="channel-guide-drawer" id="channel-guide-drawer">
     <div class="drawer-header">
       <div class="drawer-title">
-        <span class="retro-badge">VIDEOTON</span>
-        <h3>MAGYAR CSATORNÁK (ONLINE)</h3>
+        <h3>CSATORNALISTA</h3>
       </div>
       <button class="drawer-close-btn" id="btn-close-guide" title="Bezárás">✕</button>
     </div>
 
+    <!-- Country / Source Selector -->
+    <div class="drawer-source-selector">
+      <label for="source-select">Forrás / Ország:</label>
+      <select id="source-select" class="source-select-input">
+        <option value="HU" selected>🇭🇺 Magyar Adások (131 csatorna)</option>
+        <option value="WORLD">🌍 iptv-org Világ (index.country.m3u)</option>
+      </select>
+    </div>
+
     <!-- Filter & Search Controls -->
     <div class="drawer-search-bar">
-      <input type="text" id="channel-search-input" placeholder="🔍 Keresés (pl. Alföld, Euronews, Galaxy4, Love Nature)..." autocomplete="off">
+      <input type="text" id="channel-search-input" placeholder="🔍 Keresés (pl. RTL, Sport, Zene, Film)..." autocomplete="off">
     </div>
 
     <!-- Category Pills -->
@@ -105,6 +134,78 @@
     </div>
   </aside>
 
+  <!-- Technical Stats Modal -->
+  <div class="modal-backdrop" id="stats-modal">
+    <div class="modal-content stats-modal-box">
+      <div class="modal-header">
+        <h3>⚙ PILLANATNYI TECHNIKAI ADATOK</h3>
+        <button class="modal-close-btn" id="btn-close-stats">✕</button>
+      </div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Szerver Státusz</span>
+          <span class="stat-value text-green" id="stat-server-status">Kapcsolódás...</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Szerver Régió</span>
+          <span class="stat-value" id="stat-server-region">-</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Aktuális Csatorna</span>
+          <span class="stat-value" id="stat-ch-name">-</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Videó Felbontás</span>
+          <span class="stat-value" id="stat-video-res">-</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Stream Bitráta</span>
+          <span class="stat-value" id="stat-video-bitrate">-</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Pufferelt Idő</span>
+          <span class="stat-value" id="stat-video-buffer">-</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Eldobott Képkockák</span>
+          <span class="stat-value" id="stat-dropped-frames">0</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Hálózati Késleltetés</span>
+          <span class="stat-value" id="stat-ping">-</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="nav-btn" id="btn-refresh-stats">🔄 Frissítés</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report Modal for Red Button -->
+  <div class="modal-backdrop" id="report-modal">
+    <div class="modal-content report-modal-box">
+      <div class="modal-header">
+        <h3>🚨 ADÁSHIBA BEJELENTÉSE</h3>
+        <button class="modal-close-btn" id="btn-close-report">✕</button>
+      </div>
+      <div class="report-body">
+        <p class="report-intro">Az alábbi adatok összegyűjtésre kerülnek és elküldjük a felhős szerverre az adás minőségének javítása érdekében:</p>
+        <div class="report-data-preview" id="report-preview">
+          <!-- Diagnostics preview -->
+        </div>
+        <div class="report-input-group">
+          <label for="report-user-note">Hiba rövid leírása (opcionális):</label>
+          <textarea id="report-user-note" rows="3" placeholder="Pl.: Akadozik a kép, nincs hang, fekete képernyő..."></textarea>
+        </div>
+        <div class="report-status-msg" id="report-status-msg"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="nav-btn cancel-btn" id="btn-cancel-report">Mégse</button>
+        <button class="nav-btn send-report-btn" id="btn-submit-report">📤 ADATOK KÜLDÉSE</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Help & Keyboard Shortcuts Modal / Footer -->
   <footer class="app-footer">
     <div class="shortcuts-legend">
@@ -114,13 +215,14 @@
       <kbd>M</kbd> Némítás &bull;
       <kbd>F</kbd> Teljes képernyő &bull;
       <kbd>C</kbd> Csatornalista &bull;
+      <kbd>P</kbd> Műsorújság &bull;
       <kbd>Számok (0-9)</kbd> Közvetlen választás
     </div>
     <div class="footer-credit">
-      <strong>ZsirafVision</strong> &bull; Videoton Dizájn &bull; Tökéletes HD Képminőség &bull; Valós Online Működés
+      <strong>ZsirafVision</strong> &bull; Kristálytiszta HD Képminőség &bull; Valós Online Működés
     </div>
   </footer>
 
-  <script src="js/app.js?v=2.1"></script>
+  <script src="js/app.js?v=3.0"></script>
 </body>
 </html>
