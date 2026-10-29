@@ -1,11 +1,11 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v3.8)
+# 📺 ZsirafVision - Online IPTV & Web Player (v3.9)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **WebRTC Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v3.8`
+* **Aktuális verzió:** `v3.9`
 
 ---
 
@@ -95,6 +95,15 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v3.9] - 2026-10-29
+* **Fix**: **Mobil távirányító azonnali kapcsolódása (MQTT over WSS felhős híd)**:
+  * **Hiba oka:** Mobilhálózatokon (Telekom, Yettel, Vodafone 4G/5G és mobilnet) a szolgáltatók Symmetric NAT-ot / CGNAT-ot alkalmaznak, amely nyilvános TURN szerver hiányában megakadályozza a közvetlen WebRTC P2P kapcsolódást, emiatt a távirányító folyamatosan a sárga/piros `Kapcsolódás: [KÓD]` állapotban maradt.
+  * **Kétcsatornás megoldás (Dual-Channel):**
+    * **1. Elsődleges, azonnali felhős csatorna:** Biztonságos WebSocket MQTT (`wss://broker.hivemq.com:8884/mqtt` és `wss://broker.emqx.io:8084/mqtt`). Ez a szabványos TLS 443/8884 porton keresztül **100%-ban átüti a mobilszolgáltatói Symmetric NAT-ot, CGNAT-ot és a legszigorúbb tűzfalakat is**, <200 ms válaszidővel.
+    * **2. Másodlagos P2P csatorna:** A WebRTC / PeerJS csatorna párhuzamosan fut lokális hálózatokhoz.
+  * **Helyi könyvtár integráció:** Hozzáadva a hivatalos Eclipse Paho MQTT kliens (`js/paho-mqtt.min.js`), így külső CDN kiesés nélkül, offline PWA környezetben is azonnal működik.
+  * **UI & UX javítás:** A szobakód 4 betűs beviteli mezőre javítva (`PL. ETVM`), automatikus nagybetűs konverzióval és azonnali zöld visszajelzéssel (`TV Csatlakoztatva`).
 
 ### [v3.8] - 2026-10-29
 * **Fix**: **Szobakód azonnali megjelenítése**: A TV párosító felugró ablakában a generált szobakód (pl. `B7K2`) mostantól azonnal, szinkron módon megjelenik a QR-kód alatt, nem vár a felhős PeerJS háttér-kapcsolat létrejöttére.

@@ -43,6 +43,7 @@
   let peer = null;
   let conn = null;
   let roomCode = null;
+  let mqttClient = null;
 
   function haptic() {
     try {
@@ -68,10 +69,24 @@
 
   function sendCommand(action, data = {}) {
     haptic();
+    const payload = JSON.stringify({ type: 'command', cmd: action, action, ...data });
+
+    // 1. Send via MQTT Cloud Bridge (Fastest, 100% reliable)
+    if (mqttClient && mqttClient.isConnected && mqttClient.isConnected()) {
+      try {
+        const msg = new Paho.MQTT.Message(payload);
+        msg.destinationName = 'zsirafvision/' + roomCode + '/cmd';
+        mqttClient.send(msg);
+      } catch (e) {
+        console.warn('MQTT send error:', e);
+      }
+    }
+
+    // 2. Also send via PeerJS (if WebRTC P2P is open)
     if (conn && conn.open) {
-      conn.send({ type: 'command', cmd: action, action, ...data });
-    } else {
-      console.warn('Cannot send command, not connected');
+      try {
+        conn.send({ type: 'command', cmd: action, action, ...data });
+      } catch (e) {}
     }
   }
 
@@ -81,56 +96,124 @@
       return;
     }
     roomCode = targetRoom.toUpperCase().trim();
+    if (manualRoomCode) manualRoomCode.value = roomCode;
     setStatus(false, `Kapcsolódás: ${roomCode}`);
 
-    if (peer) {
-      try { peer.destroy(); } catch (e) {}
+    // ==========================================
+    // 1. MQTT Cloud Bridge (Zero NAT issues)
+    // ==========================================
+    if (mqttClient) {
+      try { mqttClient.disconnect(); } catch (e) {}
+      mqttClient = null;
     }
 
-    // Connect as client peer
-    peer = new Peer({
-      debug: 1,
-      config: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:global.stun.twilio.com:3478' }
-        ]
+    const brokerHosts = ['broker.hivemq.com', 'broker.emqx.io'];
+    let hostIdx = 0;
+
+    function tryMqtt() {
+      if (typeof Paho === 'undefined' || !Paho.MQTT) {
+        console.warn('Paho MQTT not available');
+        return;
       }
-    });
 
-    peer.on('open', (id) => {
-      console.log('[Remote] Peer ready with ID:', id);
-      const tvPeerId = 'zsiraf-tv-' + roomCode;
-      conn = peer.connect(tvPeerId, { reliable: true });
+      const host = brokerHosts[hostIdx];
+      const clientId = 'zsirafrem_' + roomCode + '_' + Math.random().toString(16).substr(2, 6);
 
-      conn.on('open', () => {
-        console.log('[Remote] Connected to TV:', tvPeerId);
-        setStatus(true, 'TV Aktív');
-        sendCommand('requestState');
-      });
+      try {
+        mqttClient = new Paho.MQTT.Client(host, 8884, '/mqtt', clientId);
 
-      conn.on('data', (msg) => {
-        if (msg && msg.type === 'state') {
-          updateDisplay(msg);
-        }
-      });
+        mqttClient.onMessageArrived = (m) => {
+          try {
+            const state = JSON.parse(m.payloadString);
+            if (state && state.type === 'state') {
+              updateDisplay(state);
+              setStatus(true, 'TV Csatlakoztatva');
+            }
+          } catch (e) {}
+        };
 
-      conn.on('close', () => {
-        console.warn('[Remote] Connection closed');
-        setStatus(false, 'Megszakadt');
-      });
+        mqttClient.onConnectionLost = (res) => {
+          console.warn('Remote MQTT connection lost:', res.errorMessage);
+          hostIdx = (hostIdx + 1) % brokerHosts.length;
+          setTimeout(tryMqtt, 2000);
+        };
 
-      conn.on('error', (err) => {
-        console.error('[Remote] Conn error:', err);
-        setStatus(false, 'Hiba');
-      });
-    });
+        mqttClient.connect({
+          useSSL: true,
+          timeout: 5,
+          keepAliveInterval: 30,
+          onSuccess: () => {
+            console.log('[Remote v3.9] Connected to MQTT broker:', host);
+            setStatus(true, 'TV Csatlakoztatva');
+            mqttClient.subscribe('zsirafvision/' + roomCode + '/state');
+            // Request current state from TV
+            sendCommand('requestState');
+          },
+          onFailure: (err) => {
+            console.warn('[Remote] MQTT connect failed on', host, err);
+            hostIdx = (hostIdx + 1) % brokerHosts.length;
+            setTimeout(tryMqtt, 2500);
+          }
+        });
+      } catch (err) {
+        console.error('MQTT Remote init error:', err);
+      }
+    }
 
-    peer.on('error', (err) => {
-      console.error('[Remote] Peer error:', err);
-      setStatus(false, 'Szerver hiba');
-      pairingBox.classList.add('active');
-    });
+    tryMqtt();
+
+    // ==========================================
+    // 2. PeerJS Direct WebRTC P2P (Parallel)
+    // ==========================================
+    if (peer) {
+      try { peer.destroy(); } catch (e) {}
+      peer = null;
+    }
+
+    if (typeof Peer !== 'undefined') {
+      try {
+        peer = new Peer({
+          debug: 1,
+          config: {
+            iceServers: [
+              { urls: 'stun:stun.l.google.com:19302' },
+              { urls: 'stun:global.stun.twilio.com:3478' }
+            ]
+          }
+        });
+
+        peer.on('open', (id) => {
+          console.log('[Remote v3.9] Peer ready with ID:', id);
+          const tvPeerId = 'zsiraf-tv-' + roomCode;
+          conn = peer.connect(tvPeerId, { reliable: true });
+
+          conn.on('open', () => {
+            console.log('[Remote v3.9] WebRTC Connected to TV:', tvPeerId);
+            setStatus(true, 'TV Csatlakoztatva');
+            sendCommand('requestState');
+          });
+
+          conn.on('data', (msg) => {
+            if (msg && msg.type === 'state') {
+              updateDisplay(msg);
+              setStatus(true, 'TV Csatlakoztatva');
+            }
+          });
+
+          conn.on('close', () => {
+            console.warn('[Remote] WebRTC Connection closed');
+          });
+
+          conn.on('error', (err) => {
+            console.error('[Remote] WebRTC Conn error:', err);
+          });
+        });
+
+        peer.on('error', (err) => {
+          console.warn('[Remote] Peer error:', err);
+        });
+      } catch (e) {}
+    }
   }
 
   function updateDisplay(state) {

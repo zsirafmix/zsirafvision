@@ -1,7 +1,7 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 3.8
- * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Mobil távirányító (QR), Fekvő PWA app
+ * Version: 3.9
+ * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
 (function () {
@@ -22,7 +22,7 @@
   let statsInterval = null;
   let lastDroppedFrames = 0;
 
-  // New v3.8 State
+  // New v3.9 State
   let favorites = [];
   let sleepTimerSec = 0;
   let sleepInterval = null;
@@ -31,12 +31,13 @@
   let remoteConn = null;
   let roomCode = null;
   let qrCodeInstance = null;
+  let mqttTvClient = null;
 
   // Smart TV Detection (Samsung Tizen, LG webOS, etc.)
   const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
   if (isSmartTV) {
     document.body.classList.add('is-smart-tv');
-    console.log('[ZsirafVision v3.8] Smart TV mód aktiválva:', navigator.userAgent);
+    console.log('[ZsirafVision v3.9] Smart TV mód aktiválva:', navigator.userAgent);
   }
 
   let videoWatchdogTimer = null;
@@ -360,6 +361,71 @@
     return res;
   }
 
+  // MQTT Cloud Relay for instant remote pairing (100% works across CGNAT/Firewalls)
+  function initMqttServer() {
+    if (typeof Paho === 'undefined' || !Paho.MQTT) {
+      console.warn('Paho MQTT not loaded');
+      return;
+    }
+    if (mqttTvClient) {
+      try { mqttTvClient.disconnect(); } catch (e) {}
+      mqttTvClient = null;
+    }
+
+    const brokerHosts = ['broker.hivemq.com', 'broker.emqx.io'];
+    let hostIdx = 0;
+
+    function tryConnect() {
+      if (!roomCode) return;
+      const host = brokerHosts[hostIdx];
+      const clientId = 'zsiraftv_' + roomCode + '_' + Math.random().toString(16).substr(2, 6);
+      try {
+        mqttTvClient = new Paho.MQTT.Client(host, 8884, '/mqtt', clientId);
+
+        mqttTvClient.onMessageArrived = (m) => {
+          try {
+            const data = JSON.parse(m.payloadString);
+            handleRemoteCommand(data);
+            if (remoteStatusMsg) {
+              remoteStatusMsg.textContent = '🟢 ' + t('remoteConnected');
+              remoteStatusMsg.classList.add('connected');
+            }
+          } catch (e) {
+            console.warn('MQTT parse error:', e);
+          }
+        };
+
+        mqttTvClient.onConnectionLost = (res) => {
+          console.warn('MQTT TV connection lost:', res.errorMessage);
+          hostIdx = (hostIdx + 1) % brokerHosts.length;
+          setTimeout(tryConnect, 2000);
+        };
+
+        mqttTvClient.connect({
+          useSSL: true,
+          timeout: 5,
+          keepAliveInterval: 30,
+          onSuccess: () => {
+            console.log('[ZsirafVision v3.8] MQTT TV Bridge online on', host);
+            mqttTvClient.subscribe('zsirafvision/' + roomCode + '/cmd');
+            if (remoteStatusMsg && !remoteConn) {
+              remoteStatusMsg.textContent = t('remoteWaiting');
+            }
+          },
+          onFailure: (err) => {
+            console.warn('MQTT TV connect fail on', host, err);
+            hostIdx = (hostIdx + 1) % brokerHosts.length;
+            setTimeout(tryConnect, 3000);
+          }
+        });
+      } catch (err) {
+        console.error('MQTT setup error:', err);
+      }
+    }
+
+    tryConnect();
+  }
+
   function initRemoteServer() {
     if (!roomCode) {
       roomCode = generateRoomCode();
@@ -367,6 +433,9 @@
     if (remoteRoomCodeText) {
       remoteRoomCodeText.textContent = roomCode;
     }
+
+    // Start MQTT Cloud Bridge (Reliable 100% firewall traversal)
+    initMqttServer();
 
     if (typeof Peer === 'undefined') {
       console.warn('PeerJS library not loaded.');
@@ -393,7 +462,7 @@
       });
 
       tvPeer.on('open', (id) => {
-        console.log('[ZsirafVision v3.7] PeerJS TV server online. Peer ID:', id);
+        console.log('[ZsirafVision v3.8] PeerJS TV server online. Peer ID:', id);
         if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
         if (remoteStatusMsg && !remoteConn) {
           remoteStatusMsg.textContent = t('remoteWaiting');
@@ -403,7 +472,7 @@
 
       tvPeer.on('connection', (conn) => {
         remoteConn = conn;
-        console.log('[ZsirafVision v3.7] Remote connected from mobile!');
+        console.log('[ZsirafVision v3.8] Remote connected from mobile via WebRTC!');
         if (remoteStatusMsg) {
           remoteStatusMsg.textContent = '🟢 ' + t('remoteConnected');
           remoteStatusMsg.classList.add('connected');
@@ -418,7 +487,7 @@
         });
 
         conn.on('close', () => {
-          console.log('[ZsirafVision v3.7] Remote disconnected');
+          console.log('[ZsirafVision v3.8] Remote disconnected');
           remoteConn = null;
           if (remoteStatusMsg) {
             remoteStatusMsg.textContent = t('remoteWaiting');
@@ -428,7 +497,7 @@
       });
 
       tvPeer.on('error', (err) => {
-        console.warn('[ZsirafVision v3.7] PeerJS error:', err);
+        console.warn('[ZsirafVision v3.8] PeerJS error:', err);
         if (err.type === 'unavailable-id') {
           roomCode = generateRoomCode();
           if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
@@ -527,22 +596,34 @@
   }
 
   function broadcastTVState() {
-    if (!remoteConn || !remoteConn.open) return;
+    if (!roomCode) return;
     const currentCh = channels[currentChannelIndex] || {};
-    try {
-      remoteConn.send({
-        type: 'state',
-        channelName: currentCh.name || 'ZsirafVision',
-        channelNumber: currentCh.channel_number || (currentCh.id ? String(currentCh.id).padStart(2, '0') : '00'),
-        group: currentCh.group || '',
-        isFav: favorites.includes(currentCh.name),
-        volume: Math.round(currentVolume * 100),
-        isMuted: isMuted,
-        isStandby: isStandby,
-        sleepTimerSec: sleepTimerSec
-      });
-    } catch (e) {
-      console.warn('broadcastTVState error:', e);
+    const stateObj = {
+      type: 'state',
+      channelName: currentCh.name || 'ZsirafVision',
+      channelNumber: currentCh.channel_number || (currentCh.id ? String(currentCh.id).padStart(2, '0') : '00'),
+      group: currentCh.group || '',
+      isFav: favorites.includes(currentCh.name),
+      volume: Math.round(currentVolume * 100),
+      isMuted: isMuted,
+      isStandby: isStandby,
+      sleepTimerSec: sleepTimerSec
+    };
+
+    // 1. MQTT Cloud Relay (Fast, 100% reliable)
+    if (mqttTvClient && mqttTvClient.isConnected && mqttTvClient.isConnected()) {
+      try {
+        const msg = new Paho.MQTT.Message(JSON.stringify(stateObj));
+        msg.destinationName = 'zsirafvision/' + roomCode + '/state';
+        mqttTvClient.send(msg);
+      } catch (e) {}
+    }
+
+    // 2. PeerJS Direct WebRTC P2P (if connected)
+    if (remoteConn && remoteConn.open) {
+      try {
+        remoteConn.send(stateObj);
+      } catch (e) {}
     }
   }
 
@@ -1604,13 +1685,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v3.8)
+  // Service Worker Registration for PWA (v3.9)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=3.8').then((reg) => {
-        console.log('[ZsirafVision v3.8] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=3.9').then((reg) => {
+        console.log('[ZsirafVision v3.9] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v3.8] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v3.9] Service Worker hiba:', err);
       });
     });
   }

@@ -10,8 +10,8 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
-  <!-- PeerJS for WebRTC Direct Cloud P2P connection -->
+  <!-- Paho MQTT and PeerJS for Dual Cloud Relay & P2P connection -->
+  <script src="js/paho-mqtt.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
@@ -301,8 +301,8 @@
 
     <!-- Pairing Box (if room is not in URL) -->
     <div class="pairing-box" id="pairing-box">
-      <p style="font-size: 0.85rem; color: #ccc;">Add meg a tévén látható 6 betűs kódot:</p>
-      <input type="text" id="manual-room-code" class="pairing-input" maxlength="8" placeholder="TV-1234">
+      <p style="font-size: 0.85rem; color: #ccc;">Add meg a tévén látható 4 betűs kódot:</p>
+      <input type="text" id="manual-room-code" class="pairing-input" maxlength="8" placeholder="PL. ETVM">
       <button class="pairing-btn" id="btn-manual-pair">CSATLAKOZÁS</button>
     </div>
 
@@ -365,6 +365,6 @@
     </div>
   </div>
 
-  <script src="js/remote.js?v=3.8"></script>
+  <script src="js/remote.js?v=3.9"></script>
 </body>
 </html>
