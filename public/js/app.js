@@ -33,6 +33,7 @@
   const adjustmentValue = document.getElementById('adjustment-value');
   const tuningIndicator = document.getElementById('tuning-indicator');
   const tuningText = document.getElementById('tuning-text');
+  const playOverlay = document.getElementById('play-overlay');
 
   // Controls & Modals
   const btnPrev = document.getElementById('btn-prev');
@@ -212,12 +213,16 @@
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         hideLoading();
-        video.play().catch((err) => {
-          console.warn('Autoplay blocked, muting video:', err);
-          video.muted = true;
-          isMuted = true;
-          btnMute.textContent = '🔇';
-          video.play().catch((e) => console.error('Play failed completely:', e));
+        // Modern browsers require muted autoplay for un-interacted pages
+        video.muted = true;
+        isMuted = true;
+        btnMute.textContent = '🔇';
+        
+        video.play().then(() => {
+          if (playOverlay) playOverlay.classList.remove('active');
+        }).catch((err) => {
+          console.warn('Autoplay requires user interaction:', err);
+          if (playOverlay) playOverlay.classList.add('active');
         });
       });
 
@@ -289,10 +294,14 @@
 
       const logoImg = document.createElement('img');
       logoImg.className = 'channel-item-logo';
-      logoImg.src = ch.logo || 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222"/><text y="55" x="50" font-size="30" text-anchor="middle" fill="%23666">TV</text></svg>';
+      logoImg.referrerPolicy = 'no-referrer';
+      logoImg.crossOrigin = 'anonymous';
+      const fallbackSvg = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222"/><text y="55" x="50" font-size="30" text-anchor="middle" fill="%23666">TV</text></svg>';
+      logoImg.src = ch.logo || fallbackSvg;
       logoImg.loading = 'lazy';
       logoImg.onerror = () => {
-        logoImg.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23222"/><text y="55" x="50" font-size="30" text-anchor="middle" fill="%23666">TV</text></svg>';
+        logoImg.onerror = null;
+        logoImg.src = fallbackSvg;
       };
 
       const infoDiv = document.createElement('div');
@@ -633,6 +642,17 @@
     guideDrawer.classList.remove('open');
     epgSidebar.classList.remove('open');
     sidebarBackdrop.classList.remove('active');
+  }
+
+  if (playOverlay) {
+    playOverlay.addEventListener('click', () => {
+      video.muted = false;
+      isMuted = false;
+      btnMute.textContent = '🔊';
+      video.play().then(() => {
+        playOverlay.classList.remove('active');
+      }).catch(e => console.error('Play on overlay click error:', e));
+    });
   }
 
   btnOpenGuide.addEventListener('click', () => {
