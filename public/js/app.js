@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.1
+ * Version: 4.2
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -866,13 +866,68 @@
     }
 
     if (programs && programs.length) {
+      // Find currently playing program based on local time
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+
+      let activeIndex = -1;
+
+      // 1. First pass: exact interval match
+      for (let i = 0; i < programs.length; i++) {
+        const p = programs[i];
+        if (!p.start || !p.stop) continue;
+        const [sh, sm] = p.start.split(':').map(Number);
+        const [eh, em] = p.stop.split(':').map(Number);
+        if (isNaN(sh) || isNaN(sm) || isNaN(eh) || isNaN(em)) continue;
+
+        const startMin = sh * 60 + sm;
+        const stopMin = eh * 60 + em;
+
+        if (stopMin > startMin) {
+          // Daytime / normal slot within same day
+          if (currentMin >= startMin && currentMin < stopMin) {
+            activeIndex = i;
+            break;
+          }
+        } else {
+          // Midnight rollover (e.g. 23:30 - 01:00)
+          if (currentMin >= startMin || currentMin < stopMin) {
+            activeIndex = i;
+            break;
+          }
+        }
+      }
+
+      // 2. Second pass fallback if gaps in schedule or past the last show
+      if (activeIndex === -1) {
+        for (let i = 0; i < programs.length; i++) {
+          const p = programs[i];
+          if (!p.stop) continue;
+          const [eh, em] = p.stop.split(':').map(Number);
+          if (isNaN(eh) || isNaN(em)) continue;
+          const stopMin = eh * 60 + em;
+          if (stopMin > currentMin) {
+            activeIndex = i;
+            break;
+          }
+        }
+      }
+
+      // 3. Ultimate fallback: default to first program
+      if (activeIndex === -1) {
+        activeIndex = 0;
+      }
+
+      let activeElement = null;
+
       programs.forEach((p, idx) => {
+        const isActive = (idx === activeIndex);
         const item = document.createElement('div');
-        item.className = `epg-prog-item ${idx === 0 ? 'active' : ''}`;
+        item.className = `epg-prog-item ${isActive ? 'active currently-playing' : ''}`;
 
         const timeRow = document.createElement('div');
         timeRow.className = 'epg-time-row';
-        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${idx === 0 ? `<span class="epg-live-indicator">${t('epgLive')}</span>` : ''}`;
+        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${isActive ? `<span class="epg-live-indicator">🔴 ${t('epgLive')}</span>` : ''}`;
 
         const titleDiv = document.createElement('div');
         titleDiv.className = 'epg-prog-title';
@@ -889,7 +944,17 @@
         }
 
         epgProgramsList.appendChild(item);
+        if (isActive) {
+          activeElement = item;
+        }
       });
+
+      // Smooth scroll to currently playing program so user immediately sees it
+      if (activeElement) {
+        setTimeout(() => {
+          activeElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }, 100);
+      }
     } else {
       epgProgramsList.innerHTML = `
         <div class="epg-empty">
@@ -1827,13 +1892,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v4.1)
+  // Service Worker Registration for PWA (v4.2)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.1').then((reg) => {
-        console.log('[ZsirafVision v4.1] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.2').then((reg) => {
+        console.log('[ZsirafVision v4.2] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.1] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.2] Service Worker hiba:', err);
       });
     });
   }

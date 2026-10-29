@@ -1,20 +1,20 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.1)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.2)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot (élő adás kiemeléssel)**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v4.1`
+* **Aktuális verzió:** `v4.2`
 
 ---
 
 ## 🚀 Főbb funkciók és képességek
 
-* **❓ Többnyelvű Használati Útmutató & Súgó Rendszer (v4.0):**
+* **❓ Többnyelvű Használati Útmutató & Súgó Rendszer (v4.0 - v4.2):**
   * Egyetlen kattintással az alsó sávban lévő `❓ SÚGÓ` gombra vagy a billentyűzeten a `H` / `?` billentyűre kinyílik a teljes körű retro használati útmutató.
   * **6 Nyelven elérhető:** Magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven, valós idejű nyelvváltással.
-  * **11 Részletes Témakör:** Élő adások, csatornalista és keresés, kedvencek, műsorújság (EPG), elalvásidőzítő & készenlét, mobil távirányító, telepíthető PWA zsebtévé, többnyelvű felület, billentyűzet és okostévé vezérlés, technikai statisztikák & hibajelentő, titkos felnőtt mód.
+  * **10 Részletes Témakör:** Élő adások, csatornalista és keresés, kedvencek, műsorújság (EPG), elalvásidőzítő & készenlét, mobil távirányító, telepíthető PWA zsebtévé, többnyelvű felület, billentyűzet és okostévé vezérlés, technikai statisztikák & hibajelentő (a titkos felnőtt mód szándékosan rejtve, diszkrét húsvéti tojásként marad).
   * **Azonnali Keresés és Kategóriaszűrők:** Valós idejű szűrés címre, összefoglalóra és billentyűkre.
   * **Automatikus és Moduláris Jövőbeli Bővíthetőség:** A súgó adatai az `i18n.js` `HELP_GUIDE` struktúrájából renderelődnek. Új funkciók beépítésekor elegendő egyetlen új bejegyzést felvenni a 6 nyelven, és a felület automatikusan, HTML szerkesztés nélkül leköveti és megjeleníti azt!
 
@@ -103,6 +103,16 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.2] - 2026-10-29
+* **Új**: **Műsorújság (EPG) aktuálisan futó műsor valós idejű kiemelése**:
+  * **Intelligens idősáv-felismerés:** A rendszer a helyi idő (óra és perc) alapján pontosan összeveti a műsor kezdési (`start`) és befejezési (`stop`) idejét.
+  * **Éjféli átnyúlások kezelése:** Megbízhatóan kezeli a napváltást (pl. 23:30 - 01:00 közötti éjszakai adások).
+  * **Látványos foszfor-zöld kiemelés:** Az éppen futó műsor tétel kiemelt zöld szegéllyel (`border-left: 4px solid var(--crt-phosphor)`), lágy fényárral, kiemelt fehér címmel és lüktető `🔴 ÉLŐBEN` (`pulseLiveBadge`) jelvénnyel jelenik meg.
+  * **Automatikus odagörgetés (Auto-scroll):** A műsorújság kinyitásakor vagy csatornaváltáskor a lista automatikusan és finoman a pillanatnyilag nézhető műsorhoz görget, így a felhasználó azonnal látja az éppen menő adást még a 40+ tételes egész napos műsorstruktúrákban is.
+* **Módosítás**: **Titkos felnőtt mód eltávolítása a Súgóból**:
+  * A felhasználói kérésnek megfelelően a titkos felnőtt mód nem szerepel a nyilvános használati útmutatóban (❓ Súgó) egyik nyelven sem (`hu`, `en`, `de`, `fr`, `es`, `ru`), így megőrzi diszkrét, rejtett funkcióját.
+* **Update**: PWA Service Worker gyorsítótár és kliens assetek egységes verziófrissítése (`v4.2`).
 
 ### [v4.1] - 2026-10-29
 * **Fix**: **Súgó ablak megnyitásának javítása (DOM struktúra helyreállítása)**:

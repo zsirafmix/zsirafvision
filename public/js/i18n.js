@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Internationalization (i18n) & Dynamic EPG Engine
- * Version: 4.1
+ * Version: 4.2
  * Supported Languages: Hungarian (hu), English (en), German (de), French (fr), Spanish (es), Russian (ru)
  */
 
@@ -637,19 +637,6 @@ window.ZsirafI18N = (function () {
         "**Megjegyzés fűzése:** A hibajelentésnél opcionálisan megadhatsz részleteket (pl. 'nincs hang', 'szaggat a videó').",
         "**100% Felhő alapú:** Minden adat a Vercel Serverless proxy végponton keresztül kerül feldolgozásra."
       ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Titkos Felnőtt Mód",
-      "summary": "Diszkrét felnőtt tartalom feloldása egyetlen titkos kulcsszóval.",
-      "details": [
-        "**Feloldás:** Nyisd meg a csatornalistát (<kbd>C</kbd>), és a keresőmezőbe írd be a hárombetűs <kbd>xxx</kbd> szót.",
-        "**33 ellenőrzött adó:** Azonnal megjelenik a prémium felnőtt csatornák válogatása (Miami TV, Tiny4K 1080p, Paradise Hill, VOD mozik).",
-        "**Kategóriaszűrés:** A felnőtt módban külön szűrőgombokkal válogathatsz élő adások és mozik között.",
-        "**Visszaállítás:** A keresőmező törlésével a csatornalista automatikusan visszaáll a normál televízióadásokra."
-      ]
     }
   ],
   "en": [
@@ -784,19 +771,6 @@ window.ZsirafI18N = (function () {
         "**Red Report Button:** Click the glowing red button on the TV bezel to submit an automated diagnostic crash report directly to the cloud.",
         "**Optional Note:** You can describe the issue (e.g. 'no sound', 'stuttering video') before sending.",
         "**100% Cloud Powered:** Processed seamlessly via our Vercel Serverless proxy backend."
-      ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Secret Adult Mode",
-      "summary": "Discreetly unlock adult channels using a secret keyword in the channel guide.",
-      "details": [
-        "**Unlock:** Open the channel list (<kbd>C</kbd>) and type the secret keyword <kbd>xxx</kbd> into the search box.",
-        "**33 Verified Streams:** Instantly displays a verified adult lineup (Miami TV, Tiny4K 1080p, Paradise Hill, VOD movies).",
-        "**Category Filter:** Filter easily between live streams and cinematic adult content.",
-        "**Exit:** Clearing the search input immediately returns the guide to standard television broadcasts."
       ]
     }
   ],
@@ -933,19 +907,6 @@ window.ZsirafI18N = (function () {
         "**Notiz hinzufügen:** Sie können optional Details angeben (z.B. 'Kein Ton', 'Bild ruckelt').",
         "**100% Cloud-basiert:** Schnelle Übertragung über den Vercel Serverless Proxy."
       ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Geheimer Erwachsenen-Modus",
-      "summary": "Diskrete Freischaltung von Erotikkanälen über ein geheimes Suchwort.",
-      "details": [
-        "**Freischalten:** Öffnen Sie die Kanalliste (<kbd>C</kbd>) und geben Sie das geheime Wort <kbd>xxx</kbd> in die Suche ein.",
-        "**33 Geprüfte Kanäle:** Zeigt eine Auswahl überprüfter Erotiksender (Miami TV, Tiny4K 1080p, Paradise Hill, VOD-Filme).",
-        "**Filter:** Schnelles Filtern zwischen Live-Sendungen und Kinofilmen.",
-        "**Beenden:** Beim Löschen des Suchfelds kehrt die Liste sofort zum normalen Programm zurück."
-      ]
     }
   ],
   "fr": [
@@ -1080,19 +1041,6 @@ window.ZsirafI18N = (function () {
         "**Bouton Rouge de Signalement :** Cliquez sur le bouton rouge sur le meuble TV pour transmettre un rapport technique au serveur.",
         "**Note facultative :** Précisez le problème rencontré (ex: 'pas de son', 'image saccadée').",
         "**100% Cloud :** Traitement transparent via le proxy Vercel Serverless."
-      ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Mode Adulte Secret",
-      "summary": "Déverrouillez discrètement les chaînes pour adultes avec un mot-clé secret dans la recherche.",
-      "details": [
-        "**Déverrouiller :** Ouvrez la liste des chaînes (<kbd>C</kbd>) et tapez le mot secret <kbd>xxx</kbd> dans la barre de recherche.",
-        "**33 Flux vérifiés :** Affiche instantanément une sélection adulte vérifiée (Miami TV, Tiny4K 1080p, Paradise Hill, films VOD).",
-        "**Filtres :** Naviguez entre flux en direct et cinéma pour adultes.",
-        "**Quitter :** Effacer la recherche restaure immédiatement la programmation télévisée normale."
       ]
     }
   ],
@@ -1229,19 +1177,6 @@ window.ZsirafI18N = (function () {
         "**Nota opcional:** Puedes describir el fallo (ej. 'sin audio', 'imagen congelada').",
         "**100% en la Nube:** Conexión directa mediante el backend Vercel Serverless."
       ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Modo Adulto Secreto",
-      "summary": "Desbloquea contenido para adultos de forma discreta usando una palabra clave secreta.",
-      "details": [
-        "**Desbloquear:** Abre la lista de canales (<kbd>C</kbd>) y escribe la palabra secreta <kbd>xxx</kbd> en el buscador.",
-        "**33 Canales verificados:** Muestra una selección de canales para adultos (Miami TV, Tiny4K 1080p, Paradise Hill, películas VOD).",
-        "**Filtros:** Filtra fácilmente entre emisiones en vivo y contenidos de cine.",
-        "**Salir:** Borrar el buscador restaura de inmediato la programación habitual."
-      ]
     }
   ],
   "ru": [
@@ -1376,19 +1311,6 @@ window.ZsirafI18N = (function () {
         "**Красная кнопка на корпусе:** Нажмите светящуюся красную кнопку на рамке ТВ для автоматической отправки диагностики на сервер.",
         "**Комментарий:** Вы можете кратко описать проблему (напр.: 'нет звука', 'зависает картинка').",
         "**100% Облачная работа:** Обработка данных через бессерверный прокси Vercel."
-      ]
-    },
-    {
-      "id": "adult_mode",
-      "category": "tips",
-      "icon": "🔞",
-      "title": "Секретный Взрослый Режим",
-      "summary": "Скрытый доступ к каналам для взрослых с помощью секретного кодового слова.",
-      "details": [
-        "**Разблокировка:** Откройте список каналов (<kbd>C</kbd>) и введите секретное слово <kbd>xxx</kbd> в поле поиска.",
-        "**33 Проверенных канала:** Мгновенно открывает список проверенных каналов (Miami TV, Tiny4K 1080p, Paradise Hill, VOD-кино).",
-        "**Фильтрация:** Удобный выбор между прямым эфиром и фильмами.",
-        "**Выход:** Очистка поля поиска возвращает список к обычным телеканалам."
       ]
     }
   ]
