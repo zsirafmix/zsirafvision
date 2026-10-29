@@ -21,6 +21,15 @@
   let statsInterval = null;
   let lastDroppedFrames = 0;
 
+  // Smart TV Detection (Samsung Tizen, LG webOS, etc.)
+  const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
+  if (isSmartTV) {
+    document.body.classList.add('is-smart-tv');
+    console.log('[ZsirafVision v3.5] Smart TV mód aktiválva:', navigator.userAgent);
+  }
+
+  let videoWatchdogTimer = null;
+
   // DOM Elements
   const video = document.getElementById('tv-video');
   const osdContainer = document.getElementById('osd-container');
@@ -199,6 +208,10 @@
       hls.destroy();
       hls = null;
     }
+    if (videoWatchdogTimer) {
+      clearTimeout(videoWatchdogTimer);
+      videoWatchdogTimer = null;
+    }
 
     // Clean up any direct video element event handlers from MP4
     video.onloadeddata = null;
@@ -246,12 +259,19 @@
 
     if (Hls.isSupported()) {
       hls = new Hls({
-        enableWorker: true,
+        // Samsung Smart TV-n (Tizen) a Web Worker demuxer nem továbbítja megbízhatóan a videó frame-eket (fekete kép, csak hang).
+        // enableWorker: false esetén a főszálon azonnal, zökkenőmentesen renderelődik a kép.
+        enableWorker: false,
         lowLatencyMode: false,
-        manifestLoadingTimeOut: 15000,
-        manifestLoadingMaxRetry: 3,
-        levelLoadingTimeOut: 15000,
-        fragLoadingTimeOut: 20000,
+        manifestLoadingTimeOut: 20000,
+        manifestLoadingMaxRetry: 4,
+        levelLoadingTimeOut: 20000,
+        fragLoadingTimeOut: 25000,
+        fragLoadingMaxRetry: 4,
+        backBufferLength: isSmartTV ? 15 : 30,
+        maxBufferLength: isSmartTV ? 10 : 20,
+        maxMaxBufferLength: isSmartTV ? 20 : 30,
+        maxBufferSize: isSmartTV ? 25 * 1000 * 1000 : 50 * 1000 * 1000,
         defaultAudioCodec: 'mp4a.40.2'
       });
 
@@ -269,7 +289,35 @@
           console.warn('Autoplay requires user interaction:', err);
           if (playOverlay) playOverlay.classList.add('active');
         });
+
+        // Smart TV Video Watchdog:
+        // Ha 4 másodperc elteltével szól a hang (currentTime > 0.5s), de a videoWidth még mindig 0 (nincs kép),
+        // automatikusan megpróbáljuk a natív Tizen lejátszóra váltást (video.src = streamUrl)
+        videoWatchdogTimer = setTimeout(() => {
+          if (!video.paused && video.currentTime > 0.5 && (video.videoWidth === 0 || video.videoHeight === 0)) {
+            console.warn('[Smart TV Watchdog] Hang van, de kép nincs (videoWidth: 0). Átváltás natív Tizen HLS-re...');
+            if (video.canPlayType('application/vnd.apple.mpegurl')) {
+              if (hls) {
+                hls.destroy();
+                hls = null;
+              }
+              video.removeAttribute('src');
+              video.load();
+              video.src = streamUrl;
+              video.play().catch(e => console.error('Native TV fallback error:', e));
+            }
+          }
+        }, 4000);
       });
+
+      const onVideoHasFrames = () => {
+        if (video.videoWidth > 0 && videoWatchdogTimer) {
+          clearTimeout(videoWatchdogTimer);
+          videoWatchdogTimer = null;
+        }
+      };
+      video.addEventListener('loadedmetadata', onVideoHasFrames, { once: true });
+      video.addEventListener('timeupdate', onVideoHasFrames);
 
       hls.on(Hls.Events.ERROR, (event, data) => {
         if (data.fatal) {
@@ -283,15 +331,25 @@
               hls.recoverMediaError();
               break;
             default:
-              tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
-              setTimeout(hideLoading, 3000);
-              hls.destroy();
+              if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                console.warn('Hls.js végzetes hiba, váltás natív HLS-re...');
+                hls.destroy();
+                hls = null;
+                video.src = streamUrl;
+                video.load();
+                video.play().catch(() => {});
+              } else {
+                tuningText.textContent = 'AZ ADÁS JELENLEG NEM ELÉRHETŐ';
+                setTimeout(hideLoading, 3000);
+                hls.destroy();
+                hls = null;
+              }
               break;
           }
         }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Safari iOS/macOS
+      // Safari iOS/macOS vagy Smart TV natív mód
       video.src = streamUrl;
       video.addEventListener('loadedmetadata', () => {
         hideLoading();
@@ -574,6 +632,7 @@
       isPaused: video.paused,
       isMuted: video.muted,
       volume: Math.round(video.volume * 100),
+      isSmartTV: isSmartTV,
       userAgent: navigator.userAgent,
       screenWidth: window.innerWidth,
       screenHeight: window.innerHeight,
@@ -743,22 +802,53 @@
   });
 
   btnFullscreen.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else {
-        const cabinet = document.getElementById('tv-cabinet');
-        if (cabinet.requestFullscreen) cabinet.requestFullscreen();
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      const req = video.requestFullscreen || video.webkitRequestFullscreen || video.mozRequestFullScreen || video.msRequestFullscreen;
+      if (req) {
+        req.call(video).catch(() => {
+          const cabinet = document.getElementById('tv-cabinet');
+          if (cabinet && cabinet.requestFullscreen) cabinet.requestFullscreen().catch(() => {});
+        });
       }
     } else {
-      if (document.exitFullscreen) document.exitFullscreen();
+      const exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen;
+      if (exit) exit.call(document);
     }
   });
 
   searchInput.addEventListener('input', applyFilter);
 
-  // Keyboard Shortcuts
+  // Keyboard Shortcuts & Smart TV Remote Control Support
   window.addEventListener('keydown', (e) => {
+    // Smart TV Remote specific keyCodes (Samsung Tizen, LG webOS):
+    // 10009: Tizen Return/Back button, 427: ChannelUp, 428: ChannelDown, 415: Play, 19: Pause, 413: Stop
+    if (e.keyCode === 10009) {
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) exit.call(document);
+        e.preventDefault();
+        return;
+      }
+      if (guideDrawer.classList.contains('open') || epgSidebar.classList.contains('open') || reportModal.classList.contains('open') || statsModal.classList.contains('open')) {
+        closeSidebars();
+        closeReportModal();
+        closeStatsModal();
+        e.preventDefault();
+        return;
+      }
+    }
+
+    if (e.keyCode === 427) {
+      e.preventDefault();
+      playChannel(currentChannelIndex + 1);
+      return;
+    }
+    if (e.keyCode === 428) {
+      e.preventDefault();
+      playChannel(currentChannelIndex - 1);
+      return;
+    }
+
     if (document.activeElement === searchInput || document.activeElement === reportUserNote) {
       if (e.key === 'Escape') {
         closeSidebars();
@@ -772,13 +862,33 @@
     switch (e.key) {
       case 'ArrowUp':
       case 'ArrowRight':
+      case 'ChannelUp':
+      case 'MediaTrackNext':
         e.preventDefault();
         playChannel(currentChannelIndex + 1);
         break;
       case 'ArrowDown':
       case 'ArrowLeft':
+      case 'ChannelDown':
+      case 'MediaTrackPrevious':
         e.preventDefault();
         playChannel(currentChannelIndex - 1);
+        break;
+      case 'MediaPlay':
+      case 'MediaPlayPause':
+        e.preventDefault();
+        if (video.paused) video.play(); else video.pause();
+        break;
+      case 'MediaStop':
+        e.preventDefault();
+        video.pause();
+        break;
+      case 'Enter':
+        if (!guideDrawer.classList.contains('open') && !epgSidebar.classList.contains('open')) {
+          if (isMuted) {
+            btnMute.click();
+          }
+        }
         break;
       case '+':
       case '=':

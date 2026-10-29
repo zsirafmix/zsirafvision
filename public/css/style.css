@@ -201,7 +201,9 @@ body {
   width: 100%;
   max-width: 900px;
   aspect-ratio: 785 / 507;
-  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.85));
+  /* Removed CSS filter: drop-shadow to fix Samsung Smart TV (Tizen) black screen bug */
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.85);
+  border-radius: 8px;
 }
 
 /* The frame image sits on top, with a transparent cutout for the screen */
@@ -277,6 +279,8 @@ body {
   border-radius: 36px / 30px;
   overflow: hidden;
   z-index: 5;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 #tv-video {
@@ -284,6 +288,13 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+  background-color: #000000;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 /* OSD Overlay */
@@ -1021,4 +1032,46 @@ kbd {
   .stats-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ==========================================================================
+   Samsung Smart TV (Tizen OS) & Smart TV Hardware Plane Overrides
+   ========================================================================== */
+body.is-smart-tv .tv-cabinet {
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+body.is-smart-tv .crt-screen-container {
+  border-radius: 0 !important; /* Critical: Tizen hardware video hole cannot puncture through border-radius */
+  overflow: visible !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+}
+
+body.is-smart-tv #tv-video {
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Fullscreen support on Smart TV and desktop */
+:fullscreen #tv-video,
+:-webkit-full-screen #tv-video {
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: contain !important;
+  background-color: #000 !important;
+}
+
+:fullscreen .crt-screen-container,
+:-webkit-full-screen .crt-screen-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  z-index: 999999 !important;
 }
