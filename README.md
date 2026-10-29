@@ -1,14 +1,35 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v3.6)
+# 📺 ZsirafVision - Online IPTV & Web Player (v3.7)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **WebRTC Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
+* **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v3.6`
+* **Aktuális verzió:** `v3.7`
 
 ---
 
 ## 🚀 Főbb funkciók és képességek
+
+* **⭐ Kedvencek (Favorites) rendszer (v3.7):**
+  * Egykattintásos csillagozás közvetlenül a képernyőn (OSD csillag gomb) vagy a csatornalistában minden adó mellett.
+  * `⭐ Kedvencek` kategóriaszűrő fül a csatornaválasztó fiókban, amely azonnal listázza a megjelölt kedvenc adókat a darabszámukkal együtt.
+  * Tartós elmentés a böngésző `localStorage` tárhelyében.
+* **🌙 Elalvásidőzítő & Készenléti (Standby) Mód (v3.7):**
+  * Beállítható időzítő: 15, 30, 45, 60, 90, 120 perc vagy kikapcsolva.
+  * Valós idejű visszaszámlálás az alsó sáv gombján és az időzítő ablakban.
+  * Lágy hangerő-lehalkítás (audio fade-out) a lejárás előtti utolsó 10 másodpercben.
+  * Lejáratkor automatikus készenléti mód (Standby): a videó stream leáll, energiatakarékos retro sötétített képernyő jelenik meg világító piros LED-del és bekapcsoló gombbal.
+* **📱 Mobil Távirányító QR-kóddal (WebRTC / PeerJS) (v3.7):**
+  * **Zéró helyi szerver**: Nincs szükség semmilyen program vagy szerver futtatására a PC-n, a kapcsolatot a felhős PeerJS relay biztosítja közvetlen P2P WebRTC kapcsolaton keresztül.
+  * A TV képernyőjén megjelenő QR-kódot a telefon kamerájával beolvasva azonnal megnyílik a mobilra optimalizált retro távirányító (`remote.html`).
+  * Kétirányú valós idejű szinkronizáció: a telefon mini CRT kijelzőjén azonnal látszik a tévén épp futó csatorna neve, száma, műfaja, hangereje és készenléti állapota.
+  * Teljes távirányító funkciók: CH+/CH-, VOL+/VOL-, Mute, 0-9 számbillentyűk, OK, Guide, EPG, Kedvenc, Teljes képernyő, Elalvásidőzítő és haptikus rezgés.
+* **📲 Tévé formában telepíthető PWA Mobil App (v3.7):**
+  * Progressive Web App (`manifest.json`, `sw.js`), amely telefonon és táblagépen a kezdőképernyőre helyezhető.
+  * Böngésző keret nélkül, teljes képernyős **fekvő (landscape) tájolásban** indul el igazi zsebtévéként.
+  * Dedikált 192x192 és 512x512 képpontos retro arany-fekete televízió ikonok.
+  * Offline UI héj gyorsítótárazás Service Workerrel (a videóstreamek és felhős API-k közvetlen átengedésével).
 
 * **Utolsóként nézett csatorna és ország megjegyzése (v3.6):**
   * A lejátszó a `localStorage` segítségével automatikusan megjegyzi az utolsóként nézett csatornát és a forrást (`HU`, `WORLD`, `XXX`).
@@ -74,6 +95,13 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v3.7] - 2026-10-29
+* **Új**: **⭐ Kedvencek (Favorites) rendszer**: Egykattintásos csillagozás a TV OSD kijelzőjén és a csatornalistában minden adó mellett. Dedikált `⭐ Kedvencek` kategória fül az elmentett adók azonnali szűréséhez és gyors eléréséhez, folyamatos számlálóval és `localStorage` mentéssel.
+* **Új**: **🌙 Elalvásidőzítő (Sleep Timer) & Készenléti (Standby) mód**: Állítható időtartamok (15, 30, 45, 60, 90, 120 perc vagy kikapcsolva). Visszaszámláló kijelző a TV alsó vezérlősávjában és a modalban. Az utolsó 10 másodpercben lágy hangerő-lehalkítás (audio fade-out), majd a stream leállítása és készenléti mód aktiválása világító piros LED-del és bekapcsoló gombbal.
+* **Új**: **📱 Mobil Távirányító QR-kóddal (WebRTC / PeerJS)**: A TV alsó sávjában lévő `📱 Távirányító` gombra kattintva generálódik egy egyedi szobakód és QR-kód. A telefon kamerájával beolvasva megnyílik a kifejezetten mobil képernyőkre tervezett retro távirányító app (`remote.html`). Teljes körű vezérlés (CH+/CH-, VOL+/VOL-, Mute, 0-9 gombok, D-pad, EPG, Guide, Kedvenc, Teljes képernyő, Sleep) és kétirányú állapot-visszajelzés a telefon mini CRT kijelzőjére. **100%-ban felhős P2P WebRTC, nulla helyi szerverrel!**
+* **Új**: **📲 Tévé formájú telepíthető PWA mobilapp**: Progressive Web App konfiguráció (`manifest.json`, `sw.js`, 192x192 és 512x512 retro ikonok). Kezdőképernyőre helyezve böngészősávok nélkül, közvetlenül fekvő (landscape) teljes képernyős módban nyílik meg, igazi hordozható zsebtévé élményt adva.
+* **Bővítés**: Mind a 6 nyelv (`hu`, `en`, `de`, `fr`, `es`, `ru`) bővítve az új funkciók (Kedvencek, Elalvásidőzítő, Készenlét, Távirányító) felirataival.
 
 ### [v3.6] - 2026-10-29
 * **Új**: **Utolsóként nézett csatorna és ország megjegyzése**: A lejátszó `localStorage` segítségével elmenti az utoljára nézett adót és forrást (`HU`, `WORLD`, `XXX`), és a legközelebbi indításkor pontosan azzal indul el, automatikusan beállítva az országválasztót is.

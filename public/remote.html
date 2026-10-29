@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ZsirafVision - Mobil Távirányító</title>
+  <meta name="theme-color" content="#12100f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📱</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
+  <!-- PeerJS for WebRTC Direct Cloud P2P connection -->
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #12100f;
+      --card-bg: #1c1815;
+      --brass-gold: #c8a24c;
+      --brass-light: #f5d485;
+      --crt-green: #39ff14;
+      --btn-grad: linear-gradient(180deg, #2c241f 0%, #1e1814 100%);
+      --btn-active: linear-gradient(180deg, #1e1814 0%, #120e0c 100%);
+      --border-color: #3d322b;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      background-color: var(--bg-dark);
+      color: #e8dccb;
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+    }
+    .remote-case {
+      width: 100%;
+      max-width: 400px;
+      background: #181412;
+      border: 2px solid var(--border-color);
+      border-radius: 28px;
+      padding: 18px 14px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.9), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    /* Header & Status Screen */
+    .remote-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 4px;
+    }
+    .brand-title {
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--brass-gold);
+      font-weight: bold;
+    }
+    .connection-pill {
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: #25201c;
+      border: 1px solid #4a3b33;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+    }
+    .status-dot.connected {
+      background: #22c55e;
+      box-shadow: 0 0 6px #22c55e;
+    }
+    /* Mini CRT Display on Remote */
+    .remote-screen {
+      background: #0a0a0c;
+      border: 2px solid #2e2621;
+      border-radius: 10px;
+      padding: 10px 12px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+    .screen-ch-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .screen-ch-name {
+      font-size: 1.15rem;
+      color: #fff;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 240px;
+    }
+    .screen-ch-num {
+      font-size: 1.3rem;
+      color: var(--crt-green);
+      font-family: 'VT323', monospace;
+    }
+    .screen-status-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .screen-volume {
+      color: var(--brass-light);
+    }
+    /* Action Buttons Grid */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .r-btn {
+      background: var(--btn-grad);
+      border: 1px solid var(--border-color);
+      color: #e8dccb;
+      font-family: inherit;
+      font-size: 0.95rem;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+      transition: all 0.1s ease;
+      touch-action: manipulation;
+    }
+    .r-btn:active {
+      background: var(--btn-active);
+      transform: scale(0.95);
+      border-color: var(--brass-gold);
+    }
+    .btn-power {
+      background: linear-gradient(180deg, #5c181c 0%, #3a0d10 100%);
+      border-color: #88242b;
+      color: #ff9999;
+      width: 48px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+    .btn-mute {
+      width: 48px;
+      height: 44px;
+      font-size: 1.2rem;
+    }
+    .btn-sleep {
+      flex: 1;
+      height: 44px;
+      font-size: 0.85rem;
+    }
+    /* Rocker Columns (CH and VOL) */
+    .rockers-section {
+      display: flex;
+      justify-content: space-around;
+      gap: 16px;
+      margin: 4px 0;
+    }
+    .rocker-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: #201a16;
+      padding: 8px;
+      border-radius: 16px;
+      border: 1px solid #332822;
+      align-items: center;
+    }
+    .rocker-label {
+      font-size: 0.75rem;
+      color: var(--brass-gold);
+      letter-spacing: 1px;
+    }
+    .btn-rocker {
+      width: 100%;
+      height: 52px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    /* D-Pad Navigation */
+    .dpad-section {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 44px);
+      gap: 6px;
+      margin: 6px 0;
+    }
+    .dpad-btn {
+      height: 100%;
+      font-size: 1.1rem;
+    }
+    .dpad-center {
+      background: linear-gradient(180deg, #3d322b 0%, #29211c 100%);
+      border-color: var(--brass-gold);
+      color: var(--brass-light);
+      font-weight: bold;
+    }
+    /* Secondary Nav Grid */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .nav-btn-r {
+      height: 40px;
+      font-size: 0.82rem;
+    }
+    /* Number Pad */
+    .numpad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .num-btn {
+      height: 42px;
+      font-size: 1.15rem;
+      font-weight: bold;
+    }
+    /* Pairing Form when Room Code is missing */
+    .pairing-box {
+      margin-top: 15px;
+      background: #241e1a;
+      border: 1px solid #4a3b33;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      display: none;
+    }
+    .pairing-box.active {
+      display: block;
+    }
+    .pairing-input {
+      width: 100%;
+      background: #151210;
+      border: 1px solid var(--brass-gold);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 3px;
+      padding: 8px;
+      border-radius: 6px;
+      margin: 10px 0;
+      text-transform: uppercase;
+      outline: none;
+    }
+    .pairing-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--brass-gold);
+      color: #12100f;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="remote-case">
+    <!-- Header -->
+    <div class="remote-header">
+      <div class="brand-title">📺 ZSIRAFVISION</div>
+      <div class="connection-pill" id="conn-pill">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="conn-label">Kapcsolódás...</span>
+      </div>
+    </div>
+
+    <!-- Mini Display -->
+    <div class="remote-screen">
+      <div class="screen-ch-row">
+        <span class="screen-ch-name" id="disp-ch-name">ALFÖLD TV</span>
+        <span class="screen-ch-num" id="disp-ch-num">CH 01</span>
+      </div>
+      <div class="screen-status-row">
+        <span id="disp-ch-group">Magyar TV</span>
+        <span class="screen-volume" id="disp-vol">VOL 80%</span>
+      </div>
+    </div>
+
+    <!-- Pairing Box (if room is not in URL) -->
+    <div class="pairing-box" id="pairing-box">
+      <p style="font-size: 0.85rem; color: #ccc;">Add meg a tévén látható 6 betűs kódot:</p>
+      <input type="text" id="manual-room-code" class="pairing-input" maxlength="8" placeholder="TV-1234">
+      <button class="pairing-btn" id="btn-manual-pair">CSATLAKOZÁS</button>
+    </div>
+
+    <!-- Power & Sleep Bar -->
+    <div class="btn-row">
+      <button class="r-btn btn-power" id="btn-power" title="Ki/Bekapcsolás">⏻</button>
+      <button class="r-btn btn-sleep" id="btn-sleep">🌙 ELALVÁSIDŐZÍTŐ</button>
+      <button class="r-btn btn-mute" id="btn-mute" title="Némítás">🔇</button>
+    </div>
+
+    <!-- Rockers: Channel & Volume -->
+    <div class="rockers-section">
+      <div class="rocker-col">
+        <span class="rocker-label">CSATORNA</span>
+        <button class="r-btn btn-rocker" id="btn-ch-up">▲ CH +</button>
+        <button class="r-btn btn-rocker" id="btn-ch-down">▼ CH -</button>
+      </div>
+      <div class="rocker-col">
+        <span class="rocker-label">HANGERŐ</span>
+        <button class="r-btn btn-rocker" id="btn-vol-up">▲ VOL +</button>
+        <button class="r-btn btn-rocker" id="btn-vol-down">▼ VOL -</button>
+      </div>
+    </div>
+
+    <!-- D-Pad Directional Keys -->
+    <div class="dpad-section">
+      <div></div>
+      <button class="r-btn dpad-btn" id="btn-dpad-up">▲</button>
+      <div></div>
+      <button class="r-btn dpad-btn" id="btn-dpad-left">◀</button>
+      <button class="r-btn dpad-btn dpad-center" id="btn-dpad-ok">OK</button>
+      <button class="r-btn dpad-btn" id="btn-dpad-right">▶</button>
+      <div></div>
+      <button class="r-btn dpad-btn" id="btn-dpad-down">▼</button>
+      <div></div>
+    </div>
+
+    <!-- Action Shortcuts -->
+    <div class="nav-grid">
+      <button class="r-btn nav-btn-r" id="btn-open-guide">📋 CSATORNÁK</button>
+      <button class="r-btn nav-btn-r" id="btn-open-epg">📅 MŰSORÚJSÁG</button>
+      <button class="r-btn nav-btn-r" id="btn-fav">⭐ KEDVENC</button>
+      <button class="r-btn nav-btn-r" id="btn-fullscreen">⛶ TELJES KÉP</button>
+    </div>
+
+    <!-- Number Pad for Direct Channel Entry -->
+    <div class="numpad-grid">
+      <button class="r-btn num-btn" data-num="1">1</button>
+      <button class="r-btn num-btn" data-num="2">2</button>
+      <button class="r-btn num-btn" data-num="3">3</button>
+      <button class="r-btn num-btn" data-num="4">4</button>
+      <button class="r-btn num-btn" data-num="5">5</button>
+      <button class="r-btn num-btn" data-num="6">6</button>
+      <button class="r-btn num-btn" data-num="7">7</button>
+      <button class="r-btn num-btn" data-num="8">8</button>
+      <button class="r-btn num-btn" data-num="9">9</button>
+      <button class="r-btn num-btn" id="btn-num-prev">◀</button>
+      <button class="r-btn num-btn" data-num="0">0</button>
+      <button class="r-btn num-btn" id="btn-num-next">▶</button>
+    </div>
+  </div>
+
+  <script src="js/remote.js?v=3.7"></script>
+</body>
+</html>

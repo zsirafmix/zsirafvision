@@ -8,9 +8,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=3.6">
+  <link rel="stylesheet" href="css/style.css?v=3.7">
+  <!-- PWA Configuration -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ZsirafVision">
   <!-- HLS.js for modern cross-browser M3U8 playback -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <!-- QRCode.js and PeerJS for Mobile Remote pairing -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 </head>
 <body>
   <div class="ambient-background"></div>
@@ -49,6 +58,7 @@
         <div class="osd-container" id="osd-container">
           <div class="osd-top-row">
             <div class="osd-channel-badge" id="osd-name">ALFÖLD TV</div>
+            <button class="osd-fav-btn" id="osd-fav-btn" title="Kedvencekhez adás">⭐</button>
           </div>
           <div class="osd-number-row">
             <span class="osd-number" id="osd-number">01</span>
@@ -82,6 +92,16 @@
           </div>
         </div>
 
+        <!-- Standby / Sleep Screen Overlay -->
+        <div class="standby-overlay" id="standby-overlay">
+          <div class="standby-box">
+            <span class="standby-icon">🌙</span>
+            <h2 data-i18n="standbyTitle">KÉSZENLÉTI ÁLLAPOT</h2>
+            <p data-i18n="standbySubtitle">Az elalvásidőzítő leállította az adást. Kattints a bekapcsoláshoz!</p>
+            <button class="standby-power-btn" id="btn-standby-wake">⏻ BEKAPCSOLÁS</button>
+          </div>
+        </div>
+
       </div>
 
       <!-- TV Cabinet Wooden Overlay Frame with transparent screen cutout -->
@@ -102,6 +122,8 @@
       <button class="nav-btn prev-btn" id="btn-prev" data-i18n="btnPrev" title="Előző csatorna (Balra nyíl)">◀ ELŐZŐ</button>
       <button class="nav-btn guide-btn" id="btn-open-guide" data-i18n="btnGuide">📋 CSATORNALISTA</button>
       <button class="nav-btn next-btn" id="btn-next" data-i18n="btnNext" title="Következő csatorna (Jobbra nyíl)">KÖVETKEZŐ ▶</button>
+      <button class="nav-btn sleep-btn" id="btn-sleep" data-i18n="btnSleep" title="Elalvásidőzítő">🌙 IDŐZÍTŐ</button>
+      <button class="nav-btn remote-btn" id="btn-remote" data-i18n="btnRemote" title="Mobil Távirányító QR-kóddal">📱 TÁVIRÁNYÍTÓ</button>
       <button class="nav-btn icon-btn" id="btn-mute" title="Némítás (M)">🔊</button>
       <button class="nav-btn icon-btn" id="btn-fullscreen" title="Teljes képernyő (F)">⛶</button>
       <button class="nav-btn stats-btn" id="btn-toggle-stats" data-i18n="btnStats" title="Technikai adatok és szerverstátusz">⚙ TECHNIKAI ADATOK</button>
@@ -236,6 +258,49 @@
     </div>
   </div>
 
+  <!-- Sleep Timer Modal -->
+  <div class="modal-backdrop" id="sleep-modal">
+    <div class="modal-content sleep-modal-box">
+      <div class="modal-header">
+        <h3 data-i18n="sleepModalTitle">🌙 ELALVÁSIDŐZÍTŐ</h3>
+        <button class="modal-close-btn" id="btn-close-sleep" data-i18n-title="epgClose" title="Bezárás">✕</button>
+      </div>
+      <div class="sleep-modal-body">
+        <div class="sleep-current-status" id="sleep-status-display">Nincs aktív időzítő</div>
+        <div class="sleep-options-grid">
+          <button class="sleep-opt-btn" data-min="0" data-i18n="sleepOff">Kikapcsolva</button>
+          <button class="sleep-opt-btn" data-min="15" data-i18n="sleep15">15 perc</button>
+          <button class="sleep-opt-btn" data-min="30" data-i18n="sleep30">30 perc</button>
+          <button class="sleep-opt-btn" data-min="45" data-i18n="sleep45">45 perc</button>
+          <button class="sleep-opt-btn" data-min="60" data-i18n="sleep60">60 perc</button>
+          <button class="sleep-opt-btn" data-min="90" data-i18n="sleep90">90 perc</button>
+          <button class="sleep-opt-btn" data-min="120" data-i18n="sleep120">120 perc</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Remote Pairing Modal -->
+  <div class="modal-backdrop" id="remote-modal">
+    <div class="modal-content remote-modal-box">
+      <div class="modal-header">
+        <h3 data-i18n="remoteModalTitle">📱 MOBIL TÁVIRÁNYÍTÓ</h3>
+        <button class="modal-close-btn" id="btn-close-remote" data-i18n-title="epgClose" title="Bezárás">✕</button>
+      </div>
+      <div class="remote-modal-body">
+        <p class="remote-scan-desc" data-i18n="remoteScanDesc">Olvasd be a QR-kódot a telefonoddal a távirányító megnyitásához:</p>
+        <div class="qr-code-wrapper" id="qr-code-container"></div>
+        <div class="room-code-display">
+          <span>Szobakód:</span> <strong id="remote-room-code-text">...</strong>
+        </div>
+        <div class="remote-status-msg" id="remote-status-msg" data-i18n="remoteWaiting">Várakozás a telefon csatlakozására...</div>
+        <div class="remote-link-hint">
+          <a href="#" id="remote-direct-link" target="_blank" style="color: var(--brass-gold); font-size: 0.8rem; text-decoration: underline;">Közvetlen link megnyitása új lapon</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Help & Keyboard Shortcuts Modal / Footer -->
   <footer class="app-footer">
     <div class="shortcuts-legend" id="shortcuts-legend" data-i18n-html="shortcutsLegend">
@@ -253,7 +318,7 @@
     </div>
   </footer>
 
-  <script src="js/i18n.js?v=3.6"></script>
-  <script src="js/app.js?v=3.6"></script>
+  <script src="js/i18n.js?v=3.7"></script>
+  <script src="js/app.js?v=3.7"></script>
 </body>
 </html>

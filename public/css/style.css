@@ -1036,6 +1036,277 @@ kbd {
 }
 
 /* ==========================================================================
+   v3.7 Features: Favorites, Standby Overlay, Sleep Timer & Mobile Remote
+   ========================================================================== */
+/* Favorite Star on OSD and Channel Items */
+.osd-top-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.osd-fav-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  color: #666;
+  cursor: pointer;
+  padding: 2px 4px;
+  line-height: 1;
+  transition: all 0.15s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+}
+
+.osd-fav-btn:hover {
+  transform: scale(1.2);
+  color: #ffd700;
+}
+
+.osd-fav-btn.active {
+  color: #ffd700;
+  text-shadow: 0 0 10px #ffea00;
+}
+
+.ch-item-fav-btn {
+  background: none;
+  border: none;
+  font-size: 1.15rem;
+  color: #554a42;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+  margin-left: auto;
+}
+
+.ch-item-fav-btn:hover {
+  color: #ffd700;
+  transform: scale(1.2);
+}
+
+.ch-item-fav-btn.active {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* Standby / Sleep Screen Overlay */
+.standby-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #181512 0%, #0a0908 100%);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 25;
+  text-align: center;
+  padding: 20px;
+}
+
+.standby-overlay.active {
+  display: flex;
+}
+
+.standby-box {
+  background: rgba(20, 18, 16, 0.95);
+  border: 2px solid #3d322b;
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 440px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.standby-icon {
+  font-size: 2.5rem;
+  animation: floatMoon 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatMoon {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+.standby-box h2 {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.4rem;
+  color: var(--brass-gold);
+  letter-spacing: 2px;
+}
+
+.standby-box p {
+  font-size: 0.85rem;
+  color: #aaa;
+  line-height: 1.4;
+}
+
+.standby-power-btn {
+  margin-top: 10px;
+  background: linear-gradient(135deg, #e63946 0%, #9e1b26 100%);
+  border: 2px solid #ff6b77;
+  color: #fff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 12px 24px;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.6);
+  transition: all 0.15s ease;
+}
+
+.standby-power-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 22px rgba(230, 57, 70, 0.85);
+}
+
+/* Sleep Timer & Remote Nav Buttons */
+.sleep-btn {
+  background: linear-gradient(180deg, #1f2732 0%, #131a22 100%);
+  border-color: #314457;
+  color: #9ac2f0;
+}
+
+.sleep-btn:hover {
+  border-color: #5d93ce;
+  color: #fff;
+}
+
+.sleep-btn.active {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+.remote-btn {
+  background: linear-gradient(180deg, #2b1f32 0%, #1a1322 100%);
+  border-color: #4b3157;
+  color: #d69af0;
+}
+
+.remote-btn:hover {
+  border-color: #ad5dce;
+  color: #fff;
+}
+
+/* Sleep Timer Modal */
+.sleep-modal-box {
+  max-width: 420px;
+}
+
+.sleep-modal-body {
+  padding: 20px;
+}
+
+.sleep-current-status {
+  text-align: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.95rem;
+  color: var(--brass-light);
+  margin-bottom: 16px;
+  padding: 8px;
+  background: #141210;
+  border-radius: 6px;
+  border: 1px solid #332b24;
+}
+
+.sleep-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.sleep-opt-btn {
+  background: #241e1a;
+  border: 1px solid #4a3b33;
+  color: #e8dccb;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sleep-opt-btn:hover {
+  background: #332822;
+  border-color: var(--brass-accent);
+  color: #fff;
+}
+
+.sleep-opt-btn.active {
+  background: var(--brass-accent);
+  color: #12100f;
+  font-weight: bold;
+}
+
+/* Mobile Remote Pairing Modal */
+.remote-modal-box {
+  max-width: 440px;
+  text-align: center;
+}
+
+.remote-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.remote-scan-desc {
+  font-size: 0.88rem;
+  color: #ccc;
+  line-height: 1.4;
+}
+
+.qr-code-wrapper {
+  background: #fff;
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.qr-code-wrapper img, .qr-code-wrapper canvas {
+  display: block;
+}
+
+.room-code-display {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.15rem;
+  color: #fff;
+  background: #241e1a;
+  padding: 6px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--brass-gold);
+}
+
+.room-code-display strong {
+  color: var(--brass-gold);
+  letter-spacing: 2px;
+}
+
+.remote-status-msg {
+  font-size: 0.82rem;
+  color: #888;
+}
+
+.remote-status-msg.connected {
+  color: #4ade80;
+  font-weight: bold;
+}
+
+/* ==========================================================================
    Responsive adjustments (Mobile & Tablet)
    ========================================================================== */
 @media (max-width: 950px) {

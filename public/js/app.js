@@ -1,7 +1,7 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 3.6
- * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Hibajelentő, iptv-org és Secret XXX támogatással
+ * Version: 3.7
+ * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Mobil távirányító (QR), Fekvő PWA app
  */
 
 (function () {
@@ -22,11 +22,21 @@
   let statsInterval = null;
   let lastDroppedFrames = 0;
 
+  // New v3.7 State
+  let favorites = [];
+  let sleepTimerSec = 0;
+  let sleepInterval = null;
+  let isStandby = false;
+  let tvPeer = null;
+  let remoteConn = null;
+  let roomCode = null;
+  let qrCodeInstance = null;
+
   // Smart TV Detection (Samsung Tizen, LG webOS, etc.)
   const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
   if (isSmartTV) {
     document.body.classList.add('is-smart-tv');
-    console.log('[ZsirafVision v3.6] Smart TV mód aktiválva:', navigator.userAgent);
+    console.log('[ZsirafVision v3.7] Smart TV mód aktiválva:', navigator.userAgent);
   }
 
   let videoWatchdogTimer = null;
@@ -37,6 +47,7 @@
   const osdName = document.getElementById('osd-name');
   const osdNumber = document.getElementById('osd-number');
   const osdCategory = document.getElementById('osd-category');
+  const osdFavBtn = document.getElementById('osd-fav-btn');
   const osdAdjustment = document.getElementById('osd-adjustment');
   const adjustmentLabel = document.getElementById('adjustment-label');
   const adjustmentBar = document.getElementById('adjustment-bar');
@@ -89,6 +100,24 @@
   const statVideoBuffer = document.getElementById('stat-video-buffer');
   const statDroppedFrames = document.getElementById('stat-dropped-frames');
   const statPing = document.getElementById('stat-ping');
+
+  // Sleep Timer & Standby Elements
+  const btnSleep = document.getElementById('btn-sleep');
+  const sleepModal = document.getElementById('sleep-modal');
+  const btnCloseSleep = document.getElementById('btn-close-sleep');
+  const sleepStatusDisplay = document.getElementById('sleep-status-display');
+  const sleepOptBtns = document.querySelectorAll('.sleep-opt-btn');
+  const standbyOverlay = document.getElementById('standby-overlay');
+  const btnStandbyWake = document.getElementById('btn-standby-wake');
+
+  // Mobile Remote Elements
+  const btnRemote = document.getElementById('btn-remote');
+  const remoteModal = document.getElementById('remote-modal');
+  const btnCloseRemote = document.getElementById('btn-close-remote');
+  const qrCodeContainer = document.getElementById('qr-code-container');
+  const remoteRoomCodeText = document.getElementById('remote-room-code-text');
+  const remoteStatusMsg = document.getElementById('remote-status-msg');
+  const remoteDirectLink = document.getElementById('remote-direct-link');
 
   // Multi-Language Management (i18n)
   let currentLang = 'hu';
@@ -150,6 +179,14 @@
     });
 
     updateEpgForCurrentChannel();
+    if (channels && channels.length) {
+      setupCategories();
+    }
+    updateSleepUI();
+    if (osdFavBtn && channels[currentChannelIndex]) {
+      const isFav = favorites.includes(channels[currentChannelIndex].name);
+      osdFavBtn.title = isFav ? t('favRemove') : t('favAdd');
+    }
   }
 
   if (langSelect) {
@@ -158,6 +195,361 @@
   if (drawerLangSelect) {
     drawerLangSelect.addEventListener('change', (e) => setLanguage(e.target.value));
   }
+
+  // ==========================================================================
+  // Favorites Management
+  // ==========================================================================
+  function loadFavorites() {
+    try {
+      const saved = localStorage.getItem('zsirafvision_favorites');
+      if (saved) {
+        favorites = JSON.parse(saved);
+        if (!Array.isArray(favorites)) favorites = [];
+      }
+    } catch (e) {
+      favorites = [];
+    }
+  }
+
+  function saveFavorites() {
+    try {
+      localStorage.setItem('zsirafvision_favorites', JSON.stringify(favorites));
+    } catch (e) {}
+  }
+
+  function toggleFavorite(channelName) {
+    if (!channelName) return;
+    const idx = favorites.indexOf(channelName);
+    if (idx !== -1) {
+      favorites.splice(idx, 1);
+    } else {
+      favorites.push(channelName);
+    }
+    saveFavorites();
+
+    const currentCh = channels[currentChannelIndex];
+    if (currentCh && currentCh.name === channelName && osdFavBtn) {
+      const isFav = favorites.includes(channelName);
+      osdFavBtn.classList.toggle('active', isFav);
+      osdFavBtn.setAttribute('title', isFav ? t('favRemove') : t('favAdd'));
+    }
+
+    setupCategories();
+    applyFilter();
+    broadcastTVState();
+  }
+
+  if (osdFavBtn) {
+    osdFavBtn.addEventListener('click', () => {
+      const cur = channels[currentChannelIndex];
+      if (cur) toggleFavorite(cur.name);
+    });
+  }
+
+  // ==========================================================================
+  // Sleep Timer & Standby Logic
+  // ==========================================================================
+  function formatSleepTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function updateSleepUI() {
+    if (sleepTimerSec > 0) {
+      const formatted = formatSleepTime(sleepTimerSec);
+      if (sleepStatusDisplay) sleepStatusDisplay.textContent = `${t('sleepActive')}: ${formatted}`;
+      if (btnSleep) {
+        btnSleep.classList.add('active');
+        btnSleep.title = `${t('navSleep')} (${formatted})`;
+      }
+    } else {
+      if (sleepStatusDisplay) sleepStatusDisplay.textContent = t('sleepOff');
+      if (btnSleep) {
+        btnSleep.classList.remove('active');
+        btnSleep.title = t('navSleep');
+      }
+    }
+  }
+
+  function setSleepTimer(minutes) {
+    if (sleepInterval) {
+      clearInterval(sleepInterval);
+      sleepInterval = null;
+    }
+
+    if (minutes <= 0) {
+      sleepTimerSec = 0;
+      updateSleepUI();
+      showAdjustment(t('navSleep'), t('sleepOff'), 0);
+      broadcastTVState();
+      return;
+    }
+
+    sleepTimerSec = minutes * 60;
+    updateSleepUI();
+    showAdjustment(t('navSleep'), `${minutes} ${t('minutes') || 'perc'}`, 100);
+    broadcastTVState();
+
+    sleepInterval = setInterval(() => {
+      sleepTimerSec--;
+      if (sleepTimerSec <= 10 && sleepTimerSec > 0) {
+        // Soft volume fade-out before standby
+        const fadeVol = (sleepTimerSec / 10) * currentVolume;
+        video.volume = Math.max(0, fadeVol);
+      }
+      if (sleepTimerSec <= 0) {
+        clearInterval(sleepInterval);
+        sleepInterval = null;
+        sleepTimerSec = 0;
+        updateSleepUI();
+        enterStandby();
+      } else {
+        updateSleepUI();
+      }
+    }, 1000);
+  }
+
+  function enterStandby() {
+    isStandby = true;
+    video.pause();
+    if (standbyOverlay) standbyOverlay.classList.add('active');
+    broadcastTVState();
+  }
+
+  function exitStandby() {
+    isStandby = false;
+    video.volume = currentVolume;
+    if (standbyOverlay) standbyOverlay.classList.remove('active');
+    video.play().catch(e => console.warn('Wake play error:', e));
+    broadcastTVState();
+  }
+
+  function openSleepModal() {
+    if (sleepModal) sleepModal.classList.add('open');
+    updateSleepUI();
+  }
+
+  function closeSleepModal() {
+    if (sleepModal) sleepModal.classList.remove('open');
+  }
+
+  if (btnSleep) btnSleep.addEventListener('click', openSleepModal);
+  if (btnCloseSleep) btnCloseSleep.addEventListener('click', closeSleepModal);
+  if (btnStandbyWake) btnStandbyWake.addEventListener('click', exitStandby);
+
+  if (sleepOptBtns) {
+    sleepOptBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const min = parseInt(btn.dataset.min, 10);
+        setSleepTimer(isNaN(min) ? 0 : min);
+        closeSleepModal();
+      });
+    });
+  }
+
+  // ==========================================================================
+  // Mobile Remote Control (PeerJS WebRTC)
+  // ==========================================================================
+  function generateRoomCode() {
+    const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    let res = '';
+    for (let i = 0; i < 4; i++) {
+      res += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return res;
+  }
+
+  function initRemoteServer() {
+    if (typeof Peer === 'undefined') {
+      console.warn('PeerJS library not loaded.');
+      if (remoteStatusMsg) remoteStatusMsg.textContent = 'PeerJS nem elérhető';
+      return;
+    }
+
+    roomCode = generateRoomCode();
+    const peerId = 'zsiraf-tv-' + roomCode.toLowerCase();
+
+    try {
+      tvPeer = new Peer(peerId, {
+        debug: 1
+      });
+
+      tvPeer.on('open', (id) => {
+        console.log('[ZsirafVision v3.7] PeerJS TV server online. Peer ID:', id);
+        if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
+        updateRemoteModalQr();
+      });
+
+      tvPeer.on('connection', (conn) => {
+        remoteConn = conn;
+        console.log('[ZsirafVision v3.7] Remote connected from mobile!');
+        if (remoteStatusMsg) {
+          remoteStatusMsg.textContent = '🟢 ' + t('remoteConnected');
+          remoteStatusMsg.classList.add('connected');
+        }
+
+        conn.on('open', () => {
+          broadcastTVState();
+        });
+
+        conn.on('data', (data) => {
+          handleRemoteCommand(data);
+        });
+
+        conn.on('close', () => {
+          console.log('[ZsirafVision v3.7] Remote disconnected');
+          remoteConn = null;
+          if (remoteStatusMsg) {
+            remoteStatusMsg.textContent = t('remoteWaiting');
+            remoteStatusMsg.classList.remove('connected');
+          }
+        });
+      });
+
+      tvPeer.on('error', (err) => {
+        console.warn('[ZsirafVision v3.7] PeerJS error:', err);
+        if (err.type === 'unavailable-id') {
+          setTimeout(initRemoteServer, 500);
+        }
+      });
+    } catch (err) {
+      console.error('Failed to initialize PeerJS:', err);
+    }
+  }
+
+  function handleRemoteCommand(data) {
+    if (!data || !data.cmd) return;
+    const cmd = data.cmd;
+
+    switch (cmd) {
+      case 'power':
+        if (isStandby) {
+          exitStandby();
+        } else {
+          enterStandby();
+        }
+        break;
+      case 'wake':
+        if (isStandby) exitStandby();
+        break;
+      case 'chUp':
+        playChannel(currentChannelIndex + 1);
+        break;
+      case 'chDown':
+        playChannel(currentChannelIndex - 1);
+        break;
+      case 'volUp':
+        setVolume(currentVolume + 0.05);
+        break;
+      case 'volDown':
+        setVolume(currentVolume - 0.05);
+        break;
+      case 'mute':
+        btnMute.click();
+        broadcastTVState();
+        break;
+      case 'toggleFav':
+        const cur = channels[currentChannelIndex];
+        if (cur) toggleFavorite(cur.name);
+        break;
+      case 'toggleGuide':
+        if (guideDrawer.classList.contains('open')) {
+          closeSidebars();
+        } else {
+          btnOpenGuide.click();
+        }
+        break;
+      case 'toggleEpg':
+        if (epgSidebar.classList.contains('open')) {
+          closeSidebars();
+        } else {
+          btnToggleEpg.click();
+        }
+        break;
+      case 'toggleFullscreen':
+        btnFullscreen.click();
+        break;
+      case 'sleep':
+        const currentMin = Math.round(sleepTimerSec / 60);
+        let nextMin = 15;
+        if (currentMin >= 90) nextMin = 0;
+        else if (currentMin >= 60) nextMin = 90;
+        else if (currentMin >= 30) nextMin = 60;
+        else if (currentMin >= 15) nextMin = 30;
+        setSleepTimer(nextMin);
+        break;
+      case 'digit':
+        if (typeof data.digit !== 'undefined') {
+          const num = parseInt(data.digit, 10);
+          if (num > 0 && num <= channels.length) {
+            playChannel(num - 1);
+          }
+        }
+        break;
+      case 'getState':
+        broadcastTVState();
+        break;
+    }
+  }
+
+  function broadcastTVState() {
+    if (!remoteConn || !remoteConn.open) return;
+    const currentCh = channels[currentChannelIndex] || {};
+    try {
+      remoteConn.send({
+        type: 'state',
+        channelName: currentCh.name || 'ZsirafVision',
+        channelNumber: currentCh.channel_number || (currentCh.id ? String(currentCh.id).padStart(2, '0') : '00'),
+        group: currentCh.group || '',
+        isFav: favorites.includes(currentCh.name),
+        volume: Math.round(currentVolume * 100),
+        isMuted: isMuted,
+        isStandby: isStandby,
+        sleepTimerSec: sleepTimerSec
+      });
+    } catch (e) {
+      console.warn('broadcastTVState error:', e);
+    }
+  }
+
+  function updateRemoteModalQr() {
+    if (!roomCode) return;
+    const baseUrl = window.location.href.split('#')[0].split('?')[0].replace('index.html', '');
+    const cleanBase = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+    const remoteUrl = `${cleanBase}remote.html?room=${roomCode}`;
+
+    if (remoteDirectLink) {
+      remoteDirectLink.href = remoteUrl;
+    }
+
+    if (qrCodeContainer && typeof QRCode !== 'undefined') {
+      qrCodeContainer.innerHTML = '';
+      qrCodeInstance = new QRCode(qrCodeContainer, {
+        text: remoteUrl,
+        width: 180,
+        height: 180,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+  }
+
+  function openRemoteModal() {
+    if (!tvPeer) {
+      initRemoteServer();
+    }
+    updateRemoteModalQr();
+    if (remoteModal) remoteModal.classList.add('open');
+  }
+
+  function closeRemoteModal() {
+    if (remoteModal) remoteModal.classList.remove('open');
+  }
+
+  if (btnRemote) btnRemote.addEventListener('click', openRemoteModal);
+  if (btnCloseRemote) btnCloseRemote.addEventListener('click', closeRemoteModal);
 
   function showLoading(msg) {
     tuningText.textContent = msg || t('tuning');
@@ -286,6 +678,11 @@
     osdName.textContent = channel.name;
     osdNumber.textContent = channel.channel_number || (channel.id ? String(channel.id).padStart(2, '0') : '00');
     osdCategory.textContent = channel.group || 'Online TV';
+    if (osdFavBtn) {
+      const isFav = favorites.includes(channel.name);
+      osdFavBtn.classList.toggle('active', isFav);
+      osdFavBtn.title = isFav ? t('favRemove') : t('favAdd');
+    }
     osdContainer.classList.remove('fade-out');
     clearTimeout(osdTimeout);
     osdTimeout = setTimeout(() => {
@@ -295,6 +692,7 @@
     highlightActiveDrawerItem();
     updateEpgForCurrentChannel();
     showLoading(`${channel.name} ${t('tuning')}`);
+    broadcastTVState();
 
     const streamUrl = channel.url;
 
@@ -463,7 +861,8 @@
     video.muted = false;
     isMuted = false;
     btnMute.textContent = currentVolume === 0 ? '🔇' : '🔊';
-    showAdjustment('HANGERŐ', `${Math.round(currentVolume * 100)}%`, currentVolume * 100);
+    showAdjustment(t('volume') || 'HANGERŐ', `${Math.round(currentVolume * 100)}%`, currentVolume * 100);
+    broadcastTVState();
   }
 
   // ==========================================================================
@@ -472,7 +871,11 @@
   function renderDrawer(channelsToRender) {
     channelListScroll.innerHTML = '';
     if (!channelsToRender.length) {
-      channelListScroll.innerHTML = '<div style="padding: 20px; text-align: center; color: #777;">Nincs találat.</div>';
+      const activePill = categoryPillsContainer.querySelector('.cat-pill.active');
+      const isFavTab = activePill && activePill.dataset.category === 'FAV';
+      channelListScroll.innerHTML = isFavTab
+        ? `<div style="padding: 28px 16px; text-align: center; color: #888; font-size: 0.85rem; line-height: 1.5;">${t('favEmpty')}</div>`
+        : `<div style="padding: 20px; text-align: center; color: #777;">${t('noResults') || 'Nincs találat.'}</div>`;
       return;
     }
 
@@ -514,9 +917,20 @@
       infoDiv.appendChild(nameDiv);
       infoDiv.appendChild(catDiv);
 
+      const favBtn = document.createElement('button');
+      const isFav = favorites.includes(ch.name);
+      favBtn.className = `ch-item-fav-btn ${isFav ? 'active' : ''}`;
+      favBtn.setAttribute('title', isFav ? t('favRemove') : t('favAdd'));
+      favBtn.textContent = '⭐';
+      favBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(ch.name);
+      });
+
       item.appendChild(numSpan);
       item.appendChild(logoImg);
       item.appendChild(infoDiv);
+      item.appendChild(favBtn);
 
       item.addEventListener('click', () => {
         const idx = parseInt(item.dataset.index, 10);
@@ -550,30 +964,45 @@
       if (c.group) groups.add(c.group);
     });
 
+    const activePill = categoryPillsContainer.querySelector('.cat-pill.active');
+    const prevCat = activePill ? activePill.dataset.category : 'ALL';
+
     categoryPillsContainer.innerHTML = '';
+
     const allPill = document.createElement('button');
-    allPill.className = 'cat-pill active';
+    allPill.className = `cat-pill ${prevCat === 'ALL' ? 'active' : ''}`;
     allPill.dataset.category = 'ALL';
-    allPill.textContent = `Mind (${channels.length})`;
+    allPill.textContent = `${t('catAll') || 'Mind'} (${channels.length})`;
     categoryPillsContainer.appendChild(allPill);
+
+    const favPill = document.createElement('button');
+    favPill.className = `cat-pill fav-cat-pill ${prevCat === 'FAV' ? 'active' : ''}`;
+    favPill.dataset.category = 'FAV';
+    favPill.textContent = `⭐ ${t('navFavorites')} (${favorites.length})`;
+    categoryPillsContainer.appendChild(favPill);
 
     Array.from(groups).sort().forEach((grp) => {
       const count = channels.filter((c) => c.group === grp).length;
       const pill = document.createElement('button');
-      pill.className = 'cat-pill';
+      pill.className = `cat-pill ${prevCat === grp ? 'active' : ''}`;
       pill.dataset.category = grp;
       pill.textContent = `${grp} (${count})`;
       categoryPillsContainer.appendChild(pill);
     });
 
-    categoryPillsContainer.addEventListener('click', (e) => {
-      if (e.target.classList.contains('cat-pill')) {
-        categoryPillsContainer.querySelectorAll('.cat-pill').forEach((p) => p.classList.remove('active'));
-        e.target.classList.add('active');
-        applyFilter();
-      }
-    });
+    if (!categoryPillsContainer.querySelector('.cat-pill.active')) {
+      allPill.classList.add('active');
+    }
   }
+
+  categoryPillsContainer.addEventListener('click', (e) => {
+    const pill = e.target.closest('.cat-pill');
+    if (pill) {
+      categoryPillsContainer.querySelectorAll('.cat-pill').forEach((p) => p.classList.remove('active'));
+      pill.classList.add('active');
+      applyFilter();
+    }
+  });
 
   async function applyFilter() {
     const activePill = categoryPillsContainer.querySelector('.cat-pill.active');
@@ -596,7 +1025,9 @@
           setupCategories();
         }
         let filtered = adultChannels;
-        if (selectedCategory !== 'ALL') {
+        if (selectedCategory === 'FAV') {
+          filtered = filtered.filter((c) => favorites.includes(c.name));
+        } else if (selectedCategory !== 'ALL') {
           filtered = filtered.filter((c) => c.group === selectedCategory);
         }
         renderDrawer(filtered);
@@ -611,7 +1042,9 @@
     }
 
     let filtered = channels;
-    if (selectedCategory !== 'ALL') {
+    if (selectedCategory === 'FAV') {
+      filtered = filtered.filter((c) => favorites.includes(c.name));
+    } else if (selectedCategory !== 'ALL') {
       filtered = filtered.filter((c) => c.group === selectedCategory);
     }
     if (query) {
@@ -927,10 +1360,12 @@
         e.preventDefault();
         return;
       }
-      if (guideDrawer.classList.contains('open') || epgSidebar.classList.contains('open') || reportModal.classList.contains('open') || statsModal.classList.contains('open')) {
+      if (guideDrawer.classList.contains('open') || epgSidebar.classList.contains('open') || reportModal.classList.contains('open') || statsModal.classList.contains('open') || sleepModal.classList.contains('open') || remoteModal.classList.contains('open')) {
         closeSidebars();
         closeReportModal();
         closeStatsModal();
+        closeSleepModal();
+        closeRemoteModal();
         e.preventDefault();
         return;
       }
@@ -952,6 +1387,8 @@
         closeSidebars();
         closeReportModal();
         closeStatsModal();
+        closeSleepModal();
+        closeRemoteModal();
         document.activeElement.blur();
       }
       return;
@@ -1032,6 +1469,8 @@
         closeSidebars();
         closeReportModal();
         closeStatsModal();
+        closeSleepModal();
+        closeRemoteModal();
         break;
       default:
         if (e.key >= '0' && e.key <= '9') {
@@ -1050,6 +1489,12 @@
       // Set initial language
       const initLang = detectInitialLanguage();
       setLanguage(initLang);
+
+      // Load Favorites from LocalStorage
+      loadFavorites();
+
+      // Initialize PeerJS Remote Server in background
+      setTimeout(initRemoteServer, 800);
 
       const res = await fetch(`channels.json?t=${Date.now()}`);
       hungarianChannels = await res.json();
@@ -1114,4 +1559,24 @@
   }
 
   loadChannels();
+
+  // Service Worker Registration for PWA (v3.7)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js?v=3.7').then((reg) => {
+        console.log('[ZsirafVision v3.7] Service Worker regisztrálva:', reg.scope);
+      }).catch((err) => {
+        console.warn('[ZsirafVision v3.7] Service Worker hiba:', err);
+      });
+    });
+  }
+
+  // PWA Fullscreen Landscape Lock Support
+  window.addEventListener('load', () => {
+    if (window.matchMedia && (window.matchMedia('(display-mode: fullscreen)').matches || window.matchMedia('(display-mode: standalone)').matches)) {
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
+    }
+  });
 })();
