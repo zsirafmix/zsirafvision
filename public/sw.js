@@ -1,17 +1,17 @@
 /**
  * ZsirafVision Service Worker (PWA)
- * Version: 3.7
+ * Version: 3.8
  * Cache-First for static UI shell, Network-First for dynamic data, Pass-Through for live video streams
  */
 
-const CACHE_NAME = 'zsirafvision-v3.7';
+const CACHE_NAME = 'zsirafvision-v3.8';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
-  './css/style.css?v=3.7',
-  './js/app.js?v=3.7',
-  './js/i18n.js?v=3.7',
+  './css/style.css?v=3.8',
+  './js/app.js?v=3.8',
+  './js/i18n.js?v=3.8',
   './assets/tv_frame_cutout.png',
   './assets/icon-192.png',
   './assets/icon-512.png',

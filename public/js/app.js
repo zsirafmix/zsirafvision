@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 3.7
+ * Version: 3.8
  * Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -22,7 +22,7 @@
   let statsInterval = null;
   let lastDroppedFrames = 0;
 
-  // New v3.7 State
+  // New v3.8 State
   let favorites = [];
   let sleepTimerSec = 0;
   let sleepInterval = null;
@@ -36,7 +36,7 @@
   const isSmartTV = /SMART-TV|Tizen|Web0S|NetCast|Maple|SamsungBrowser|HbbTV|SmartTV/i.test(navigator.userAgent);
   if (isSmartTV) {
     document.body.classList.add('is-smart-tv');
-    console.log('[ZsirafVision v3.7] Smart TV mód aktiválva:', navigator.userAgent);
+    console.log('[ZsirafVision v3.8] Smart TV mód aktiválva:', navigator.userAgent);
   }
 
   let videoWatchdogTimer = null;
@@ -361,23 +361,43 @@
   }
 
   function initRemoteServer() {
+    if (!roomCode) {
+      roomCode = generateRoomCode();
+    }
+    if (remoteRoomCodeText) {
+      remoteRoomCodeText.textContent = roomCode;
+    }
+
     if (typeof Peer === 'undefined') {
       console.warn('PeerJS library not loaded.');
       if (remoteStatusMsg) remoteStatusMsg.textContent = 'PeerJS nem elérhető';
       return;
     }
 
-    roomCode = generateRoomCode();
-    const peerId = 'zsiraf-tv-' + roomCode.toLowerCase();
+    const peerId = 'zsiraf-tv-' + roomCode.toUpperCase();
 
     try {
+      if (tvPeer) {
+        try { tvPeer.destroy(); } catch (e) {}
+        tvPeer = null;
+      }
+
       tvPeer = new Peer(peerId, {
-        debug: 1
+        debug: 1,
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' }
+          ]
+        }
       });
 
       tvPeer.on('open', (id) => {
         console.log('[ZsirafVision v3.7] PeerJS TV server online. Peer ID:', id);
         if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
+        if (remoteStatusMsg && !remoteConn) {
+          remoteStatusMsg.textContent = t('remoteWaiting');
+        }
         updateRemoteModalQr();
       });
 
@@ -410,7 +430,11 @@
       tvPeer.on('error', (err) => {
         console.warn('[ZsirafVision v3.7] PeerJS error:', err);
         if (err.type === 'unavailable-id') {
-          setTimeout(initRemoteServer, 500);
+          roomCode = generateRoomCode();
+          if (remoteRoomCodeText) remoteRoomCodeText.textContent = roomCode;
+          setTimeout(initRemoteServer, 600);
+        } else if (remoteStatusMsg && !remoteConn) {
+          remoteStatusMsg.textContent = 'Kapcsolódási hiba, újracsatlakozás...';
         }
       });
     } catch (err) {
@@ -419,8 +443,9 @@
   }
 
   function handleRemoteCommand(data) {
-    if (!data || !data.cmd) return;
-    const cmd = data.cmd;
+    if (!data) return;
+    const cmd = data.cmd || data.action;
+    if (!cmd) return;
 
     switch (cmd) {
       case 'power':
@@ -448,6 +473,13 @@
       case 'mute':
         btnMute.click();
         broadcastTVState();
+        break;
+      case 'ok':
+        if (isStandby) {
+          exitStandby();
+        } else if (isMuted) {
+          btnMute.click();
+        }
         break;
       case 'toggleFav':
         const cur = channels[currentChannelIndex];
@@ -487,6 +519,7 @@
           }
         }
         break;
+      case 'requestState':
       case 'getState':
         broadcastTVState();
         break;
@@ -514,7 +547,12 @@
   }
 
   function updateRemoteModalQr() {
-    if (!roomCode) return;
+    if (!roomCode) {
+      roomCode = generateRoomCode();
+    }
+    if (remoteRoomCodeText) {
+      remoteRoomCodeText.textContent = roomCode;
+    }
     const baseUrl = window.location.href.split('#')[0].split('?')[0].replace('index.html', '');
     const cleanBase = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
     const remoteUrl = `${cleanBase}remote.html?room=${roomCode}`;
@@ -537,7 +575,13 @@
   }
 
   function openRemoteModal() {
-    if (!tvPeer) {
+    if (!roomCode) {
+      roomCode = generateRoomCode();
+    }
+    if (remoteRoomCodeText) {
+      remoteRoomCodeText.textContent = roomCode;
+    }
+    if (!tvPeer || tvPeer.destroyed) {
       initRemoteServer();
     }
     updateRemoteModalQr();
@@ -1560,13 +1604,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v3.7)
+  // Service Worker Registration for PWA (v3.8)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=3.7').then((reg) => {
-        console.log('[ZsirafVision v3.7] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=3.8').then((reg) => {
+        console.log('[ZsirafVision v3.8] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v3.7] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v3.8] Service Worker hiba:', err);
       });
     });
   }

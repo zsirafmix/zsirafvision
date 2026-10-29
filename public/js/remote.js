@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Mobile TV Remote Client Logic
- * Version: 3.7
+ * Version: 3.8
  * Peer-to-Peer WebRTC communication via PeerJS
  */
 
@@ -69,7 +69,7 @@
   function sendCommand(action, data = {}) {
     haptic();
     if (conn && conn.open) {
-      conn.send({ type: 'command', action, ...data });
+      conn.send({ type: 'command', cmd: action, action, ...data });
     } else {
       console.warn('Cannot send command, not connected');
     }
@@ -138,8 +138,8 @@
     if (state.channelNumber) dispChNum.textContent = `CH ${state.channelNumber}`;
     if (state.group) dispChGroup.textContent = state.group;
     if (state.volume !== undefined) {
-      const volPct = Math.round(state.volume * 100);
-      dispVol.textContent = state.isMuted ? 'NÉMÍTVA' : `VOL ${volPct}%`;
+      const volVal = state.volume > 1 ? Math.round(state.volume) : Math.round(state.volume * 100);
+      dispVol.textContent = state.isMuted ? 'NÉMÍTVA' : `VOL ${volVal}%`;
     }
     if (state.isStandby) {
       dispChName.textContent = 'STANDBY';

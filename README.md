@@ -1,11 +1,11 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v3.7)
+# 📺 ZsirafVision - Online IPTV & Web Player (v3.8)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet**, valós idejű **nemzetközi EPG műsorújságot**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **WebRTC Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v3.7`
+* **Aktuális verzió:** `v3.8`
 
 ---
 
@@ -95,6 +95,14 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v3.8] - 2026-10-29
+* **Fix**: **Szobakód azonnali megjelenítése**: A TV párosító felugró ablakában a generált szobakód (pl. `B7K2`) mostantól azonnal, szinkron módon megjelenik a QR-kód alatt, nem vár a felhős PeerJS háttér-kapcsolat létrejöttére.
+* **Fix**: **Mobil távirányító P2P kapcsolat javítása**:
+  * Standardizált nagybetűs Peer ID azonosító (`zsiraf-tv-XXXX`) a TV és a mobil távirányító között az esetérzékenységi eltérések kizárására.
+  * Google és Twilio publikus STUN szerverek beépítése a gyors és tűzfalakon átívelő WebRTC kapcsolódáshoz.
+  * Kétirányú parancs-kompatibilitás (`cmd` és `action` mezők támogatása a távirányító eseménykezelőjében).
+  * Hangerő kijelzés javítása a távirányító CRT képernyőjén (megelőzve a túlszorzást).
 
 ### [v3.7] - 2026-10-29
 * **Új**: **⭐ Kedvencek (Favorites) rendszer**: Egykattintásos csillagozás a TV OSD kijelzőjén és a csatornalistában minden adó mellett. Dedikált `⭐ Kedvencek` kategória fül az elmentett adók azonnali szűréséhez és gyors eléréséhez, folyamatos számlálóval és `localStorage` mentéssel.
