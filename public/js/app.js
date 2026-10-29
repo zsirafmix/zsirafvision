@@ -387,13 +387,14 @@
     if (query === 'xxx' || query === ':xxx') {
       if (!adultChannels) {
         try {
-          const res = await fetch('adult.json');
+          const res = await fetch(`adult.json?t=${Date.now()}`);
           adultChannels = await res.json();
         } catch (e) {
           console.error('Failed to load adult channels:', e);
         }
       }
       if (adultChannels) {
+        channels = adultChannels;
         renderDrawer(adultChannels);
         return;
       }
