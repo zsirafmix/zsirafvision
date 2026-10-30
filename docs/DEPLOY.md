@@ -1,0 +1,40 @@
+# Telepítés és üzemeltetés
+
+## 1. Front-end – GitHub Pages
+A `main` ágra pusholt változás automatikusan kikerül: `https://zsirafmix.github.io/zsirafvision/public/`.
+Verzióváltáskor léptesd a `?v=` tageket és a `public/sw.js` cache nevét (különben a PWA a régit mutatja).
+
+## 2. Cloudflare Worker
+```bash
+cd cloudflare-worker
+npx wrangler login                       # egyszer
+npx wrangler kv namespace create REPORTS # egyszer, az id a wrangler.toml-ba
+npx wrangler secret put REPORT_TOKEN     # véletlen érték
+npx wrangler secret put RENDER_SIGN_KEY  # ugyanaz, mint a Renderen
+npx wrangler deploy
+```
+- Keep-warm: `wrangler.toml` → `[triggers] crons = ["*/10 * * * *"]` – 10 percenként meghívja a Render `/health`-et.
+- Ingyenes keret: 100 000 kérés / nap; KV írás 1000 / nap (ezért a proxy limit memóriában van).
+
+## 3. Render proxy
+- Web Service, Python, start: `python3 server.py` (a `PORT` env-et a Render adja).
+- Környezeti változók:
+  - `RENDER_SIGN_KEY` – kötelező (nélküle aláírás nélkül, csak allowlist alapján enged).
+  - `TLS_INSECURE_HOSTS` – opcionális, vesszővel elválasztott hostok / `.domain` utótagok.
+- Ellenőrzés: `curl https://zsirafvision-proxy2.onrender.com/health` → `OK - ZsirafVision proxy2 v4.5 (signed=yes)`.
+- Ha a push után nem frissül: Dashboard → Manual Deploy → Deploy latest commit.
+
+## 4. Allowlist frissítése
+Új csatorna hosztja után: `python3 tools/gen_allowed_hosts.py`, majd commit + Worker deploy (a Worker buildbe kerül a JSON).
+
+## 5. Hibajelentések kiolvasása
+```bash
+curl -H "Authorization: Bearer $REPORT_TOKEN" "https://zsirafvision-proxy.gamsgoworld.workers.dev/api/report?limit=50"
+npx wrangler kv key list --binding REPORTS --remote
+```
+
+## 6. Csatornateszt
+```bash
+python3 tools/channel_test.py              # összesítés + hibás csatornák
+python3 tools/channel_test.py --json r.json
+```
