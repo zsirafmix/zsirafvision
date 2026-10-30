@@ -95,7 +95,11 @@
       pairingBox.classList.add('active');
       return;
     }
-    roomCode = targetRoom.toUpperCase().trim();
+    roomCode = String(targetRoom).toUpperCase().trim();
+    if (!/^[23456789A-HJ-NP-Z]{4,32}$/.test(roomCode)) {
+      setStatus(false, 'Érvénytelen szobakód');
+      return;
+    }
     if (manualRoomCode) manualRoomCode.value = roomCode;
     setStatus(false, `Kapcsolódás: ${roomCode}`);
 

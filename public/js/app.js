@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.4
+ * Version: 4.5
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -517,10 +517,11 @@
   // ==========================================================================
   function generateRoomCode() {
     const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+    // v4.5: 26 karakter * 5 bit = 130 bit, kriptográfiai véletlen
+    const buf = new Uint8Array(26);
+    crypto.getRandomValues(buf);
     let res = '';
-    for (let i = 0; i < 4; i++) {
-      res += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
+    for (let i = 0; i < buf.length; i++) res += chars[buf[i] & 31];
     return res;
   }
 
@@ -674,10 +675,19 @@
     }
   }
 
+  const REMOTE_CMDS = new Set(['power','wake','chUp','chDown','volUp','volDown','mute','ok','toggleFav','toggleGuide','toggleEpg','toggleFullscreen','sleep','digit','requestState','getState']);
+  function escHtml(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
   function handleRemoteCommand(data) {
-    if (!data) return;
+    if (!data || typeof data !== 'object') return;
     const cmd = data.cmd || data.action;
-    if (!cmd) return;
+    if (typeof cmd !== 'string' || !REMOTE_CMDS.has(cmd)) return;
+    if (cmd === 'digit') {
+      const d = Number(data.value ?? data.digit);
+      if (!Number.isInteger(d) || d < 0 || d > 9) return;
+    }
 
     switch (cmd) {
       case 'power':
@@ -961,7 +971,7 @@
 
         const timeRow = document.createElement('div');
         timeRow.className = 'epg-time-row';
-        timeRow.innerHTML = `<span>${p.start} - ${p.stop}</span> ${isActive ? `<span class="epg-live-indicator">🔴 ${t('epgLive')}</span>` : ''}`;
+        timeRow.innerHTML = `<span>${escHtml(p.start)} - ${escHtml(p.stop)}</span> ${isActive ? `<span class="epg-live-indicator">🔴 ${t('epgLive')}</span>` : ''}`;
 
         const titleDiv = document.createElement('div');
         titleDiv.className = 'epg-prog-title';
@@ -1942,10 +1952,10 @@
   // Service Worker Registration for PWA (v4.3)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.4').then((reg) => {
-        console.log('[ZsirafVision v4.4] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.5').then((reg) => {
+        console.log('[ZsirafVision v4.5] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.4] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.5] Service Worker hiba:', err);
       });
     });
   }
