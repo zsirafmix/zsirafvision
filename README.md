@@ -1,11 +1,12 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.3)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.4)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot (élő adás kiemeléssel)**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
 * **Felhős Proxy & API (Cloudflare Worker, v4.3-tól):** `cloudflare-worker/` – a cím a `public/js/app.js` `PROXY_BASE` konstansában állítható (a régi Vercel proxyt a Vercel 402 / DEPLOYMENT_DISABLED hibával letiltotta)
-* **Aktuális verzió:** `v4.3`
+* **Aktuális verzió:** `v4.4`
+* **Második proxy (Render, v4.4-től):** `https://zsirafvision-proxy2.onrender.com` – a `server.py` fut rajta; a Worker ide irányítja az IP-címes és nem 80/443 portos streameket
 
 ---
 
@@ -73,6 +74,7 @@ Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, a
 Böngésző / TV / PWA  ──►  GitHub Pages (public/: HTML+CSS+JS, hls.js)
         │
         ├─► Cloudflare Worker  /api/proxy  ──► TV stream szerverek (M3U8 + TS)
+        │        └─(IP-cím / egyedi port: 302)─► Render proxy (server.py) ──► IP-címes stream szerverek
         ├─► Cloudflare Worker  /api/report ──► Cloudflare KV (REPORTS)
         ├─► Cloudflare Worker  /api/stats
         └─► (tartalék) közvetlen HTTPS stream, ha a szerver engedi a CORS-t
@@ -136,6 +138,12 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.4] - 2026-10-30
+* **Új**: **Két proxys architektúra.** A Cloudflare Worker nem tud IP-címes hostot (CF 1003 hiba) és nem szabványos portot (pl. 1344, 2443, 8890) elérni, ezért ezeket a kéréseket 302-es átirányítással a Renderen futó második proxyhoz küldi: `https://zsirafvision-proxy2.onrender.com` (`server.py`). Ez hozza vissza az RTL, TV2, M1–M5, Duna, Viasat stb. csatornákat.
+* **Új**: Worker cron (10 percenként) – ébren tartja a Render proxyt, hogy ne legyen ~60 mp-es hidegindítás.
+* **Fix**: `server.py` – az M3U8 átírás abszolút URL-eket ad (Host / X-Forwarded-Proto alapján), `/health` végpont, belső/privát IP-k tiltása (SSRF védelem).
+* **Update**: verzió 4.4 (UI, Service Worker cache `zsirafvision-v4.4`, `?v=` tagek).
 
 ### [v4.3] - 2026-10-30
 * **Fix**: **Átállás Vercelről Cloudflare Workerre** – a Vercel proxy `402 DEPLOYMENT_DISABLED` hibát adott (elfogyott az ingyenes keret), ezért nem indult egy csatorna sem és a hibajelentő sem működött.
