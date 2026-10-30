@@ -127,8 +127,9 @@ AXN Spin (Hungary) – 429 · BTV (Hungary) – időtúllépés · Berente TV, G
 ### Ismert problémás csatornák
 | Csatorna | Hiba | Ok |
 |---|---|---|
-| EbS, EbS+, ESTV, Jászsági Térségi TV, Makói Városi TV | csak playlist | üres vagy szegmens nélküli playlist |
-| Alföld, Bajai, Gyöngyösi, Kapos, Karcag TV (lexanetwork :1344) | 502 | TLS tanúsítvány hiba – a v4.5 javítás (`.lexanetwork.com` TLS-kivétel) Render redeploy után él |
+| EbS, EbS+, ESTV, Gyöngyösi TV, Jászsági Térségi TV, Makói Városi TV | csak playlist | üres vagy szegmens nélküli playlist (forrásoldali) |
+
+Teszt eredmény (v4.5.1): 122 csatornából 116 OK, 6 csak playlist, 0 hiba.
 
 ## 🔢 Verziózás
 
