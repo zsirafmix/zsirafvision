@@ -1,18 +1,18 @@
 /**
  * ZsirafVision Service Worker (PWA)
- * Version: 4.2
+ * Version: 4.3
  * Cache-First for static UI shell, Network-First for dynamic data, Pass-Through for live video streams
  */
 
-const CACHE_NAME = 'zsirafvision-v4.2';
+const CACHE_NAME = 'zsirafvision-v4.3';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './remote.html',
-  './css/style.css?v=4.2',
-  './js/app.js?v=4.2',
-  './js/i18n.js?v=4.2',
+  './css/style.css?v=4.3',
+  './js/app.js?v=4.3',
+  './js/i18n.js?v=4.3',
   './js/remote.js?v=3.9',
   './js/paho-mqtt.min.js',
   './assets/tv_frame_cutout.png',
@@ -51,7 +51,7 @@ self.addEventListener('fetch', (event) => {
     url.pathname.endsWith('.ts') ||
     url.pathname.endsWith('.mp4') ||
     url.pathname.includes('/api/') ||
-    url.hostname.includes('vercel.app') ||
+    url.hostname.includes('vercel.app') || url.hostname.includes('workers.dev') || url.pathname.includes('/api/') ||
     url.hostname.includes('iptv') ||
     url.hostname.includes('peerjs') ||
     event.request.method !== 'GET'

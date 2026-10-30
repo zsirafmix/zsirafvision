@@ -1,7 +1,13 @@
+# ZsirafVision v4.3 – Cloudflare Worker (proxy + hibajelentő + stats)
 name = "zsirafvision-proxy"
 main = "worker.js"
 compatibility_date = "2024-11-01"
-compatibility_flags = ["nodejs_compat"]
 
 [observability]
 enabled = true
+
+# Hibajelentések tárolása. Az id-t a `npx wrangler kv namespace create REPORTS`
+# parancs kiírja – azt kell ide bemásolni.
+[[kv_namespaces]]
+binding = "REPORTS"
+id = "IDE_JON_A_KV_NAMESPACE_ID"

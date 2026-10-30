@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Internationalization (i18n) & Dynamic EPG Engine
- * Version: 4.2
+ * Version: 4.3
  * Supported Languages: Hungarian (hu), English (en), German (de), French (fr), Spanish (es), Russian (ru)
  */
 
@@ -635,7 +635,7 @@ window.ZsirafI18N = (function () {
         "**Technikai adatok (⚙):** Kattints az alsó sávban lévő TECHNIKAI ADATOK gombra az élő hálózati ping, felbontás, bitráta, puffer és eldobott képkockák megtekintéséhez.",
         "**Piros Hibajelentő gomb:** A TV káváján jobb oldalon található világító piros gombra kattintva bármikor beküldhetsz egy automatikus diagnosztikai jelentést a felhős szerverre.",
         "**Megjegyzés fűzése:** A hibajelentésnél opcionálisan megadhatsz részleteket (pl. 'nincs hang', 'szaggat a videó').",
-        "**100% Felhő alapú:** Minden adat a Vercel Serverless proxy végponton keresztül kerül feldolgozásra."
+        "**100% Felhő alapú:** Minden adat a Cloudflare Worker proxy végponton keresztül kerül feldolgozásra."
       ]
     }
   ],
@@ -770,7 +770,7 @@ window.ZsirafI18N = (function () {
         "**Technical Stats (⚙):** Click the TECHNICAL STATS button in the bottom bar to view live server ping, stream resolution, bitrate, buffer health and dropped frames.",
         "**Red Report Button:** Click the glowing red button on the TV bezel to submit an automated diagnostic crash report directly to the cloud.",
         "**Optional Note:** You can describe the issue (e.g. 'no sound', 'stuttering video') before sending.",
-        "**100% Cloud Powered:** Processed seamlessly via our Vercel Serverless proxy backend."
+        "**100% Cloud Powered:** Processed seamlessly via our Cloudflare Worker proxy backend."
       ]
     }
   ],
@@ -1040,7 +1040,7 @@ window.ZsirafI18N = (function () {
         "**Statistiques techniques (⚙) :** Cliquez sur DONNÉES TECHNIQUES pour voir le ping, la résolution, le débit et la mémoire tampon.",
         "**Bouton Rouge de Signalement :** Cliquez sur le bouton rouge sur le meuble TV pour transmettre un rapport technique au serveur.",
         "**Note facultative :** Précisez le problème rencontré (ex: 'pas de son', 'image saccadée').",
-        "**100% Cloud :** Traitement transparent via le proxy Vercel Serverless."
+        "**100% Cloud :** Traitement transparent via le proxy Cloudflare Worker."
       ]
     }
   ],

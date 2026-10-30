@@ -1,11 +1,11 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.2)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.3)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot (élő adás kiemeléssel)**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
 * **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
 * **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
-* **Felhős Proxy & API (Vercel Serverless):** `https://zsirafvision-vercel.vercel.app`
-* **Aktuális verzió:** `v4.2`
+* **Felhős Proxy & API (Cloudflare Worker, v4.3-tól):** `cloudflare-worker/` – a cím a `public/js/app.js` `PROXY_BASE` konstansában állítható (a régi Vercel proxyt a Vercel 402 / DEPLOYMENT_DISABLED hibával letiltotta)
+* **Aktuális verzió:** `v4.3`
 
 ---
 
@@ -67,6 +67,39 @@ Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, a
 
 ---
 
+## ☁️ Architektúra és Cloudflare Worker telepítése (v4.3)
+
+```
+Böngésző / TV / PWA  ──►  GitHub Pages (public/: HTML+CSS+JS, hls.js)
+        │
+        ├─► Cloudflare Worker  /api/proxy  ──► TV stream szerverek (M3U8 + TS)
+        ├─► Cloudflare Worker  /api/report ──► Cloudflare KV (REPORTS)
+        ├─► Cloudflare Worker  /api/stats
+        └─► (tartalék) közvetlen HTTPS stream, ha a szerver engedi a CORS-t
+Távirányító: PeerJS (WebRTC) + MQTT (HiveMQ / EMQX publikus broker)
+```
+
+### Telepítés lépésről lépésre
+1. Ingyenes Cloudflare fiók: https://dash.cloudflare.com/sign-up
+2. A repóban: `cd cloudflare-worker`
+3. Bejelentkezés: `npx wrangler login` (böngészőben engedélyezd)
+4. KV tároló a hibajelentéseknek: `npx wrangler kv namespace create REPORTS` – a kiírt `id`-t másold be a `wrangler.toml`-ba az `IDE_JON_A_KV_NAMESPACE_ID` helyére.
+5. Élesítés: `npx wrangler deploy` – a végén kiírja a címet, pl. `https://zsirafvision-proxy.<fiókneved>.workers.dev`
+6. Ezt a címet írd be a `public/js/app.js` elején a `PROXY_BASE` konstansba, majd commit + push. A GitHub Pages pár perc alatt frissül.
+7. Ellenőrzés: `https://<worker-cím>/health` és `https://<worker-cím>/api/stats`
+
+Helyi teszt: `npx wrangler dev` → `http://localhost:8787/api/stats`
+
+### Hibajelentések kiolvasása
+* Böngészőben: `https://<worker-cím>/api/report` (legújabb elöl, `?limit=200`-ig)
+* Vagy: `npx wrangler kv key list --binding REPORTS --remote`
+* Korlát: IP-nként 5 jelentés / 10 perc, max 16 KB, 90 napig tárolva.
+
+### Ingyenes keret
+Workers Free: 100 000 kérés / nap. Egy élő adás néhány kérést generál percenként (playlist + szegmensek), sávszélesség-díj nincs.
+
+---
+
 ## 🛠️ Samsung Smart TV (Tizen OS) - Technikai hibajavítás (v3.5)
 
 ### A hiba oka
@@ -103,6 +136,13 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.3] - 2026-10-30
+* **Fix**: **Átállás Vercelről Cloudflare Workerre** – a Vercel proxy `402 DEPLOYMENT_DISABLED` hibát adott (elfogyott az ingyenes keret), ezért nem indult egy csatorna sem és a hibajelentő sem működött.
+* **Új**: `cloudflare-worker/worker.js` teljes backend: `/api/proxy` (M3U8 átírás, Range/206, CORS), `/api/report` (Cloudflare KV, IP-nkénti limit: 5 db / 10 perc, 90 napos megőrzés, GET-tel listázható), `/api/stats`, `/health`.
+* **Biztonság**: a proxy csak ismert csatorna-hostokat enged teljesen; ismeretlen hostról csak média URL-t/tartalmat (m3u8, ts, mp4…), belső/privát IP-ket tilt.
+* **Új**: `app.js` – egyetlen `PROXY_BASE` konstans; a régi Vercel linkeket a lejátszó automatikusan átírja. Tartalék: ha a Worker nem elérhető, HTTPS + CORS streameknél közvetlen lejátszás.
+* **Update**: hls.js rögzítve `1.7.4`-re (`@latest` helyett); Service Worker cache `zsirafvision-v4.3`.
 
 ### [v4.2] - 2026-10-29
 * **Új**: **Műsorújság (EPG) aktuálisan futó műsor valós idejű kiemelése**:

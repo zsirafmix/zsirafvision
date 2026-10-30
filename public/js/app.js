@@ -1,11 +1,45 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.2
+ * Version: 4.3
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
 (function () {
   'use strict';
+
+  // ==========================================================================
+  // v4.3 – Egyetlen, konfigurálható proxy cím (Cloudflare Worker)
+  // A Worker telepítése után ide kell beírni a valódi workers.dev címet.
+  // ==========================================================================
+  const PROXY_BASE = 'https://zsirafvision-proxy.CLOUDFLARE-FIOK.workers.dev';
+  const PROXY_CONFIGURED = !PROXY_BASE.includes('CLOUDFLARE-FIOK');
+  const LEGACY_PROXY_RE = /^https?:\/\/[^/]+\/api\/proxy\?/i;
+
+  // A régi (Vercel) proxy linkekből kiszedi az eredeti stream URL-t és a UA-t
+  function unwrapStreamUrl(url) {
+    if (!url || !LEGACY_PROXY_RE.test(url)) return { raw: url, ua: '' };
+    try {
+      const u = new URL(url);
+      return { raw: u.searchParams.get('url') || url, ua: u.searchParams.get('ua') || '' };
+    } catch (e) { return { raw: url, ua: '' }; }
+  }
+
+  function buildProxyUrl(raw, ua) {
+    const params = new URLSearchParams({ url: raw });
+    if (ua) params.set('ua', ua);
+    return `${PROXY_BASE}/api/proxy?${params.toString()}`;
+  }
+
+  // Lejátszási jelöltek sorrendben: 1) Worker proxy, 2) közvetlen (csak HTTPS)
+  function getStreamCandidates(url) {
+    const { raw, ua } = unwrapStreamUrl(url);
+    const list = [];
+    if (PROXY_CONFIGURED) list.push(buildProxyUrl(raw, ua));
+    const pageIsHttps = location.protocol === 'https:';
+    if (raw && (raw.startsWith('https://') || !pageIsHttps)) list.push(raw);
+    if (!list.length) list.push(raw);
+    return list;
+  }
 
   // State
   let channels = [];
@@ -968,7 +1002,7 @@
   // ==========================================================================
   // Channel Playback & State Persistence
   // ==========================================================================
-  function playChannel(index) {
+  function playChannel(index, candidateIdx = 0) {
     if (!channels.length) return;
     if (index < 0) index = channels.length - 1;
     if (index >= channels.length) index = 0;
@@ -1013,7 +1047,17 @@
     showLoading(`${channel.name} ${t('tuning')}`);
     broadcastTVState();
 
-    const streamUrl = channel.url;
+    const candidates = getStreamCandidates(channel.url);
+    const streamUrl = candidates[Math.min(candidateIdx, candidates.length - 1)];
+    const playIndex = currentChannelIndex;
+    const tryNextCandidate = () => {
+      if (candidateIdx + 1 < candidates.length && currentChannelIndex === playIndex) {
+        console.warn('[ZsirafVision] Proxy/forrás hiba, következő próbálkozás:', candidates[candidateIdx + 1]);
+        playChannel(playIndex, candidateIdx + 1);
+        return true;
+      }
+      return false;
+    };
 
     if (hls) {
       hls.destroy();
@@ -1055,6 +1099,7 @@
       video.oncanplay = onReady;
       video.onerror = (e) => {
         console.error('MP4 playback error:', e);
+        if (tryNextCandidate()) return;
         tuningText.textContent = t('streamUnavailable');
         setTimeout(hideLoading, 3000);
       };
@@ -1134,6 +1179,7 @@
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
+              if ((data.details === 'manifestLoadError' || data.details === 'manifestLoadTimeOut' || data.details === 'manifestParsingError') && tryNextCandidate()) return;
               tuningText.textContent = 'HÁLÓZATI HIBA';
               hls.startLoad();
               break;
@@ -1430,8 +1476,8 @@
         while (j < lines.length && lines[j].trim().startsWith('#')) j++;
         if (j < lines.length && lines[j].trim().startsWith('http')) {
           const rawUrl = lines[j].trim();
-          // Route through Vercel Proxy
-          const proxyUrl = `https://zsirafvision-vercel.vercel.app/api/proxy?url=${encodeURIComponent(rawUrl)}`;
+          // Nyers URL – lejátszáskor Worker proxy, majd közvetlen próbálkozás
+          const proxyUrl = rawUrl; // v4.3: a proxyzást a getStreamCandidates() végzi
           list.push({
             id: `w_${idCounter}`,
             channel_number: String(idCounter).padStart(3, '0'),
@@ -1518,7 +1564,8 @@
     diag.userNote = reportUserNote.value.trim();
 
     try {
-      const res = await fetch('https://zsirafvision-vercel.vercel.app/api/report', {
+      if (!PROXY_CONFIGURED) throw new Error('A hibajelentő szerver (Cloudflare Worker) még nincs beállítva');
+      const res = await fetch(`${PROXY_BASE}/api/report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(diag)
@@ -1547,12 +1594,12 @@
   async function refreshStats() {
     const startTime = performance.now();
     try {
-      const res = await fetch('https://zsirafvision-vercel.vercel.app/api/stats');
+      const res = await fetch(`${PROXY_BASE}/api/stats`);
       const pingMs = Math.round(performance.now() - startTime);
       if (res.ok) {
         const data = await res.json();
         statServerStatus.textContent = data.status || 'ONLINE';
-        statServerRegion.textContent = data.region || 'iad1';
+        statServerRegion.textContent = data.region || data.colo || 'cloudflare';
         statPing.textContent = `${pingMs} ms`;
       }
     } catch (e) {
@@ -1892,13 +1939,13 @@
 
   loadChannels();
 
-  // Service Worker Registration for PWA (v4.2)
+  // Service Worker Registration for PWA (v4.3)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.2').then((reg) => {
-        console.log('[ZsirafVision v4.2] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.3').then((reg) => {
+        console.log('[ZsirafVision v4.3] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.2] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.3] Service Worker hiba:', err);
       });
     });
   }
