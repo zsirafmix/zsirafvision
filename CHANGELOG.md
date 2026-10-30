@@ -9,6 +9,7 @@ A korábbi verziók részletes leírása a README „Verziótörténet” fejeze
 * **Biztonság**: `server.py` (Render) – TLS-ellenőrzés újra bekapcsolva (kivétel hostonként: `TLS_INSECURE_HOSTS`), privát IP tiltás átirányítás után és a tényleges kapcsolódott IP-re is, aláírt URL-ek (`RENDER_SIGN_KEY`), limitek. Javítva: a `/health` most a GET-ben van (korábban tévedésből a HEAD-be került).
 * **Biztonság**: front-end – Content-Security-Policy, SRI hash a CDN szkriptekre, EPG adatok escape-elése, 130 bites (26 karakteres, crypto) szobakód, távirányító parancsok whitelistje és ellenőrzése.
 * **Takarítás**: a nem használt `online_channels.json` törölve; a két TV-keret PNG ~660 KB-ról ~50/108 KB-ra tömörítve.
+* **Fix**: `server.py` – a lexanetwork.com relay-ek (:1344, pl. Bajai, Gyöngyösi, Kapos, Karcag TV) hibás tanúsítványa miatt a bekapcsolt TLS-ellenőrzés 502-t adott; `.lexanetwork.com` alapértelmezett TLS-kivétel lett (utótag-egyezés), a hibaüzenet már tartalmazza az okot.
 * **Update**: verzió 4.5 mindenhol (UI, Service Worker cache, `?v=` tagek).
 
 ### [v4.4] - 2026-10-30

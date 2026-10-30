@@ -47,7 +47,14 @@ MAX_PLAYLIST = 2 * 1024 * 1024
 MAX_SEGMENT = 40 * 1024 * 1024
 TIMEOUT = 15
 RATE_MAX = 900            # kérés / IP / perc
-TLS_INSECURE_HOSTS = set(h.strip().lower() for h in os.environ.get("TLS_INSECURE_HOSTS", "").split(",") if h.strip())
+# Alapértelmezett kivétel: a lexanetwork.com relay-ek (:1344) tanúsítványa hibás/önaláírt.
+# Elem lehet pontos host vagy ".domain" utótag. Felülírható a TLS_INSECURE_HOSTS env-vel (hozzáadódik).
+TLS_INSECURE_HOSTS = {".lexanetwork.com"} | set(h.strip().lower() for h in os.environ.get("TLS_INSECURE_HOSTS", "").split(",") if h.strip())
+
+
+def tls_insecure(host):
+    host = (host or "").lower()
+    return any(host == h or (h.startswith(".") and (host.endswith(h) or host == h[1:])) for h in TLS_INSECURE_HOSTS)
 
 
 def _load_hosts():
@@ -242,14 +249,14 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
         rng = self.headers.get("Range")
         if rng:
             headers["Range"] = rng
-        opener = OPENER_INSECURE if host in TLS_INSECURE_HOSTS else OPENER_SECURE
+        opener = OPENER_INSECURE if tls_insecure(host) else OPENER_SECURE
         req = urllib.request.Request(target, headers=headers, method="HEAD" if is_head else "GET")
         try:
             resp = opener.open(req, timeout=TIMEOUT)
         except urllib.error.HTTPError as e:
             return self._text(e.code if 400 <= e.code < 600 else 502, f"Upstream HTTP {e.code}")
         except Exception as e:
-            return self._text(502, f"Upstream hiba: {type(e).__name__}")
+            return self._text(502, f"Upstream hiba: {type(e).__name__}: {str(getattr(e, 'reason', e))[:80]}")
         with resp:
             pip = peer_ip(resp)
             if pip and ip_is_bad(pip):
