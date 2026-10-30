@@ -11,7 +11,7 @@
   // v4.3 – Egyetlen, konfigurálható proxy cím (Cloudflare Worker)
   // A Worker telepítése után ide kell beírni a valódi workers.dev címet.
   // ==========================================================================
-  const PROXY_BASE = 'https://zsirafvision-proxy.CLOUDFLARE-FIOK.workers.dev';
+  const PROXY_BASE = 'https://zsirafvision-proxy.gamsgoworld.workers.dev';
   const PROXY_CONFIGURED = !PROXY_BASE.includes('CLOUDFLARE-FIOK');
   const LEGACY_PROXY_RE = /^https?:\/\/[^/]+\/api\/proxy\?/i;
 

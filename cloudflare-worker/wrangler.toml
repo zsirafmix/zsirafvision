@@ -10,4 +10,4 @@ enabled = true
 # parancs kiírja – azt kell ide bemásolni.
 [[kv_namespaces]]
 binding = "REPORTS"
-id = "IDE_JON_A_KV_NAMESPACE_ID"
+id = "ee953f0a6caf4a67aa5a8f35c0db7f18"
