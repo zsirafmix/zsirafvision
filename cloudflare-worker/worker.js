@@ -9,7 +9,7 @@
  *   GET  /health                                        – életjel
  */
 
-const VERSION = '4.3';
+const VERSION = '4.4';
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 let STARTED = 0; // Workers-ben a globális Date.now() 0, ezért az első kérésnél állítjuk
 
@@ -41,7 +41,27 @@ const CORS = {
 const json = (obj, status = 200) =>
   new Response(JSON.stringify(obj), { status, headers: { ...CORS, 'Content-Type': 'application/json; charset=utf-8' } });
 
+const RENDER_PROXY = 'https://zsirafvision-proxy2.onrender.com';
+
+function needsRender(target) {
+  try {
+    const u = new URL(target);
+    if (!['http:', 'https:'].includes(u.protocol) || isPrivateHost(u.hostname)) return false;
+    const ipLiteral = /^\d{1,3}(\.\d{1,3}){3}$/.test(u.hostname) || u.hostname.startsWith('[');
+    return ipLiteral || (u.port !== '' && u.port !== '80' && u.port !== '443');
+  } catch { return false; }
+}
+
+function redirectToRender(url) {
+  return new Response(null, { status: 302, headers: { ...CORS, Location: `${RENDER_PROXY}/api/proxy${url.search}`, 'Cache-Control': 'no-store' } });
+}
+
 export default {
+  async scheduled(event, env, ctx) {
+    // v4.4: Render ébren tartása (cold start ellen)
+    ctx.waitUntil(fetch(`${RENDER_PROXY}/health`).catch(() => {}));
+  },
+
   async fetch(request, env, ctx) {
     if (!STARTED) STARTED = Date.now();
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
@@ -102,6 +122,8 @@ async function handleProxy(request, url) {
   if (!['GET', 'HEAD'].includes(request.method)) return json({ error: 'Method not allowed' }, 405);
   const target = url.searchParams.get('url');
   if (!target) return json({ error: 'Hiányzó ?url= paraméter' }, 400);
+  // v4.4: IP-címes vagy nem 80/443 portos cél -> Render proxy (a Worker ezeket nem éri el, CF 1003)
+  if (needsRender(target)) return redirectToRender(url);
   const chk = checkTarget(target);
   if (!chk.ok) return json({ error: chk.msg }, 403);
 
@@ -116,7 +138,11 @@ async function handleProxy(request, url) {
   try {
     up = await fetch(chk.u.toString(), { method: request.method, headers, redirect: 'follow', cf: { cacheTtl: 0 } });
   } catch (err) {
-    return json({ error: `Upstream hiba: ${err.message}` }, 502);
+    return redirectToRender(url);
+  }
+  if (up.status === 403 && (up.headers.get('server') || '').includes('cloudflare') && up.headers.get('cf-ray') && !up.headers.get('content-type')?.includes('mpegurl')) {
+    const txt = await up.clone().text().catch(() => '');
+    if (txt.includes('1003')) return redirectToRender(url);
   }
   // Átirányítás után is ellenőrizzük a végső címet
   if (up.url && up.url !== chk.u.toString()) {

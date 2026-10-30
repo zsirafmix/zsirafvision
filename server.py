@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-ZsirafVision - Videoton Retro IPTV Server & Stream Proxy
+ZsirafVision v4.4 - Videoton Retro IPTV Server & Stream Proxy
+(Render-en masodlagos proxy: IP-cimes es nem szabvanyos portu streamekhez)
 """
 
 import os
@@ -21,6 +22,22 @@ ssl_ctx.verify_mode = ssl.CERT_NONE
 
 DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
+import ipaddress, socket
+
+def is_allowed_target(url):
+    """v4.4: csak http/https, belso / privat cimek tiltva (SSRF vedelem)."""
+    try:
+        u = urllib.parse.urlparse(url)
+        if u.scheme not in ("http", "https") or not u.hostname:
+            return False
+        for info in socket.getaddrinfo(u.hostname, None):
+            ip = ipaddress.ip_address(info[4][0])
+            if ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved or ip.is_multicast or ip.is_unspecified:
+                return False
+        return True
+    except Exception:
+        return False
+
 class ZsirafVisionHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=PUBLIC_DIR, **kwargs)
@@ -38,6 +55,9 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
 
     def do_HEAD(self):
         parsed = urllib.parse.urlparse(self.path)
+        if parsed.path in ("/health", "/healthz"):
+            self.send_response(200); self.send_header("Content-Type", "text/plain"); self.end_headers()
+            self.wfile.write(b"OK - ZsirafVision proxy2 v4.4"); return
         if parsed.path == "/api/proxy":
             query = urllib.parse.parse_qs(parsed.query)
             target_url = query.get("url", [None])[0]
@@ -69,7 +89,19 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
         # Serve static files
         return super().do_GET()
 
+    def _base(self):
+        proto = self.headers.get("X-Forwarded-Proto") or ("https" if os.environ.get("RENDER") else "http")
+        host = self.headers.get("X-Forwarded-Host") or self.headers.get("Host") or f"localhost:{PORT}"
+        return f"{proto.split(',')[0].strip()}://{host}"
+
     def handle_proxy(self, target_url, ua, ref, is_head=False):
+        if not is_allowed_target(target_url):
+            self.send_response(403)
+            self.send_header("Content-Type", "text/plain; charset=utf-8")
+            self.end_headers()
+            self.wfile.write(b"Tiltott cel (belso halozat vagy nem http/https)")
+            return
+        base = self._base()
         headers = {"User-Agent": ua or DEFAULT_UA}
         if ref:
             headers["Referer"] = ref
@@ -92,7 +124,7 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
                                 # Resolve relative URL against current target_url
                                 resolved = urllib.parse.urljoin(target_url, stripped)
                                 # Encode for proxy
-                                proxy_url = f"/api/proxy?url={urllib.parse.quote(resolved, safe='')}"
+                                proxy_url = f"{base}/api/proxy?url={urllib.parse.quote(resolved, safe='')}"
                                 if ua and ua != DEFAULT_UA:
                                     proxy_url += f"&ua={urllib.parse.quote(ua, safe='')}"
                                 if ref:
@@ -103,7 +135,7 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
                                 def replace_key_uri(match):
                                     key_uri = match.group(1)
                                     resolved_key = urllib.parse.urljoin(target_url, key_uri)
-                                    p_key = f"/api/proxy?url={urllib.parse.quote(resolved_key, safe='')}"
+                                    p_key = f"{base}/api/proxy?url={urllib.parse.quote(resolved_key, safe='')}"
                                     return f'URI="{p_key}"'
                                 import re
                                 line = re.sub(r'URI="([^"]+)"', replace_key_uri, line)
