@@ -1,4 +1,4 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.6.0)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.6.1)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: **122 élő magyar csatorna**, 6 nyelvű felület és súgó, valós idejű EPG, kedvencek, elalvásidőzítő, MQTT + WebRTC mobil távirányító (QR-kód), telepíthető PWA, Samsung Tizen / LG webOS támogatás és felhős hibajelentő.
 
@@ -6,7 +6,7 @@ Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: *
 * **Mobil távirányító:** https://zsirafmix.github.io/zsirafvision/public/remote.html
 * **Proxy 1 – Cloudflare Worker:** `https://zsirafvision-proxy.gamsgoworld.workers.dev` (`cloudflare-worker/`, cím: `public/js/app.js` → `PROXY_BASE`)
 * **Proxy 2 – Render:** `https://zsirafvision-proxy2.onrender.com` (`server.py`)
-* **Aktuális verzió:** `v4.6.0` – [Változásnapló](CHANGELOG.md) · [Kiadások](https://github.com/zsirafmix/zsirafvision/releases)
+* **Aktuális verzió:** `v4.6.1` – [Változásnapló](CHANGELOG.md) · [Kiadások](https://github.com/zsirafmix/zsirafvision/releases)
 * **Dokumentáció:** [Architektúra](docs/ARCHITECTURE.md) · [Biztonság](docs/SECURITY.md) · [Telepítés & üzemeltetés](docs/DEPLOY.md)
 
 ---
@@ -178,7 +178,7 @@ A teljes, verziónkénti változásnapló: **[CHANGELOG.md](CHANGELOG.md)** · k
 
 | Verzió | Dátum | Fő változás |
 |---|---|---|
-| v4.6.0 | 2026-10-30 | Élő nézőszámláló (Durable Object, `/api/heartbeat`, `/api/viewers`) |
+| v4.6.1 | 2026-10-30 | Élő nézőszámláló (Durable Object, `/api/heartbeat`, `/api/viewers`) |
 | v4.5.1 | 2026-10-30 | 9 tartósan halott csatorna eltávolítva (122 csatorna) |
 | v4.5 | 2026-10-30 | Biztonsági csomag (allowlist, aláírt URL-ek, CSP/SRI), dokumentáció |
 | v4.4 | 2026-10-30 | Render második proxy, keep-warm cron |
@@ -197,9 +197,14 @@ A teljes, verziónkénti változásnapló: **[CHANGELOG.md](CHANGELOG.md)** · k
 | v3.1 | 2026-10-29 | Vercel proxy |
 | v3.0 | 2026-10-28 | Első kiadás |
 
-## 👁 Élő nézőszámláló (v4.6.0)
+## 👁 Élő nézőszámláló (v4.6.1)
 
 A TV mellett (jobb felső sarok, mobilon jobb alul) látszik, hányan néznek éppen bármelyik csatornát, és hányan az aktuálisat.
 - Lejátszás közben a böngésző ~60 mp-enként anonim jelzést küld (`POST /api/heartbeat`, véletlen munkamenet-azonosító, nincs süti/IP-tárolás).
 - Az utolsó 2 percben jelzett munkamenetek számítanak nézőnek; szünetnél vagy a lap elrejtésekor azonnal kikerül.
 - Lekérdezés: `GET https://zsirafvision-proxy.gamsgoworld.workers.dev/api/viewers` → `{"total":2,"perChannel":{"M1":2},"windowSec":120}`.
+
+### Telepítés a kezdőképernyőre (PWA, v4.6.1-től)
+- **iPhone (Safari):** nyisd meg a https://zsirafmix.github.io/zsirafvision/public/ oldalt → Megosztás → *Főképernyőhöz adás*.
+- **Android (Chrome):** ⋮ menü → *Alkalmazás telepítése* / *Hozzáadás a kezdőképernyőhöz*.
+- Ha egy régebbi ikon nem indul: töröld, frissítsd az oldalt a böngészőben, és add hozzá újra.

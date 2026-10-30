@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.6.0
+ * Version: 4.6.1
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -1952,10 +1952,10 @@
   // Service Worker Registration for PWA (v4.3)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.6.0').then((reg) => {
-        console.log('[ZsirafVision v4.6.0] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.6.1').then((reg) => {
+        console.log('[ZsirafVision v4.6.1] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.6.0] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.6.1] Service Worker hiba:', err);
       });
     });
   }

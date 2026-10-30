@@ -8,6 +8,24 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
+## v4.6.1 – 2026-10-30 – PWA / kezdőképernyő-ikon javítás
+
+**Hiba:** a kezdőképernyőre tett ikonról az alkalmazás nem indult el (iPhone Safari és Android Chrome).
+
+**Okok:**
+- A Service Worker navigációs kéréseknél hiba esetén `undefined`-ot adhatott vissza (üres cache-találat), illetve átirányított (`redirected`) választ szolgált ki – Safari standalone módban ez indítási hibát / fehér képernyőt okoz.
+- A SW minden kérést elkapott, a külső CDN-szkripteket (hls.js, PeerJS, SRI-vel) is.
+- A `manifest.json`-ban nem volt `id`, a `start_url`/`scope` relatív volt, `display: fullscreen` + fix `landscape` tájolás (iOS nem támogatja, Androidon álló telefonon gondot okozhat), `any maskable` kombinált ikon.
+- Nem volt `apple-touch-icon` (404), a gyökér oldalon (`/zsirafvision/`) nem volt manifest, így onnan hozzáadva rossz parancsikon keletkezett.
+- A SW előgyorsítótár `remote.js?v=3.9`-et kért, a HTML viszont más verziót.
+
+**Javítás:**
+- Új SW fetch-kezelő: csak azonos eredetű GET kérések; navigáció mindig hálózat-első, offline esetén a cache-elt `index.html`; átirányított válaszok „megtisztítása”; soha nem ad vissza üres választ. Cache: `zsirafvision-v4.6.1` (a régi törlődik, `skipWaiting` + `clients.claim`).
+- Manifest: abszolút `id`, `start_url` (`/zsirafvision/public/?source=pwa`), `scope`, `display: standalone` + `display_override: fullscreen`, külön `any` és `maskable` ikon, tájolás-zár eltávolítva.
+- `apple-touch-icon.png` (180×180), `theme-color`, gyökér `index.html`-be is manifest + ikon.
+
+**Teendő a felhasználónak:** töröld a régi ikont a kezdőképernyőről, nyisd meg böngészőben a https://zsirafmix.github.io/zsirafvision/public/ oldalt, frissíts egyszer, majd add hozzá újra (iPhone: Megosztás → Főképernyőhöz adás; Android: ⋮ → Alkalmazás telepítése).
+
 ## [v4.6.0] - 2026-10-30
 
 ### Hozzáadva

@@ -1,23 +1,24 @@
 /**
  * ZsirafVision Service Worker (PWA)
- * Version: 4.6.0
+ * Version: 4.6.1
  * Cache-First for static UI shell, Network-First for dynamic data, Pass-Through for live video streams
  */
 
-const CACHE_NAME = 'zsirafvision-v4.6.0';
+const CACHE_NAME = 'zsirafvision-v4.6.1';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './remote.html',
-  './css/style.css?v=4.6.0',
-  './js/app.js?v=4.6.0',
-  './js/i18n.js?v=4.6.0',
-  './js/remote.js?v=3.9',
+  './css/style.css?v=4.6.1',
+  './js/app.js?v=4.6.1',
+  './js/i18n.js?v=4.6.1',
+  './js/remote.js?v=4.6.1',
   './js/paho-mqtt.min.js',
   './assets/tv_frame_cutout.png',
   './assets/icon-192.png',
   './assets/icon-512.png',
+  './assets/apple-touch-icon.png',
   './manifest.json',
   './channels.json'
 ];
@@ -42,35 +43,45 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-self.addEventListener('fetch', (event) => {
-  const url = new URL(event.request.url);
+// v4.6.1: robusztus fetch-kezelő. Csak azonos eredetű GET kéréseket kezel,
+// navigációnál mindig hálózat-első, és SOHA nem ad vissza üres/átirányított választ
+// (Safari standalone módban az átirányított SW-válasz vagy undefined = fehér képernyő/indítási hiba).
+function cleanResponse(res) {
+  if (!res || !res.redirected) return Promise.resolve(res);
+  return res.blob().then((b) => new Response(b, { status: res.status, statusText: res.statusText, headers: res.headers }));
+}
 
-  // Live video streams (.m3u8, .ts, .mp4), proxy and API calls should bypass cache completely
-  if (
-    url.pathname.endsWith('.m3u8') ||
-    url.pathname.endsWith('.ts') ||
-    url.pathname.endsWith('.mp4') ||
-    url.pathname.includes('/api/') ||
-    url.hostname.includes('vercel.app') || url.hostname.includes('workers.dev') || url.pathname.includes('/api/') ||
-    url.hostname.includes('iptv') ||
-    url.hostname.includes('peerjs') ||
-    event.request.method !== 'GET'
-  ) {
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return; // CDN, proxy, API, stream: böngészőre bízva
+  if (/\.(m3u8|ts|mp4)$/.test(url.pathname) || url.pathname.includes('/api/')) return;
+
+  if (req.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const net = await fetch(req, { cache: 'no-store' });
+        return await cleanResponse(net);
+      } catch (e) {
+        const c = await caches.match('./index.html', { ignoreSearch: true }) || await caches.match('./', { ignoreSearch: true });
+        return c ? cleanResponse(c) : Response.error();
+      }
+    })());
     return;
   }
 
-  // Network-first with cache fallback for static app assets
-  event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
-        }
-        return networkResponse;
-      })
-      .catch(() => caches.match(event.request))
-  );
+  event.respondWith((async () => {
+    try {
+      const net = await fetch(req);
+      if (net && net.ok && net.type === 'basic' && !net.redirected) {
+        const copy = net.clone();
+        caches.open(CACHE_NAME).then((c) => c.put(req, copy)).catch(() => {});
+      }
+      return net;
+    } catch (e) {
+      const c = await caches.match(req);
+      return c || Response.error();
+    }
+  })());
 });

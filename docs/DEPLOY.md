@@ -40,7 +40,7 @@ python3 tools/channel_test.py --json r.json
 ```
 
 
-## Nézőszámláló telepítése (v4.6.0)
+## Nézőszámláló telepítése (v4.6.1)
 
 A `cloudflare-worker/wrangler.toml` tartalmazza a Durable Object kötést és migrációt:
 ```toml

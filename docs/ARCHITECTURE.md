@@ -33,7 +33,7 @@ flowchart LR
 `sig = base64url(HMAC-SHA256(RENDER_SIGN_KEY, "url|exp|ua|ref")[:18])`, `exp = most + 6 óra`. Paraméterek: `url, ua, ref, exp, sig`. Ugyanaz a kulcs a Workerben és a Renderen.
 
 
-## Élő nézőszámláló (v4.6.0)
+## Élő nézőszámláló (v4.6.1)
 
 ```
 böngésző ──POST /api/heartbeat {sid,ch} (60 mp)──▶ Worker ──▶ Durable Object "ViewerCounter" (id: global)
