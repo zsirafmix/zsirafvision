@@ -1,18 +1,18 @@
 /**
  * ZsirafVision Service Worker (PWA)
- * Version: 4.5.1
+ * Version: 4.6.0
  * Cache-First for static UI shell, Network-First for dynamic data, Pass-Through for live video streams
  */
 
-const CACHE_NAME = 'zsirafvision-v4.5.1';
+const CACHE_NAME = 'zsirafvision-v4.6.0';
 
 const STATIC_ASSETS = [
   './',
   './index.html',
   './remote.html',
-  './css/style.css?v=4.5.1',
-  './js/app.js?v=4.5.1',
-  './js/i18n.js?v=4.5.1',
+  './css/style.css?v=4.6.0',
+  './js/app.js?v=4.6.0',
+  './js/i18n.js?v=4.6.0',
   './js/remote.js?v=3.9',
   './js/paho-mqtt.min.js',
   './assets/tv_frame_cutout.png',

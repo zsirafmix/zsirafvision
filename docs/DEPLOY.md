@@ -38,3 +38,24 @@ npx wrangler kv key list --binding REPORTS --remote
 python3 tools/channel_test.py              # összesítés + hibás csatornák
 python3 tools/channel_test.py --json r.json
 ```
+
+
+## Nézőszámláló telepítése (v4.6.0)
+
+A `cloudflare-worker/wrangler.toml` tartalmazza a Durable Object kötést és migrációt:
+```toml
+[[durable_objects.bindings]]
+name = "VIEWERS"
+class_name = "ViewerCounter"
+
+[[migrations]]
+tag = "v4.6-viewers"
+new_sqlite_classes = ["ViewerCounter"]
+```
+Telepítés: `cd cloudflare-worker && npx wrangler deploy` (ingyenes csomagban `new_sqlite_classes` kell, a régi `new_classes` fizetős).
+Ellenőrzés:
+```bash
+curl -s -H 'Origin: https://zsirafmix.github.io' -X POST https://zsirafvision-proxy.gamsgoworld.workers.dev/api/heartbeat -d '{"sid":"teszt0000000000001","ch":"M1"}'
+curl -s https://zsirafvision-proxy.gamsgoworld.workers.dev/api/viewers
+```
+Új titok vagy környezeti változó nem kell.

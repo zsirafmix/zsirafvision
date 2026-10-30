@@ -31,3 +31,18 @@ flowchart LR
 
 ## Aláírás
 `sig = base64url(HMAC-SHA256(RENDER_SIGN_KEY, "url|exp|ua|ref")[:18])`, `exp = most + 6 óra`. Paraméterek: `url, ua, ref, exp, sig`. Ugyanaz a kulcs a Workerben és a Renderen.
+
+
+## Élő nézőszámláló (v4.6.0)
+
+```
+böngésző ──POST /api/heartbeat {sid,ch} (60 mp)──▶ Worker ──▶ Durable Object "ViewerCounter" (id: global)
+böngésző ──GET  /api/viewers (45 mp)──────────────▶ Worker ──▶ ugyanaz a DO → {total, perChannel}
+```
+
+**Tárolási döntés:** egyetlen globális Durable Object (SQLite-alapú osztály, a Workers ingyenes csomagjában elérhető), az állapotot **csak memóriában** (Map: sid → {ch, időbélyeg}) tartja.
+- *Miért nem KV?* A KV ingyenes keret napi 1000 írás; 5 néző × 60 mp-es jelzés már ~7200 írás/nap lenne, és a KV végül konzisztens (akár 60 mp késés).
+- *Miért nem Cache API / Worker memória?* Az adatközpontonként/isolate-onként külön lenne, így a szám nem globális.
+- *DO előnye:* egy példány látja az összes nézőt → pontos szám; nincs tárhely-írás. Költség: minden jelzés 1 DO-kérés (ingyen napi 100 000 Worker + DO kérés közös kerettel). 50 egyidejű néző ≈ 72 000 jelzés/nap.
+- *Korlát:* ha a DO-t a Cloudflare kiüríti (tétlenség, újratelepítés), a számláló nulláról indul, és legfeljebb 60 mp alatt újra feltöltődik. Ez elfogadható egy „most néz” kijelzőnél.
+- Ablak: 120 mp (2 kihagyott jelzés után esik ki a néző); `stop: true` azonnal törli.

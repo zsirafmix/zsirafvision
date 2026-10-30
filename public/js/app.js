@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Online TV Player
- * Version: 4.5.1
+ * Version: 4.6.0
  * Használati Útmutató & Súgó (Help), Műsorújság (EPG), 6 nyelvű felület, Utolsó csatorna megjegyzése, Kedvencek, Elalvásidőzítő, Dual MQTT+WebRTC Mobil távirányító (QR), Fekvő PWA app
  */
 
@@ -1952,10 +1952,10 @@
   // Service Worker Registration for PWA (v4.3)
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js?v=4.5.1').then((reg) => {
-        console.log('[ZsirafVision v4.5.1] Service Worker regisztrálva:', reg.scope);
+      navigator.serviceWorker.register('sw.js?v=4.6.0').then((reg) => {
+        console.log('[ZsirafVision v4.6.0] Service Worker regisztrálva:', reg.scope);
       }).catch((err) => {
-        console.warn('[ZsirafVision v4.5.1] Service Worker hiba:', err);
+        console.warn('[ZsirafVision v4.6.0] Service Worker hiba:', err);
       });
     });
   }
@@ -1968,4 +1968,60 @@
       }
     }
   });
+
+  // -------------------------------------------------------------------------
+  // v4.6: Élő nézőszámláló (anonim munkamenet-azonosító, 60 mp-es jelzés)
+  // -------------------------------------------------------------------------
+  (function viewerCounter() {
+    if (!PROXY_CONFIGURED) return;
+    const vEl = document.getElementById('tv-video');
+    const box = document.getElementById('viewer-counter');
+    if (!vEl || !box) return;
+    let sid = null;
+    try { sid = sessionStorage.getItem('zv_sid'); } catch (e) {}
+    if (!sid || !/^[A-Za-z0-9_-]{16,64}$/.test(sid)) {
+      const a = new Uint8Array(16); crypto.getRandomValues(a);
+      sid = Array.from(a, (b) => b.toString(16).padStart(2, '0')).join('');
+      try { sessionStorage.setItem('zv_sid', sid); } catch (e) {}
+    }
+    const chName = () => ((channels[currentChannelIndex] || {}).name || '').slice(0, 60);
+    let last = null;
+    const render = (d) => {
+      if (!d || typeof d.total !== 'number') return;
+      last = d;
+      const cur = chName();
+      const n = Math.max(d.total, watching() ? 1 : 0);
+      const c = cur && d.perChannel ? (d.perChannel[cur] || 0) : 0;
+      box.querySelector('.vc-total').textContent = String(n).padStart(3, '0');
+      box.querySelector('.vc-ch').textContent = c ? `ezen a csatornán: ${c}` : '';
+      box.title = `${n} néző most (utolsó 2 perc)`;
+    };
+    const watching = () => !vEl.paused && !vEl.ended && document.visibilityState === 'visible';
+    const send = (stop = false) => {
+      const body = JSON.stringify({ sid, ch: chName(), stop });
+      if (stop && navigator.sendBeacon) {
+        try { navigator.sendBeacon(`${PROXY_BASE}/api/heartbeat`, new Blob([body], { type: 'text/plain' })); return; } catch (e) {}
+      }
+      fetch(`${PROXY_BASE}/api/heartbeat`, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body, keepalive: true })
+        .then((r) => r.ok ? r.json() : null).then(render).catch(() => {});
+    };
+    const poll = () => fetch(`${PROXY_BASE}/api/viewers`).then((r) => r.ok ? r.json() : null).then(render).catch(() => {});
+    let lastCh = '';
+    let lastSent = 0;
+    const tick = () => {
+      if (watching()) {
+        if (Date.now() - lastSent > 55000 || chName() !== lastCh) { lastCh = chName(); lastSent = Date.now(); send(); }
+      }
+    };
+    let sentStop = false;
+    const onStop = () => { if (lastSent && !sentStop) { sentStop = true; lastSent = 0; send(true); } };
+    const onPlay = () => { sentStop = false; tick(); };
+    vEl.addEventListener('playing', onPlay);
+    vEl.addEventListener('pause', onStop);
+    document.addEventListener('visibilitychange', () => (document.visibilityState === 'visible' ? onPlay() : onStop()));
+    window.addEventListener('pagehide', onStop);
+    setInterval(() => { if (watching()) sentStop = false; tick(); }, 5000);
+    setInterval(() => { if (!watching()) poll(); }, 45000);
+    poll();
+  })();
 })();

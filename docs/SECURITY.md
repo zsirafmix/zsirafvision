@@ -31,3 +31,12 @@ Csere: új érték generálása (`python3 -c "import secrets;print(secrets.token
 
 ## Hibabejelentés
 Biztonsági hibát kérjük ne nyilvános issue-ban, hanem privát üzenetben (GitHub: @zsirafmix) jelezz.
+
+
+## Nézőszámláló (v4.6.0)
+
+- `POST /api/heartbeat`: csak engedélyezett Origin (github.io, localhost), törzs ≤ 512 bájt, JSON; `sid` csak `[A-Za-z0-9_-]{16,64}`; `ch` vezérlőkarakterek és `<>` nélkül, max. 60 karakter; `stop` csak `true` értékkel.
+- Rate limit: IP-nként 30 jelzés/perc (memóriában, isolate-onként – nem globálisan szigorú). A DO max. 20 000 munkamenetet tart, így memóriát elárasztani nem lehet.
+- Adatvédelem: a `sid` véletlen (crypto.getRandomValues, 128 bit), csak `sessionStorage`-ban él, lapbezárással megszűnik; IP-t, User-Agentet nem tárolunk, semmi nem kerül lemezre.
+- A számot hamis jelzésekkel felfelé lehet torzítani (korlátozott mértékben) – ez csak kijelző, semmilyen döntés nem épül rá.
+- CSP változatlan: a `connect-src https:` már engedi a Worker hívását, inline script nincs.

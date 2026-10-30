@@ -8,6 +8,21 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
+## [v4.6.0] - 2026-10-30
+
+### Hozzáadva
+- **Élő nézőszámláló** a TV mellett (retro Videoton-stílusú LED kijelző: „👁 003 néző most”, alatta az aktuális csatorna nézői).
+- Worker: `POST /api/heartbeat` `{sid, ch, stop?}` és `GET /api/viewers` → `{total, perChannel, windowSec}`.
+- Cloudflare **Durable Object** `ViewerCounter` (SQLite-osztály, ingyenes csomag), az állapot csak memóriában: nincs KV-írás.
+- Front end: véletlen, anonim munkamenet-azonosító (`sessionStorage`, 128 bit), lejátszás közben ~60 mp-enként jelzés; szünet/háttérbe kerülés/oldalbezárás esetén `stop` jelzés (sendBeacon); egyébként 45 mp-enként lekérdezés.
+
+### Biztonság
+- Heartbeat: csak POST, Origin-ellenőrzés (github.io + localhost), max. 512 bájt törzs, `sid` regex (`[A-Za-z0-9_-]{16,64}`), csatornanév tisztítva és 60 karakterre vágva, IP-nkénti 30 kérés/perc (isolate-onként), max. 20 000 egyidejű munkamenet.
+- Nem tárolunk IP-címet, sütit vagy személyes adatot.
+
+### Változott
+- Verzió 4.6.0 mindenhol (UI, Service Worker cache, `?v=` tagek, Worker).
+
 ## [v4.5.1] - 2026-10-30
 
 ### Törölve

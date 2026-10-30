@@ -1,4 +1,4 @@
-# ZsirafVision v4.5.1 – Cloudflare Worker (proxy + hibajelentő + stats)
+# ZsirafVision v4.6.0 – Cloudflare Worker (proxy + hibajelentő + stats)
 name = "zsirafvision-proxy"
 main = "worker.js"
 compatibility_date = "2024-11-01"
@@ -15,3 +15,12 @@ id = "ee953f0a6caf4a67aa5a8f35c0db7f18"
 # v4.5: 10 percenként felébreszti a Render proxyt
 [triggers]
 crons = ["*/10 * * * *"]
+
+# v4.6: élő nézőszámláló – Durable Object (SQLite osztály = ingyenes csomagban elérhető)
+[[durable_objects.bindings]]
+name = "VIEWERS"
+class_name = "ViewerCounter"
+
+[[migrations]]
+tag = "v4.6-viewers"
+new_sqlite_classes = ["ViewerCounter"]

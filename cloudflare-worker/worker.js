@@ -6,6 +6,8 @@
  *   POST /api/report                       – hibajelentés mentése KV-ba (REPORTS)
  *   GET  /api/report[?limit=50]            – jelentések listája (CSAK tokennel: Authorization: Bearer <REPORT_TOKEN>)
  *   GET  /api/stats                        – állapot
+ *   POST /api/heartbeat {sid, ch}          – v4.6: néző jelzés (Durable Object, memóriában)
+ *   GET  /api/viewers                      – v4.6: {total, perChannel} az utolsó 2 percből
  *   GET  /health                           – életjel
  *
  * Biztonság (v4.5):
@@ -20,7 +22,7 @@
  */
 import HOSTS from '../public/allowed_hosts.json';
 
-const VERSION = '4.5.1';
+const VERSION = '4.6.0';
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const RENDER_PROXY = 'https://zsirafvision-proxy2.onrender.com';
 const ALLOWED_HOSTS = new Set([...(HOSTS.channels || []), ...(HOSTS.world || [])].map((h) => h.toLowerCase()));
@@ -117,6 +119,10 @@ export default {
           return await handleProxy(request, url, env);
         case '/api/report':
           return await handleReport(request, url, env);
+        case '/api/heartbeat':
+          return await handleHeartbeat(request, env);
+        case '/api/viewers':
+          return await handleViewers(request, env);
         case '/api/stats':
           return json({
             status: 'ONLINE', version: VERSION, platform: 'cloudflare-workers',
@@ -332,4 +338,65 @@ async function handleReport(request, url, env) {
   await env.REPORTS.put(key, JSON.stringify(report), { expirationTtl: REPORT_TTL_SEC });
   await env.REPORTS.put(rlKey, String(used + 1), { expirationTtl: RATE_WINDOW_SEC });
   return json({ success: true, id });
+}
+
+// ---------------------------------------------------------------------------
+// v4.6: Élő nézőszámláló – Durable Object (SQLite-alapú osztály, ingyenes csomag),
+// az állapot CSAK memóriában van: nincs KV/tárhely írás, nincs napi írási limit.
+// ---------------------------------------------------------------------------
+const SID_RE = /^[A-Za-z0-9_-]{16,64}$/;
+const VIEWER_TTL_MS = 120000;
+const HB_RL = new Map();
+function hbRateOk(ip) {
+  const min = Math.floor(Date.now() / 60000);
+  const k = `${ip}:${min}`;
+  const n = (HB_RL.get(k) || 0) + 1;
+  HB_RL.set(k, n);
+  if (HB_RL.size > 5000) for (const key of HB_RL.keys()) if (!key.endsWith(`:${min}`)) HB_RL.delete(key);
+  return n <= 30; // IP-nként max 30 jelzés/perc (NAT mögött több néző)
+}
+const counterStub = (env) => env.VIEWERS.get(env.VIEWERS.idFromName('global'));
+
+async function handleHeartbeat(request, env) {
+  if (request.method !== 'POST') return json({ error: 'Method Not Allowed' }, 405);
+  if (!originOk(request)) return json({ error: 'Forbidden' }, 403);
+  const ip = request.headers.get('CF-Connecting-IP') || 'x';
+  if (!hbRateOk(ip)) return json({ error: 'Túl sok kérés' }, 429);
+  const raw = await request.text();
+  if (raw.length > 512) return json({ error: 'Túl nagy' }, 413);
+  let b; try { b = JSON.parse(raw); } catch { return json({ error: 'Hibás JSON' }, 400); }
+  const sid = typeof b?.sid === 'string' ? b.sid : '';
+  if (!SID_RE.test(sid)) return json({ error: 'Hibás sid' }, 400);
+  let ch = typeof b?.ch === 'string' ? b.ch.replace(/[\u0000-\u001f<>]/g, '').trim().slice(0, 60) : '';
+  const stop = b?.stop === true;
+  const r = await counterStub(env).fetch('https://do/hb', { method: 'POST', body: JSON.stringify({ sid, ch, stop }) });
+  return json(await r.json());
+}
+async function handleViewers(request, env) {
+  if (request.method !== 'GET') return json({ error: 'Method Not Allowed' }, 405);
+  const r = await counterStub(env).fetch('https://do/viewers');
+  return json(await r.json());
+}
+
+export class ViewerCounter {
+  constructor(state, env) { this.sessions = new Map(); }
+  prune() {
+    const lim = Date.now() - VIEWER_TTL_MS;
+    for (const [k, v] of this.sessions) if (v.t < lim) this.sessions.delete(k);
+  }
+  summary() {
+    this.prune();
+    const perChannel = {};
+    for (const v of this.sessions.values()) if (v.ch) perChannel[v.ch] = (perChannel[v.ch] || 0) + 1;
+    return { total: this.sessions.size, perChannel, windowSec: VIEWER_TTL_MS / 1000 };
+  }
+  async fetch(request) {
+    const u = new URL(request.url);
+    if (u.pathname === '/hb') {
+      const { sid, ch, stop } = await request.json();
+      if (stop) this.sessions.delete(sid);
+      else if (this.sessions.has(sid) || this.sessions.size < 20000) this.sessions.set(sid, { ch, t: Date.now() });
+    }
+    return new Response(JSON.stringify(this.summary()), { headers: { 'Content-Type': 'application/json' } });
+  }
 }
