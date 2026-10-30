@@ -1,4 +1,4 @@
-# ZsirafVision v4.4 – Cloudflare Worker (proxy + hibajelentő + stats)
+# ZsirafVision v4.5 – Cloudflare Worker (proxy + hibajelentő + stats)
 name = "zsirafvision-proxy"
 main = "worker.js"
 compatibility_date = "2024-11-01"
@@ -12,6 +12,6 @@ enabled = true
 binding = "REPORTS"
 id = "ee953f0a6caf4a67aa5a8f35c0db7f18"
 
-# v4.4: 10 percenként felébreszti a Render proxyt
+# v4.5: 10 percenként felébreszti a Render proxyt
 [triggers]
 crons = ["*/10 * * * *"]
