@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Internationalization (i18n) & Dynamic EPG Engine
- * Version: 4.3
+ * Version: 4.4
  * Supported Languages: Hungarian (hu), English (en), German (de), French (fr), Spanish (es), Russian (ru)
  */
 
