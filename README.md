@@ -1,4 +1,4 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.4)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.5)
 
 Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot (élő adás kiemeléssel)**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
 
@@ -93,7 +93,7 @@ Távirányító: PeerJS (WebRTC) + MQTT (HiveMQ / EMQX publikus broker)
 Helyi teszt: `npx wrangler dev` → `http://localhost:8787/api/stats`
 
 ### Hibajelentések kiolvasása
-* Böngészőben: `https://<worker-cím>/api/report` (legújabb elöl, `?limit=200`-ig)
+* `curl -H "Authorization: Bearer $REPORT_TOKEN" https://<worker-cím>/api/report` (legújabb elöl, `?limit=200`-ig) – v4.5-től token kell
 * Vagy: `npx wrangler kv key list --binding REPORTS --remote`
 * Korlát: IP-nként 5 jelentés / 10 perc, max 16 KB, 90 napig tárolva.
 
@@ -101,6 +101,15 @@ Helyi teszt: `npx wrangler dev` → `http://localhost:8787/api/stats`
 Workers Free: 100 000 kérés / nap. Egy élő adás néhány kérést generál percenként (playlist + szegmensek), sávszélesség-díj nincs.
 
 ---
+
+## 🔒 Biztonság (v4.5)
+
+* **Allowlist**: a proxyk csak a `public/allowed_hosts.json`-ban szereplő hostokat érik el. A playlistekben talált további (CDN) címeket a proxy HMAC-aláírással, 6 órás lejárattal adja tovább.
+* **Titkok** (sosem kerülnek a repóba):
+  * `REPORT_TOKEN` – Cloudflare Worker secret (`wrangler secret put REPORT_TOKEN`), a hibajelentések listázásához.
+  * `RENDER_SIGN_KEY` – Worker secret **és** Render környezeti változó (ugyanaz az érték). Ha a Renderen nincs beállítva, a Render proxy aláírás nélkül, csak az allowlist alapján enged.
+  * `TLS_INSECURE_HOSTS` (opcionális, Render) – vesszővel elválasztott hostlista, ahol hibás tanúsítvány miatt ki kell kapcsolni a TLS-ellenőrzést.
+* **Front-end**: CSP, SRI, escape-elt EPG, 130 bites szobakód, parancs-whitelist.
 
 ## 🛠️ Samsung Smart TV (Tizen OS) - Technikai hibajavítás (v3.5)
 
@@ -138,6 +147,15 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 ---
 
 ## 📝 Verziótörténet (Changelog)
+
+### [v4.5] - 2026-10-30
+* **Biztonság**: szigorú host allowlist (`public/allowed_hosts.json`, a channels.json hostjai + iptv-org lista; újragenerálás: `tools/gen_allowed_hosts.py`). Más hostot csak HMAC-aláírt (a proxy által kiadott) URL-en keresztül lehet elérni.
+* **Biztonság**: Worker – csak média tartalomtípus (m3u8/ts/m4s/aac/kulcs) mehet át, méret- (playlist 2 MB, szegmens 40 MB) és időkorlát (15 mp), IP-nkénti limit, CORS csak `zsirafmix.github.io` és localhost, biztonsági fejlécek.
+* **Biztonság**: hibajelentés – méretkorlát (16 KB), HTML-szűrés, Origin-ellenőrzés; a `GET /api/report` listázás csak `Authorization: Bearer <REPORT_TOKEN>` fejléccel működik.
+* **Biztonság**: `server.py` (Render) – TLS-ellenőrzés újra bekapcsolva (kivétel hostonként: `TLS_INSECURE_HOSTS`), privát IP tiltás átirányítás után és a tényleges kapcsolódott IP-re is, aláírt URL-ek (`RENDER_SIGN_KEY`), limitek. Javítva: a `/health` most a GET-ben van (korábban tévedésből a HEAD-be került).
+* **Biztonság**: front-end – Content-Security-Policy, SRI hash a CDN szkriptekre, EPG adatok escape-elése, 130 bites (26 karakteres, crypto) szobakód, távirányító parancsok whitelistje és ellenőrzése.
+* **Takarítás**: a nem használt `online_channels.json` törölve; a két TV-keret PNG ~660 KB-ról ~50/108 KB-ra tömörítve.
+* **Update**: verzió 4.5 mindenhol (UI, Service Worker cache, `?v=` tagek).
 
 ### [v4.4] - 2026-10-30
 * **Új**: **Két proxys architektúra.** A Cloudflare Worker nem tud IP-címes hostot (CF 1003 hiba) és nem szabványos portot (pl. 1344, 2443, 8890) elérni, ezért ezeket a kéréseket 302-es átirányítással a Renderen futó második proxyhoz küldi: `https://zsirafvision-proxy2.onrender.com` (`server.py`). Ez hozza vissza az RTL, TV2, M1–M5, Duna, Viasat stb. csatornákat.
