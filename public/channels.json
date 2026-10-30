@@ -668,15 +668,6 @@
   {
     "id": 75,
     "channel_number": "75",
-    "name": "AXN Spin (Hungary)",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcronos.mangora1.cfd%2Fspyn%2Fusergencs85ja0j1rrnd.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36+VLC%2F3.0.18+LibVLC%2F3.0.18&ref=https%3A%2F%2Fcool-tv.net%2F",
-    "logo": "https://i.imgur.com/uVFenKm.png",
-    "group": "Szórakozás",
-    "tvg_id": "AXNSpin.hu@SD"
-  },
-  {
-    "id": 76,
-    "channel_number": "76",
     "name": "Alfold TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay01%2Flivestream006.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/W6jg8iM.png",
@@ -684,8 +675,8 @@
     "tvg_id": "AlfoldTV.hu@SD"
   },
   {
-    "id": 77,
-    "channel_number": "77",
+    "id": 76,
+    "channel_number": "76",
     "name": "Discovery Channel (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fdiscovery_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/2019_Discovery_logo.svg/960px-2019_Discovery_logo.svg.png",
@@ -693,8 +684,8 @@
     "tvg_id": "DiscoveryChannel.hu@SD"
   },
   {
-    "id": 78,
-    "channel_number": "78",
+    "id": 77,
+    "channel_number": "77",
     "name": "FEM3",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_fem3_atktv%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/AF4Sz8Z.png",
@@ -702,8 +693,8 @@
     "tvg_id": "FEM3.hu@SD"
   },
   {
-    "id": 79,
-    "channel_number": "79",
+    "id": 78,
+    "channel_number": "78",
     "name": "Izaura TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fizaura%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/p9YFnpw.png",
@@ -711,8 +702,8 @@
     "tvg_id": "IzauraTV.hu@SD"
   },
   {
-    "id": 80,
-    "channel_number": "80",
+    "id": 79,
+    "channel_number": "79",
     "name": "Jocky TV",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fjocky%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/wLawFVP.png",
@@ -720,8 +711,8 @@
     "tvg_id": "JockyTV.hu@SD"
   },
   {
-    "id": 81,
-    "channel_number": "81",
+    "id": 80,
+    "channel_number": "80",
     "name": "Life TV (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Flifetv%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/3znYv1N.png",
@@ -729,8 +720,8 @@
     "tvg_id": "LifeTV.hu@SD"
   },
   {
-    "id": 82,
-    "channel_number": "82",
+    "id": 81,
+    "channel_number": "81",
     "name": "M2 (Hungary) (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fm2_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/B0nYT0l.png",
@@ -738,8 +729,8 @@
     "tvg_id": "M2.hu@SD"
   },
   {
-    "id": 83,
-    "channel_number": "83",
+    "id": 82,
+    "channel_number": "82",
     "name": "Moziklub",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fmoziklub_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Moziklub.svg/1920px-Moziklub.svg.png",
@@ -747,8 +738,8 @@
     "tvg_id": "Moziklub.hu@SD"
   },
   {
-    "id": 84,
-    "channel_number": "84",
+    "id": 83,
+    "channel_number": "83",
     "name": "RTL Otthon",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Frtl_otthon_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/RTL_Otthon.svg/1920px-RTL_Otthon.svg.png",
@@ -756,8 +747,8 @@
     "tvg_id": "RTLOtthon.hu@SD"
   },
   {
-    "id": 85,
-    "channel_number": "85",
+    "id": 84,
+    "channel_number": "84",
     "name": "Sorozatklub",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fsorozatklub_atk%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Sorozatklub.svg/1920px-Sorozatklub.svg.png",
@@ -765,8 +756,8 @@
     "tvg_id": "Sorozatklub.hu@SD"
   },
   {
-    "id": 86,
-    "channel_number": "86",
+    "id": 85,
+    "channel_number": "85",
     "name": "Spektrum Home (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fspektrum_home_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/VaVi65F.png",
@@ -774,8 +765,8 @@
     "tvg_id": "SpektrumHome.hu@SD"
   },
   {
-    "id": 87,
-    "channel_number": "87",
+    "id": 86,
+    "channel_number": "86",
     "name": "Ozone TV",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fozone%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/eSNF9qt.png",
@@ -783,8 +774,8 @@
     "tvg_id": "OzoneTV.hu@SD"
   },
   {
-    "id": 88,
-    "channel_number": "88",
+    "id": 87,
+    "channel_number": "87",
     "name": "TV Paprika (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fparpika_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/KLpZIS6.png",
@@ -792,8 +783,8 @@
     "tvg_id": "TVPaprika.hu@SD"
   },
   {
-    "id": 89,
-    "channel_number": "89",
+    "id": 88,
+    "channel_number": "88",
     "name": "Apostol TV (576p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Flive.apostoltv.hu%2Flive%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/C43Cc9N.png",
@@ -801,8 +792,8 @@
     "tvg_id": "ApostolTV.hu@SD"
   },
   {
-    "id": 90,
-    "channel_number": "90",
+    "id": 89,
+    "channel_number": "89",
     "name": "EWTN/Bonum TV",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fdash2.antik.sk%2Flive%2Fewtn_bonum%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/LdsRz2E.png",
@@ -810,8 +801,8 @@
     "tvg_id": "EWTNBonumTV.hu@SD"
   },
   {
-    "id": 91,
-    "channel_number": "91",
+    "id": 90,
+    "channel_number": "90",
     "name": "Muzsika TV",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_muzsika_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/kmQ5vYC.png",
@@ -819,8 +810,8 @@
     "tvg_id": "MuzsikaTV.hu@SD"
   },
   {
-    "id": 92,
-    "channel_number": "92",
+    "id": 91,
+    "channel_number": "91",
     "name": "Oxygen Music (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Foxygenmusic.hu%3A2443%2Fhls%2Foxygenmusic.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://oxygenmusic.hu/static/media/logo.png",
@@ -828,8 +819,8 @@
     "tvg_id": "OxygenMusic.hu@HD"
   },
   {
-    "id": 93,
-    "channel_number": "93",
+    "id": 92,
+    "channel_number": "92",
     "name": "Slager TV",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftest_slager_tv_hungary_1200_atk%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/qDNRgSQ.png",
@@ -837,8 +828,8 @@
     "tvg_id": "SlagerTV.hu@SD"
   },
   {
-    "id": 94,
-    "channel_number": "94",
+    "id": 93,
+    "channel_number": "93",
     "name": "TV Bozsike Hamburg HD (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Frtmp.radiobozsike.com%2Fhls%2Fstream1.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://radiobozsike.com/img/icons/android-chrome-512x512.png",
@@ -846,8 +837,8 @@
     "tvg_id": "TVBozsikeHamburgHD.de@HD"
   },
   {
-    "id": 95,
-    "channel_number": "95",
+    "id": 94,
+    "channel_number": "94",
     "name": "16tv Budapest (360p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2F16tv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/04fCzHl.png",
@@ -855,8 +846,8 @@
     "tvg_id": "16tvBudapest.hu@SD"
   },
   {
-    "id": 96,
-    "channel_number": "96",
+    "id": 95,
+    "channel_number": "95",
     "name": "7.TV (360p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.y5.hu%2Fstream%2Fstream_bekescsaba%2Fstream.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/CnUhAlK.png",
@@ -864,17 +855,8 @@
     "tvg_id": "7TV.hu@SD"
   },
   {
-    "id": 97,
-    "channel_number": "97",
-    "name": "BTV (Hungary) (360p)",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fbabolnatv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/0PKqn3V.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "BTV.hu@SD"
-  },
-  {
-    "id": 98,
-    "channel_number": "98",
+    "id": 96,
+    "channel_number": "96",
     "name": "Bajai TV (720p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay01%2Flivestream002.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/cyReGWh.png",
@@ -882,17 +864,8 @@
     "tvg_id": "BajaiTV.hu@SD"
   },
   {
-    "id": 99,
-    "channel_number": "99",
-    "name": "Berente TV (1080p)",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FBerenteTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/3H3Ct9f.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "BerenteTV.hu@SD"
-  },
-  {
-    "id": 100,
-    "channel_number": "100",
+    "id": 97,
+    "channel_number": "97",
     "name": "Budapest Europa Televizio (576p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fbpetv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/CqqWtzo.png",
@@ -900,8 +873,8 @@
     "tvg_id": "BudapestEuropaTelevizio.hu@SD"
   },
   {
-    "id": 101,
-    "channel_number": "101",
+    "id": 98,
+    "channel_number": "98",
     "name": "City TV (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcitytv.hu%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/u0AKhzj.png",
@@ -909,8 +882,8 @@
     "tvg_id": "CityTV.hu@SD"
   },
   {
-    "id": 102,
-    "channel_number": "102",
+    "id": 99,
+    "channel_number": "99",
     "name": "Duna",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fduna_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/oPbsSlp.png",
@@ -918,8 +891,8 @@
     "tvg_id": "Duna.hu@SD"
   },
   {
-    "id": 103,
-    "channel_number": "103",
+    "id": 100,
+    "channel_number": "100",
     "name": "Duna World",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fduna_world_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F130.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/uOBQJZS.png",
@@ -927,8 +900,8 @@
     "tvg_id": "DunaWorld.hu@SD"
   },
   {
-    "id": 104,
-    "channel_number": "104",
+    "id": 101,
+    "channel_number": "101",
     "name": "ESTV (Hungary) (420p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE032.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/OCZ8CfK.png",
@@ -936,8 +909,8 @@
     "tvg_id": "ESTV.hu@SD"
   },
   {
-    "id": 105,
-    "channel_number": "105",
+    "id": 102,
+    "channel_number": "102",
     "name": "Galaxy4",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fbudapest-cache-1.antik.sk%2Flive%2Ftest_galaxy_4_atk_1200%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/fTG99xh.png",
@@ -945,17 +918,8 @@
     "tvg_id": "Galaxy4.hu@SD"
   },
   {
-    "id": 106,
-    "channel_number": "106",
-    "name": "Globo TV (Hungary) (720p) [Geo-blocked]",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FGloboTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/PJ4c4jq.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "GloboTV.hu@SD"
-  },
-  {
-    "id": 107,
-    "channel_number": "107",
+    "id": 103,
+    "channel_number": "103",
     "name": "Gyongyosi TV (576p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay02%2Flivestream005.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/RHgaPCk.png",
@@ -963,8 +927,8 @@
     "tvg_id": "GyongyosiTV.hu@SD"
   },
   {
-    "id": 108,
-    "channel_number": "108",
+    "id": 104,
+    "channel_number": "104",
     "name": "Hevizi TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay03%2Flivestream003.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/zuWQKDm.png",
@@ -972,8 +936,8 @@
     "tvg_id": "HeviziTV.hu@SD"
   },
   {
-    "id": 109,
-    "channel_number": "109",
+    "id": 105,
+    "channel_number": "105",
     "name": "Jaszsagi Tersegi TV (440p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast007.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/bsDN0lH.png",
@@ -981,8 +945,8 @@
     "tvg_id": "JaszsagiTersegiTV.hu@SD"
   },
   {
-    "id": 110,
-    "channel_number": "110",
+    "id": 106,
+    "channel_number": "106",
     "name": "Kanizsa TV (400p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fkanizsavtv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/l02znlE.png",
@@ -990,8 +954,8 @@
     "tvg_id": "KanizsaTV.hu@SD"
   },
   {
-    "id": 111,
-    "channel_number": "111",
+    "id": 107,
+    "channel_number": "107",
     "name": "Kapos TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront63.lexanetwork.com%3A1344%2Frelay01%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/ZMrj2C5.png",
@@ -999,8 +963,8 @@
     "tvg_id": "KaposTV.hu@SD"
   },
   {
-    "id": 112,
-    "channel_number": "112",
+    "id": 108,
+    "channel_number": "108",
     "name": "Karcag TV (720p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront41.lexanetwork.com%3A1344%2Frelay03%2Flivestream003.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/QcrVj3Q.png",
@@ -1008,8 +972,8 @@
     "tvg_id": "KarcagTV.hu@SD"
   },
   {
-    "id": 113,
-    "channel_number": "113",
+    "id": 109,
+    "channel_number": "109",
     "name": "Kecskemeti TV (416p) [Not 24/7]",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2Frtmp1.40e.hu%3A8000%2Flive%2Fktv.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/yxwrX2N.png",
@@ -1017,8 +981,8 @@
     "tvg_id": "KecskemetiTV.hu@SD"
   },
   {
-    "id": 114,
-    "channel_number": "114",
+    "id": 110,
+    "channel_number": "110",
     "name": "Komaromi Televizio (400p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE017.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/DifVZkz.png",
@@ -1026,17 +990,8 @@
     "tvg_id": "KomaromiTelevizio.hu@SD"
   },
   {
-    "id": 115,
-    "channel_number": "115",
-    "name": "Komlos TV (1080p) [Not 24/7]",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FKomlosTV%2Ftracks-v1a1%2Fmono.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/dnITSUz.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "KomlosTV.hu@SD"
-  },
-  {
-    "id": 116,
-    "channel_number": "116",
+    "id": 111,
+    "channel_number": "111",
     "name": "Makoi Varosi Televizio (576p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2Fmakomedia.mikrohalo.hu%2Fhls%2Fmakotv.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/PF3BP4X.png",
@@ -1044,8 +999,8 @@
     "tvg_id": "MakoiVarosiTelevizio.hu@SD"
   },
   {
-    "id": 117,
-    "channel_number": "117",
+    "id": 112,
+    "channel_number": "112",
     "name": "Mora-Net TV (576p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.moranettv.hu%2Flive%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/yT0RmKi.png",
@@ -1053,8 +1008,8 @@
     "tvg_id": "MoraNetTV.hu@SD"
   },
   {
-    "id": 118,
-    "channel_number": "118",
+    "id": 113,
+    "channel_number": "113",
     "name": "Oroszlanyi Varosi Televizio (720p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast002.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/P0fxUH5.png",
@@ -1062,8 +1017,8 @@
     "tvg_id": "OroszlanyiVarosiTelevizio.hu@SD"
   },
   {
-    "id": 119,
-    "channel_number": "119",
+    "id": 114,
+    "channel_number": "114",
     "name": "Ozdi Varosi TV (720p) [Not 24/7]",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2Fstream.nmih.hu%3A7980%2Flive.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/t0Aq3UD.png",
@@ -1071,26 +1026,8 @@
     "tvg_id": "OzdiVarosiTV.hu@SD"
   },
   {
-    "id": 120,
-    "channel_number": "120",
-    "name": "PilisTV (1080p) [Geo-blocked]",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FPilisTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/5L01wRi.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "PilisTV.hu@SD"
-  },
-  {
-    "id": 121,
-    "channel_number": "121",
-    "name": "RegioPlusz TV (1080p) [Geo-blocked]",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FRegioPluszTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/VXPpukf.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "RegioPluszTV.hu@SD"
-  },
-  {
-    "id": 122,
-    "channel_number": "122",
+    "id": 115,
+    "channel_number": "115",
     "name": "SIXO TV (360p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE038.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.ibb.co/GTPs9Xy/9068.png",
@@ -1098,8 +1035,8 @@
     "tvg_id": "SIXOTV.hu@SD"
   },
   {
-    "id": 123,
-    "channel_number": "123",
+    "id": 116,
+    "channel_number": "116",
     "name": "Szolnok TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/Eiab9MP.png",
@@ -1107,8 +1044,8 @@
     "tvg_id": "SzolnokTV.hu@SD"
   },
   {
-    "id": 124,
-    "channel_number": "124",
+    "id": 117,
+    "channel_number": "117",
     "name": "TV Keszthely (360p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Ffreerelay%2Fkeszthelyivtv.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/2LE8xSW.png",
@@ -1116,8 +1053,8 @@
     "tvg_id": "TVKeszthely.hu@SD"
   },
   {
-    "id": 125,
-    "channel_number": "125",
+    "id": 118,
+    "channel_number": "118",
     "name": "Tatai TV (1080p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2Fbroadcast006.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/skXYntc.png",
@@ -1125,8 +1062,8 @@
     "tvg_id": "TataiTV.hu@SD"
   },
   {
-    "id": 126,
-    "channel_number": "126",
+    "id": 119,
+    "channel_number": "119",
     "name": "TelePaks (396p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay02%2Flivestream004.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/T8ueztB.png",
@@ -1134,26 +1071,8 @@
     "tvg_id": "TelePaks.hu@SD"
   },
   {
-    "id": 127,
-    "channel_number": "127",
-    "name": "Trimedio TV (1080p) [Geo-blocked]",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.streaming4u.hu%2FTriMedioTV%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/P4hxWVZ.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "TrimedioTV.hu@SD"
-  },
-  {
-    "id": 128,
-    "channel_number": "128",
-    "name": "Vasarhelyi Televizio (576p)",
-    "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fstream.vasarhelyitelevizio.hu%2Fstream%2Fstream.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
-    "logo": "https://i.imgur.com/WOEqdmx.png",
-    "group": "Általános & Helyi TV",
-    "tvg_id": "VasarhelyiTelevizio.hu@SD"
-  },
-  {
-    "id": 129,
-    "channel_number": "129",
+    "id": 120,
+    "channel_number": "120",
     "name": "XV TV (480p)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=https%3A%2F%2Fcloudfront44.lexanetwork.com%3A1344%2Frelay01%2FHDE051.sdp%2Fplaylist.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.ibb.co/hH2KF6W/4792.png",
@@ -1161,8 +1080,8 @@
     "tvg_id": "XVTV.hu@SD"
   },
   {
-    "id": 130,
-    "channel_number": "130",
+    "id": 121,
+    "channel_number": "121",
     "name": "HGTV (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Fhgtv_hun%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://i.imgur.com/KMcR9z9.png",
@@ -1170,8 +1089,8 @@
     "tvg_id": "HGTV.hu@SD"
   },
   {
-    "id": 131,
-    "channel_number": "131",
+    "id": 122,
+    "channel_number": "122",
     "name": "TLC (Hungary)",
     "url": "https://zsirafvision-vercel.vercel.app/api/proxy?url=http%3A%2F%2F88.212.7.14%2Flive%2Ftlc_hungary%2Findex.m3u8&ua=Mozilla%2F5.0+%28Windows+NT+10.0%3B+Win64%3B+x64%29+AppleWebKit%2F537.36+%28KHTML%2C+like+Gecko%29+Chrome%2F120.0.0.0+Safari%2F537.36",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/TLC_Logo.svg/960px-TLC_Logo.svg.png",

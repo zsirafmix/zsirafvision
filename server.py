@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-ZsirafVision v4.5 – Videoton Retro IPTV szerver & stream proxy
+ZsirafVision v4.5.1 – Videoton Retro IPTV szerver & stream proxy
 Renderen második proxyként fut (IP-címes és nem szabványos portú streamek),
 helyben pedig a public/ mappát is kiszolgálja (python3 server.py -> http://localhost:8888).
 
@@ -30,7 +30,7 @@ import urllib.parse
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-VERSION = "4.5"
+VERSION = "4.5.1"
 PORT = int(os.environ.get("PORT", 8888))
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_DIR = os.path.join(ROOT_DIR, "public")

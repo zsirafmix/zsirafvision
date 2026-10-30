@@ -1,6 +1,6 @@
 /**
  * ZsirafVision - Internationalization (i18n) & Dynamic EPG Engine
- * Version: 4.5
+ * Version: 4.5.1
  * Supported Languages: Hungarian (hu), English (en), German (de), French (fr), Spanish (es), Russian (ru)
  */
 
@@ -51,7 +51,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ TECHNIKAI ADATOK",
       guideTitle: "CSATORNALISTA",
       sourceLabel: "Forrás / Ország:",
-      sourceHu: "🇭🇺 Magyar Adások (131 csatorna)",
+      sourceHu: "🇭🇺 Magyar Adások (122 csatorna)",
       sourceWorld: "🌍 iptv-org Világ (index.country.m3u)",
       searchPlaceholder: "🔍 Keresés (pl. RTL, Sport, Zene, Film)...",
       catAll: "Mind",
@@ -133,7 +133,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ TECH STATS",
       guideTitle: "CHANNEL LIST",
       sourceLabel: "Source / Country:",
-      sourceHu: "🇭🇺 Hungarian TV (131 channels)",
+      sourceHu: "🇭🇺 Hungarian TV (122 channels)",
       sourceWorld: "🌍 iptv-org World (index.country.m3u)",
       searchPlaceholder: "🔍 Search (e.g. CNN, Sport, Music, Film)...",
       catAll: "All",
@@ -215,7 +215,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ TECHNIK",
       guideTitle: "KANALLISTE",
       sourceLabel: "Quelle / Land:",
-      sourceHu: "🇭🇺 Ungarisches Fernsehen (131 Kanäle)",
+      sourceHu: "🇭🇺 Ungarisches Fernsehen (122 Kanäle)",
       sourceWorld: "🌍 iptv-org Welt (index.country.m3u)",
       searchPlaceholder: "🔍 Suche (z.B. RTL, Sport, Musik, Film)...",
       catAll: "Alle",
@@ -297,7 +297,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ INFOS TECH",
       guideTitle: "LISTE DES CHAÎNES",
       sourceLabel: "Source / Pays :",
-      sourceHu: "🇭🇺 Télévision hongroise (131 chaînes)",
+      sourceHu: "🇭🇺 Télévision hongroise (122 chaînes)",
       sourceWorld: "🌍 iptv-org Monde (index.country.m3u)",
       searchPlaceholder: "🔍 Rechercher (ex: RTL, Sport, Musique, Film)...",
       catAll: "Tous",
@@ -379,7 +379,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ DATOS TÉCNICOS",
       guideTitle: "LISTA DE CANALES",
       sourceLabel: "Fuente / País:",
-      sourceHu: "🇭🇺 Televisión húngara (131 canales)",
+      sourceHu: "🇭🇺 Televisión húngara (122 canales)",
       sourceWorld: "🌍 iptv-org Mundo (index.country.m3u)",
       searchPlaceholder: "🔍 Buscar (ej: Noticias, Deportes, Música, Cine)...",
       catAll: "Todos",
@@ -461,7 +461,7 @@ window.ZsirafI18N = (function () {
       btnStats: "⚙ ТЕХ ДАННЫЕ",
       guideTitle: "СПИСОК КАНАЛОВ",
       sourceLabel: "Источник / Страна:",
-      sourceHu: "🇭🇺 Венгерские каналы (131 канал)",
+      sourceHu: "🇭🇺 Венгерские каналы (122 канал)",
       sourceWorld: "🌍 iptv-org Мир (index.country.m3u)",
       searchPlaceholder: "🔍 Поиск (напр. Новости, Спорт, Музыка, Кино)...",
       catAll: "Все",
@@ -510,7 +510,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "Élő Adások & Csatornaváltás",
-      "summary": "131 élő magyar televízióadó és nemzetközi műsorok közötti villámgyors navigáció.",
+      "summary": "122 élő magyar televízióadó és nemzetközi műsorok közötti villámgyors navigáció.",
       "details": [
         "**Csatornaváltás:** Használd a képernyő alatti ◀ ELŐZŐ és KÖVETKEZŐ ▶ gombokat, vagy a billentyűzeten a Fel/Le és Balra/Jobbra nyilakat.",
         "**Közvetlen számválasztás:** Üsd be a kívánt csatornaszámot a billentyűzeten (pl. 1, 5, 12) az azonnali odaugráshoz.",
@@ -645,7 +645,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "Live TV & Channel Navigation",
-      "summary": "Blazing fast navigation across 131 live Hungarian channels and international streams.",
+      "summary": "Blazing fast navigation across 122 live Hungarian channels and international streams.",
       "details": [
         "**Channel Surfing:** Use the ◀ PREV and NEXT ▶ buttons below the TV, or the Arrow keys (Up/Down/Left/Right) on your keyboard.",
         "**Direct Number Tuning:** Type any channel number on your numeric keypad (e.g. 1, 5, 12) to switch instantly.",
@@ -780,7 +780,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "Live-TV & Kanalwechsel",
-      "summary": "Blitzschnelle Navigation zwischen 131 ungarischen Live-Sendern und internationalen Streams.",
+      "summary": "Blitzschnelle Navigation zwischen 122 ungarischen Live-Sendern und internationalen Streams.",
       "details": [
         "**Kanalwechsel:** Nutzen Sie die Tasten ◀ VORHERIGER und NÄCHSTER ▶ unter dem Fernseher oder die Pfeiltasten (Auf/Ab/Links/Rechts).",
         "**Direkte Nummernwahl:** Geben Sie die Kanalnummer über die Zifferntasten ein (z.B. 1, 5, 12), um direkt umzuschalten.",
@@ -915,7 +915,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "TV en direct & Changement de chaîne",
-      "summary": "Navigation ultra-rapide parmi 131 chaînes hongroises en direct et flux internationaux.",
+      "summary": "Navigation ultra-rapide parmi 122 chaînes hongroises en direct et flux internationaux.",
       "details": [
         "**Zapping :** Utilisez les boutons ◀ PRÉCÉDENT et SUIVANT ▶ sous le téléviseur ou les touches fléchées (Haut/Bas/Gauche/Droite).",
         "**Sélection directe par numéro :** Tapez le numéro de chaîne sur votre clavier (ex: 1, 5, 12) pour zapper instantanément.",
@@ -1050,7 +1050,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "TV en Vivo y Cambio de Canales",
-      "summary": "Navegación ultrarrápida entre 131 canales húngaros en vivo y transmisiones internacionales.",
+      "summary": "Navegación ultrarrápida entre 122 canales húngaros en vivo y transmisiones internacionales.",
       "details": [
         "**Cambio de canales:** Usa los botones ◀ ANTERIOR y SIGUIENTE ▶ debajo del televisor o las teclas de flecha (Arriba/Abajo/Izq/Der).",
         "**Sintonización directa:** Escribe cualquier número de canal en tu teclado (ej. 1, 5, 12) para cambiar al instante.",
@@ -1185,7 +1185,7 @@ window.ZsirafI18N = (function () {
       "category": "nav",
       "icon": "📺",
       "title": "Прямой эфир и Переключение каналов",
-      "summary": "Молниеносная навигация среди 131 венгерского телеканала и международных трансляций.",
+      "summary": "Молниеносная навигация среди 122 венгерского телеканала и международных трансляций.",
       "details": [
         "**Переключение каналов:** Используйте кнопки ◀ ПРЕД и СЛЕД ▶ под телевизором или стрелки (Вверх/Вниз/Влево/Вправо) на клавиатуре.",
         "**Прямой ввод номера:** Наберите номер канала на клавиатуре (напр.: 1, 5, 12) для мгновенного перехода.",

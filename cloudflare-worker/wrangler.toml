@@ -1,4 +1,4 @@
-# ZsirafVision v4.5 – Cloudflare Worker (proxy + hibajelentő + stats)
+# ZsirafVision v4.5.1 – Cloudflare Worker (proxy + hibajelentő + stats)
 name = "zsirafvision-proxy"
 main = "worker.js"
 compatibility_date = "2024-11-01"

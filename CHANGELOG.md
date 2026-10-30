@@ -8,6 +8,26 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
+## [v4.5.1] - 2026-10-30
+
+### Törölve
+- 9 tartósan nem működő csatorna (131 → 122):
+  - AXN Spin (Hungary) – 429 forrás korlátozás
+  - BTV (Hungary) – időtúllépés
+  - Berente TV – 403 (streaming4u.hu)
+  - Globo TV (Hungary) – 403 földrajzi tiltás (streaming4u.hu)
+  - Komlós TV – 403 (streaming4u.hu)
+  - PilisTV – 403 földrajzi tiltás (streaming4u.hu)
+  - RégióPlusz TV – 403 földrajzi tiltás (streaming4u.hu)
+  - Trimedio TV – 403 földrajzi tiltás (streaming4u.hu)
+  - Vásárhelyi Televízió – 413 / 404
+- Az „AXN Spin (Hungary)” EPG bejegyzés; a már nem használt hostok (`stream.streaming4u.hu`, `cronos.mangora1.cfd`, `stream.vasarhelyitelevizio.hu`) az allowlist csatorna-részéből.
+
+### Változott
+- Csatornaszámok folyamatosan újraszámozva (01–122); a kedvencek és az utolsó csatorna név alapján tárolódik, így megmaradnak.
+- Csatornaszám a felületen és mind a 6 nyelven 122-re frissítve; allowlist újragenerálva (iptv-org lista frissült).
+- Verzió 4.5.1 mindenhol (UI, Service Worker cache `zsirafvision-v4.5.1`, `?v=` tagek, Worker, `server.py`).
+
 ## [v4.5] - 2026-10-30
 
 ### Biztonság
@@ -173,6 +193,7 @@ Commitok: [d43c4cc](https://github.com/zsirafmix/zsirafvision/commit/d43c4cc) (k
 ### Hozzáadva
 - Első kiadás: 131 élő magyar IPTV csatorna, retro TV káva és OSD.
 
+[v4.5.1]: https://github.com/zsirafmix/zsirafvision/releases/tag/v4.5.1
 [v4.5]: https://github.com/zsirafmix/zsirafvision/releases/tag/v4.5
 [v4.4]: https://github.com/zsirafmix/zsirafvision/releases/tag/v4.4
 [v4.3]: https://github.com/zsirafmix/zsirafvision/releases/tag/v4.3

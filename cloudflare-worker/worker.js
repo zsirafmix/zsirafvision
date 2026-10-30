@@ -1,5 +1,5 @@
 /**
- * ZsirafVision v4.5 – Cloudflare Worker (proxy + hibajelentő + stats)
+ * ZsirafVision v4.5.1 – Cloudflare Worker (proxy + hibajelentő + stats)
  *
  * Végpontok:
  *   GET  /api/proxy?url=<stream>&ua=<ua>&ref=<referer>[&exp=&sig=]  – stream proxy, M3U8 átírás
@@ -20,7 +20,7 @@
  */
 import HOSTS from '../public/allowed_hosts.json';
 
-const VERSION = '4.5';
+const VERSION = '4.5.1';
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 const RENDER_PROXY = 'https://zsirafvision-proxy2.onrender.com';
 const ALLOWED_HOSTS = new Set([...(HOSTS.channels || []), ...(HOSTS.world || [])].map((h) => h.toLowerCase()));

@@ -1,12 +1,12 @@
-# 📺 ZsirafVision - Online IPTV & Web Player (v4.5)
+# 📺 ZsirafVision - Online IPTV & Web Player (v4.5.1)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: **131 élő magyar csatorna**, 6 nyelvű felület és súgó, valós idejű EPG, kedvencek, elalvásidőzítő, MQTT + WebRTC mobil távirányító (QR-kód), telepíthető PWA, Samsung Tizen / LG webOS támogatás és felhős hibajelentő.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: **122 élő magyar csatorna**, 6 nyelvű felület és súgó, valós idejű EPG, kedvencek, elalvásidőzítő, MQTT + WebRTC mobil távirányító (QR-kód), telepíthető PWA, Samsung Tizen / LG webOS támogatás és felhős hibajelentő.
 
 * **Élő Web App (GitHub Pages):** https://zsirafmix.github.io/zsirafvision/public/
 * **Mobil távirányító:** https://zsirafmix.github.io/zsirafvision/public/remote.html
 * **Proxy 1 – Cloudflare Worker:** `https://zsirafvision-proxy.gamsgoworld.workers.dev` (`cloudflare-worker/`, cím: `public/js/app.js` → `PROXY_BASE`)
 * **Proxy 2 – Render:** `https://zsirafvision-proxy2.onrender.com` (`server.py`)
-* **Aktuális verzió:** `v4.5` – [Változásnapló](CHANGELOG.md) · [Kiadások](https://github.com/zsirafmix/zsirafvision/releases)
+* **Aktuális verzió:** `v4.5.1` – [Változásnapló](CHANGELOG.md) · [Kiadások](https://github.com/zsirafmix/zsirafvision/releases)
 * **Dokumentáció:** [Architektúra](docs/ARCHITECTURE.md) · [Biztonság](docs/SECURITY.md) · [Telepítés & üzemeltetés](docs/DEPLOY.md)
 
 ---
@@ -51,7 +51,7 @@ Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: *
   * A műsorcímek és leírások a kiválasztott felületi nyelven jelennek meg, aktuális „ÉLŐBEN / LIVE” jelöléssel.
 * **Mobilos Billentyűzet Felugrásának Megakadályozása (v3.6):**
   * A csatornalista és az alkalmazás megnyitásakor mobilon/tableten nem ugrik fel zavaróan a virtuális billentyűzet; csak akkor jelenik meg, ha a felhasználó közvetlenül a keresőmezőbe kattint.
-* **131 Élő Magyar IPTV Csatorna (24/7):**
+* **122 Élő Magyar IPTV Csatorna (24/7):**
   * Országos, közszolgálati, film-, sorozat-, sport-, hír-, zenei, gyermek- és ismeretterjesztő csatornák kristálytiszta digitális minőségben.
 * **Samsung Smart TV (Tizen OS) & Okostévé Teljes Kompatibilitás:**
   * Hardveres videósík rétegpromóció (`transform: translateZ(0)`), főszálon futó demuxolás (`enableWorker: false`), Smart TV watchdog és távirányító támogatás (Return: `10009`, Csatornaváltás: `427`/`428`).
@@ -118,16 +118,15 @@ python3 tools/channel_test.py --json r.json
 WORKER=https://masik-worker.workers.dev python3 tools/channel_test.py
 ```
 
-## 📡 Ismert nem működő csatornák (2026-10-30, v4.5 teszt)
+## 📡 Csatornaállapot (2026-10-30, v4.5.1)
 
-A `tools/channel_test.py` alapján (Worker → Render útvonal). Ezek forrásoldali hibák, nem a lejátszóé:
+### Eltávolított csatornák (v4.5.1)
+Tartósan nem működtek (forrásoldali hiba), ezért kikerültek a listából (131 → 122):
+AXN Spin (Hungary) – 429 · BTV (Hungary) – időtúllépés · Berente TV, Globo TV (Hungary), Komlós TV, PilisTV, RégióPlusz TV, Trimedio TV (streaming4u.hu) – 403 földrajzi tiltás · Vásárhelyi Televízió – 413 / 404.
 
+### Ismert problémás csatornák
 | Csatorna | Hiba | Ok |
 |---|---|---|
-| Berente TV, Komlós TV, PilisTV, RégióPlusz TV, Trimedio TV, Globo TV (streaming4u.hu) | 403 | földrajzi tiltás / a szolgáltató a felhős IP-ket tiltja |
-| AXN Spin | 429 | forrás korlátozás |
-| BTV | időtúllépés | a forrás nem válaszol |
-| Vásárhelyi Televízió | 413 / 404 | hibás, túl nagy forrás válasz |
 | EbS, EbS+, ESTV, Jászsági Térségi TV, Makói Városi TV | csak playlist | üres vagy szegmens nélküli playlist |
 | Alföld, Bajai, Gyöngyösi, Kapos, Karcag TV (lexanetwork :1344) | 502 | TLS tanúsítvány hiba – a v4.5 javítás (`.lexanetwork.com` TLS-kivétel) Render redeploy után él |
 
@@ -178,6 +177,7 @@ A teljes, verziónkénti változásnapló: **[CHANGELOG.md](CHANGELOG.md)** · k
 
 | Verzió | Dátum | Fő változás |
 |---|---|---|
+| v4.5.1 | 2026-10-30 | 9 tartósan halott csatorna eltávolítva (122 csatorna) |
 | v4.5 | 2026-10-30 | Biztonsági csomag (allowlist, aláírt URL-ek, CSP/SRI), dokumentáció |
 | v4.4 | 2026-10-30 | Render második proxy, keep-warm cron |
 | v4.3 | 2026-10-30 | Vercel → Cloudflare Worker |
