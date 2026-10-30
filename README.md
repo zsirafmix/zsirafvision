@@ -1,12 +1,13 @@
 # 📺 ZsirafVision - Online IPTV & Web Player (v4.5)
 
-Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, amely **131 élő magyar televízióadást**, **6 nyelvű kezelőfelületet és teljes használati útmutatót (❓ Help)**, valós idejű **nemzetközi EPG műsorújságot (élő adás kiemeléssel)**, **Kedvencek rendszert**, **Elalvásidőzítőt**, **Azonnali MQTT + WebRTC Kétcsatornás Mobil Távirányítót (QR-kód)**, **fekvő PWA mobilalkalmazást**, okostévé (Samsung Tizen / LG webOS) támogatást és felhős diagnosztikai rendszert biztosít.
+Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó: **131 élő magyar csatorna**, 6 nyelvű felület és súgó, valós idejű EPG, kedvencek, elalvásidőzítő, MQTT + WebRTC mobil távirányító (QR-kód), telepíthető PWA, Samsung Tizen / LG webOS támogatás és felhős hibajelentő.
 
-* **Élő Web App (GitHub Pages):** [https://zsirafmix.github.io/zsirafvision/](https://zsirafmix.github.io/zsirafvision/)
-* **Mobil Távirányító App:** [https://zsirafmix.github.io/zsirafvision/remote.html](https://zsirafmix.github.io/zsirafvision/remote.html)
-* **Felhős Proxy & API (Cloudflare Worker, v4.3-tól):** `cloudflare-worker/` – a cím a `public/js/app.js` `PROXY_BASE` konstansában állítható (a régi Vercel proxyt a Vercel 402 / DEPLOYMENT_DISABLED hibával letiltotta)
-* **Aktuális verzió:** `v4.4`
-* **Második proxy (Render, v4.4-től):** `https://zsirafvision-proxy2.onrender.com` – a `server.py` fut rajta; a Worker ide irányítja az IP-címes és nem 80/443 portos streameket
+* **Élő Web App (GitHub Pages):** https://zsirafmix.github.io/zsirafvision/public/
+* **Mobil távirányító:** https://zsirafmix.github.io/zsirafvision/public/remote.html
+* **Proxy 1 – Cloudflare Worker:** `https://zsirafvision-proxy.gamsgoworld.workers.dev` (`cloudflare-worker/`, cím: `public/js/app.js` → `PROXY_BASE`)
+* **Proxy 2 – Render:** `https://zsirafvision-proxy2.onrender.com` (`server.py`)
+* **Aktuális verzió:** `v4.5` – [Változásnapló](CHANGELOG.md) · [Kiadások](https://github.com/zsirafmix/zsirafvision/releases)
+* **Dokumentáció:** [Architektúra](docs/ARCHITECTURE.md) · [Biztonság](docs/SECURITY.md) · [Telepítés & üzemeltetés](docs/DEPLOY.md)
 
 ---
 
@@ -54,62 +55,87 @@ Korszerű, 100%-ban felhő alapú IPTV webes televízió és médialejátszó, a
   * Országos, közszolgálati, film-, sorozat-, sport-, hír-, zenei, gyermek- és ismeretterjesztő csatornák kristálytiszta digitális minőségben.
 * **Samsung Smart TV (Tizen OS) & Okostévé Teljes Kompatibilitás:**
   * Hardveres videósík rétegpromóció (`transform: translateZ(0)`), főszálon futó demuxolás (`enableWorker: false`), Smart TV watchdog és távirányító támogatás (Return: `10009`, Csatornaváltás: `427`/`428`).
-* **Felhő alapú Vercel Proxy (`/api/proxy`):**
+* **Két proxys felhős backend (Cloudflare Worker + Render, v4.3–v4.4):**
   * Teljes CORS és Mixed Content feloldás, M3U8 és TS URL-ek dinamikus átírása.
   * **HTTP 206 Partial Content & Range fejlécek támogatása:** azonnali lejátszásindítás.
   * Zéró helyi függőség: **nem kell futnia semmilyen szervernek a felhasználó számítógépén**.
 * **Telemetria és Hibajelentő (`HIBAJELENTŐ` gomb):**
   * A tévékészülék káváján elhelyezett piros gomb megnyomásával az adáshibákról szóló diagnosztikai adatok felküldhetők a felhőbe (`/api/report`).
 * **Valós idejű Technikai Statisztikák (⚙ Gomb):**
-  * Élő ping mérés a Vercel szerverhez, stream felbontás, bitráta, puffer és eldobott képkockák kijelzése.
+  * Élő ping mérés a proxy szerverhez, stream felbontás, bitráta, puffer és eldobott képkockák kijelzése.
 * **Nemzetközi Adások és Titkos Felnőtt Mód:**
   * Globális forrás választó: `iptv-org` nemzetközi csatornák elérhetősége.
   * A csatornakeresőbe az `xxx` szót beírva feloldódik 33 db ellenőrzött, működő felnőtt élő és VOD mozi adás.
 
 ---
 
-## ☁️ Architektúra és Cloudflare Worker telepítése (v4.3)
-
-```
-Böngésző / TV / PWA  ──►  GitHub Pages (public/: HTML+CSS+JS, hls.js)
-        │
-        ├─► Cloudflare Worker  /api/proxy  ──► TV stream szerverek (M3U8 + TS)
-        │        └─(IP-cím / egyedi port: 302)─► Render proxy (server.py) ──► IP-címes stream szerverek
-        ├─► Cloudflare Worker  /api/report ──► Cloudflare KV (REPORTS)
-        ├─► Cloudflare Worker  /api/stats
-        └─► (tartalék) közvetlen HTTPS stream, ha a szerver engedi a CORS-t
-Távirányító: PeerJS (WebRTC) + MQTT (HiveMQ / EMQX publikus broker)
-```
-
-### Telepítés lépésről lépésre
-1. Ingyenes Cloudflare fiók: https://dash.cloudflare.com/sign-up
-2. A repóban: `cd cloudflare-worker`
-3. Bejelentkezés: `npx wrangler login` (böngészőben engedélyezd)
-4. KV tároló a hibajelentéseknek: `npx wrangler kv namespace create REPORTS` – a kiírt `id`-t másold be a `wrangler.toml`-ba az `IDE_JON_A_KV_NAMESPACE_ID` helyére.
-5. Élesítés: `npx wrangler deploy` – a végén kiírja a címet, pl. `https://zsirafvision-proxy.<fiókneved>.workers.dev`
-6. Ezt a címet írd be a `public/js/app.js` elején a `PROXY_BASE` konstansba, majd commit + push. A GitHub Pages pár perc alatt frissül.
-7. Ellenőrzés: `https://<worker-cím>/health` és `https://<worker-cím>/api/stats`
-
-Helyi teszt: `npx wrangler dev` → `http://localhost:8787/api/stats`
-
-### Hibajelentések kiolvasása
-* `curl -H "Authorization: Bearer $REPORT_TOKEN" https://<worker-cím>/api/report` (legújabb elöl, `?limit=200`-ig) – v4.5-től token kell
-* Vagy: `npx wrangler kv key list --binding REPORTS --remote`
-* Korlát: IP-nként 5 jelentés / 10 perc, max 16 KB, 90 napig tárolva.
-
-### Ingyenes keret
-Workers Free: 100 000 kérés / nap. Egy élő adás néhány kérést generál percenként (playlist + szegmensek), sávszélesség-díj nincs.
+* **🔒 Biztonság (v4.5):** szigorú host allowlist, HMAC-aláírt proxy URL-ek, SSRF védelem, CSP + SRI, 130 bites szobakód – részletek: [docs/SECURITY.md](docs/SECURITY.md).
 
 ---
 
-## 🔒 Biztonság (v4.5)
+## ☁️ Architektúra
 
-* **Allowlist**: a proxyk csak a `public/allowed_hosts.json`-ban szereplő hostokat érik el. A playlistekben talált további (CDN) címeket a proxy HMAC-aláírással, 6 órás lejárattal adja tovább.
-* **Titkok** (sosem kerülnek a repóba):
-  * `REPORT_TOKEN` – Cloudflare Worker secret (`wrangler secret put REPORT_TOKEN`), a hibajelentések listázásához.
-  * `RENDER_SIGN_KEY` – Worker secret **és** Render környezeti változó (ugyanaz az érték). Ha a Renderen nincs beállítva, a Render proxy aláírás nélkül, csak az allowlist alapján enged.
-  * `TLS_INSECURE_HOSTS` (opcionális, Render) – vesszővel elválasztott hostlista, ahol hibás tanúsítvány miatt ki kell kapcsolni a TLS-ellenőrzést.
-* **Front-end**: CSP, SRI, escape-elt EPG, 130 bites szobakód, parancs-whitelist.
+```mermaid
+flowchart LR
+  U[Böngésző / Smart TV<br/>GitHub Pages] -->|/api/proxy| W[Cloudflare Worker]
+  W -->|allowlist host, 80/443| S1[(Stream szerverek)]
+  W -->|302 aláírt URL<br/>IP-cím / egyedi port| R[Render proxy<br/>server.py]
+  R --> S2[(IP-címes / :1344 stb.<br/>stream szerverek)]
+  U -->|közvetlen HTTPS tartalék| S1
+  U -->|POST /api/report| W --> KV[(Cloudflare KV)]
+  W -. cron 10 percenként .-> R
+  P[Telefon – remote.html] -->|MQTT WSS / PeerJS| U
+```
+
+* **GitHub Pages** – a statikus front-end (`public/`).
+* **Cloudflare Worker** – elsődleges proxy (M3U8 átírás, Range/206), hibajelentések (KV), statisztika. Nem ér el IP-címes hostot (CF 1003) és nem szabványos portot, ezeket aláírt 302-vel a Renderhez küldi.
+* **Render** – második proxy a Worker által nem elérhető streamekhez; a Worker cronja ébren tartja.
+* Részletek: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+## 🚀 Telepítés és üzemeltetés (röviden)
+
+| Mit | Hogyan |
+|---|---|
+| Front-end | push a `main`-re → GitHub Pages automatikusan |
+| Worker | `cd cloudflare-worker && npx wrangler deploy` |
+| Worker secretek | `REPORT_TOKEN`, `RENDER_SIGN_KEY` – `npx wrangler secret put <NÉV>` |
+| Render env | `RENDER_SIGN_KEY` (azonos a Workerével), opcionális `TLS_INSECURE_HOSTS` |
+| Keep-warm | `wrangler.toml` → `crons = ["*/10 * * * *"]` (Render `/health`) |
+| Allowlist | `python3 tools/gen_allowed_hosts.py`, majd Worker deploy |
+
+Titkok értékei soha nem kerülnek a repóba. Teljes leírás: [docs/DEPLOY.md](docs/DEPLOY.md)
+
+### Hibajelentések kiolvasása
+```bash
+curl -H "Authorization: Bearer $REPORT_TOKEN" "https://zsirafvision-proxy.gamsgoworld.workers.dev/api/report?limit=50"
+```
+Legújabb elöl, max. `?limit=200`. Korlát: IP-nként 5 jelentés / 10 perc, max. 16 KB, 90 napig tárolva.
+
+### Csatornateszt
+```bash
+python3 tools/channel_test.py              # összesítés + nem működő csatornák listája
+python3 tools/channel_test.py --json r.json
+WORKER=https://masik-worker.workers.dev python3 tools/channel_test.py
+```
+
+## 📡 Ismert nem működő csatornák (2026-10-30, v4.5 teszt)
+
+A `tools/channel_test.py` alapján (Worker → Render útvonal). Ezek forrásoldali hibák, nem a lejátszóé:
+
+| Csatorna | Hiba | Ok |
+|---|---|---|
+| Berente TV, Komlós TV, PilisTV, RégióPlusz TV, Trimedio TV, Globo TV (streaming4u.hu) | 403 | földrajzi tiltás / a szolgáltató a felhős IP-ket tiltja |
+| AXN Spin | 429 | forrás korlátozás |
+| BTV | időtúllépés | a forrás nem válaszol |
+| Vásárhelyi Televízió | 413 / 404 | hibás, túl nagy forrás válasz |
+| EbS, EbS+, ESTV, Jászsági Térségi TV, Makói Városi TV | csak playlist | üres vagy szegmens nélküli playlist |
+| Alföld, Bajai, Gyöngyösi, Kapos, Karcag TV (lexanetwork :1344) | 502 | TLS tanúsítvány hiba – a v4.5 javítás (`.lexanetwork.com` TLS-kivétel) Render redeploy után él |
+
+## 🔢 Verziózás
+
+* `vX.Y` formátum: **X** = nagy (architektúra) változás, **Y** = funkció / javítás kiadás. Ugyanazon a napon belüli javítások a futó verzió `Javítva` részébe kerülnek, nem léptetnek verziót.
+* Minden verzióhoz: bejegyzés a [CHANGELOG.md](CHANGELOG.md)-ben (Keep a Changelog: Hozzáadva / Változott / Javítva / Biztonság / Törölve), git tag (`vX.Y`) és GitHub Release ugyanazzal a szöveggel.
+* Verzióváltáskor frissítendő: `app.js` és `i18n.js` verziószöveg, `index.html` / `remote.html` `?v=` tagek, `sw.js` cache név, `wrangler.toml` fejléc, `server.py` `VERSION`, README.
 
 ## 🛠️ Samsung Smart TV (Tizen OS) - Technikai hibajavítás (v3.5)
 
@@ -146,119 +172,25 @@ A Samsung Smart TV böngészője (Tizen OS) a hardveres videódekódolást egy k
 
 ---
 
-## 📝 Verziótörténet (Changelog)
+## 📝 Verziótörténet
 
-### [v4.5] - 2026-10-30
-* **Biztonság**: szigorú host allowlist (`public/allowed_hosts.json`, a channels.json hostjai + iptv-org lista; újragenerálás: `tools/gen_allowed_hosts.py`). Más hostot csak HMAC-aláírt (a proxy által kiadott) URL-en keresztül lehet elérni.
-* **Biztonság**: Worker – csak média tartalomtípus (m3u8/ts/m4s/aac/kulcs) mehet át, méret- (playlist 2 MB, szegmens 40 MB) és időkorlát (15 mp), IP-nkénti limit, CORS csak `zsirafmix.github.io` és localhost, biztonsági fejlécek.
-* **Biztonság**: hibajelentés – méretkorlát (16 KB), HTML-szűrés, Origin-ellenőrzés; a `GET /api/report` listázás csak `Authorization: Bearer <REPORT_TOKEN>` fejléccel működik.
-* **Biztonság**: `server.py` (Render) – TLS-ellenőrzés újra bekapcsolva (kivétel hostonként: `TLS_INSECURE_HOSTS`), privát IP tiltás átirányítás után és a tényleges kapcsolódott IP-re is, aláírt URL-ek (`RENDER_SIGN_KEY`), limitek. Javítva: a `/health` most a GET-ben van (korábban tévedésből a HEAD-be került).
-* **Biztonság**: front-end – Content-Security-Policy, SRI hash a CDN szkriptekre, EPG adatok escape-elése, 130 bites (26 karakteres, crypto) szobakód, távirányító parancsok whitelistje és ellenőrzése.
-* **Takarítás**: a nem használt `online_channels.json` törölve; a két TV-keret PNG ~660 KB-ról ~50/108 KB-ra tömörítve.
-* **Fix**: `server.py` – a lexanetwork.com relay-ek (:1344, pl. Bajai, Gyöngyösi, Kapos, Karcag TV) hibás tanúsítványa miatt a bekapcsolt TLS-ellenőrzés 502-t adott; `.lexanetwork.com` alapértelmezett TLS-kivétel lett (utótag-egyezés), a hibaüzenet már tartalmazza az okot.
-* **Update**: verzió 4.5 mindenhol (UI, Service Worker cache, `?v=` tagek).
+A teljes, verziónkénti változásnapló: **[CHANGELOG.md](CHANGELOG.md)** · kiadások: **[GitHub Releases](https://github.com/zsirafmix/zsirafvision/releases)**
 
-### [v4.4] - 2026-10-30
-* **Új**: **Két proxys architektúra.** A Cloudflare Worker nem tud IP-címes hostot (CF 1003 hiba) és nem szabványos portot (pl. 1344, 2443, 8890) elérni, ezért ezeket a kéréseket 302-es átirányítással a Renderen futó második proxyhoz küldi: `https://zsirafvision-proxy2.onrender.com` (`server.py`). Ez hozza vissza az RTL, TV2, M1–M5, Duna, Viasat stb. csatornákat.
-* **Új**: Worker cron (10 percenként) – ébren tartja a Render proxyt, hogy ne legyen ~60 mp-es hidegindítás.
-* **Fix**: `server.py` – az M3U8 átírás abszolút URL-eket ad (Host / X-Forwarded-Proto alapján), `/health` végpont, belső/privát IP-k tiltása (SSRF védelem).
-* **Update**: verzió 4.4 (UI, Service Worker cache `zsirafvision-v4.4`, `?v=` tagek).
-
-### [v4.3] - 2026-10-30
-* **Fix**: **Átállás Vercelről Cloudflare Workerre** – a Vercel proxy `402 DEPLOYMENT_DISABLED` hibát adott (elfogyott az ingyenes keret), ezért nem indult egy csatorna sem és a hibajelentő sem működött.
-* **Új**: `cloudflare-worker/worker.js` teljes backend: `/api/proxy` (M3U8 átírás, Range/206, CORS), `/api/report` (Cloudflare KV, IP-nkénti limit: 5 db / 10 perc, 90 napos megőrzés, GET-tel listázható), `/api/stats`, `/health`.
-* **Biztonság**: a proxy csak ismert csatorna-hostokat enged teljesen; ismeretlen hostról csak média URL-t/tartalmat (m3u8, ts, mp4…), belső/privát IP-ket tilt.
-* **Új**: `app.js` – egyetlen `PROXY_BASE` konstans; a régi Vercel linkeket a lejátszó automatikusan átírja. Tartalék: ha a Worker nem elérhető, HTTPS + CORS streameknél közvetlen lejátszás.
-* **Update**: hls.js rögzítve `1.7.4`-re (`@latest` helyett); Service Worker cache `zsirafvision-v4.3`.
-
-### [v4.2] - 2026-10-29
-* **Új**: **Műsorújság (EPG) aktuálisan futó műsor valós idejű kiemelése**:
-  * **Intelligens idősáv-felismerés:** A rendszer a helyi idő (óra és perc) alapján pontosan összeveti a műsor kezdési (`start`) és befejezési (`stop`) idejét.
-  * **Éjféli átnyúlások kezelése:** Megbízhatóan kezeli a napváltást (pl. 23:30 - 01:00 közötti éjszakai adások).
-  * **Látványos foszfor-zöld kiemelés:** Az éppen futó műsor tétel kiemelt zöld szegéllyel (`border-left: 4px solid var(--crt-phosphor)`), lágy fényárral, kiemelt fehér címmel és lüktető `🔴 ÉLŐBEN` (`pulseLiveBadge`) jelvénnyel jelenik meg.
-  * **Automatikus odagörgetés (Auto-scroll):** A műsorújság kinyitásakor vagy csatornaváltáskor a lista automatikusan és finoman a pillanatnyilag nézhető műsorhoz görget, így a felhasználó azonnal látja az éppen menő adást még a 40+ tételes egész napos műsorstruktúrákban is.
-* **Módosítás**: **Titkos felnőtt mód eltávolítása a Súgóból**:
-  * A felhasználói kérésnek megfelelően a titkos felnőtt mód nem szerepel a nyilvános használati útmutatóban (❓ Súgó) egyik nyelven sem (`hu`, `en`, `de`, `fr`, `es`, `ru`), így megőrzi diszkrét, rejtett funkcióját.
-* **Update**: PWA Service Worker gyorsítótár és kliens assetek egységes verziófrissítése (`v4.2`).
-
-### [v4.1] - 2026-10-29
-* **Fix**: **Súgó ablak megnyitásának javítása (DOM struktúra helyreállítása)**:
-  * **Hiba oka:** A `public/index.html` sablonban a `#remote-modal` párosító ablak lezáró `</div>` címkéje hiányzott, emiatt a `#help-modal` a távirányító ablakának belsejébe ágyazódott be. Amikor a távirányító ablaka rejtve volt (`display: none`), a súgó ablak hiába kapta meg a `.open` osztályt, a rejtett szülőelem miatt fizikailag láthatatlan maradt.
-  * **Megoldás:** A modálok DOM hierarchiájának szétválasztása, különálló háttérelemek biztosítása.
-* **Fix**: **CSS Teljes képernyő szelektorok szétbontása**:
-  * A `:fullscreen` és `:-webkit-full-screen` szelektorok önálló szabályokba rendezése, megakadályozva a böngészők (pl. Firefox) szelektor-érvénytelenítési figyelmeztetését.
-* **Update**: Konzol logok és PWA Service Worker gyorsítótár egységes verziófrissítése (`v4.1`).
-
-### [v4.0] - 2026-10-29
-* **Új**: **❓ Többnyelvű Használati Útmutató és Súgó Rendszer**:
-  * Új `❓ SÚGÓ` gomb az alsó vezérlősávban és azonnali gyorsbillentyűk (`H`, `?`, `F1`) a súgó megnyitásához.
-  * **6 Nyelvű Fordítás:** Magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven elérhető teljes körű útmutató, beépített azonnali nyelvváltóval a fejlécben.
-  * **11 Részletes Témakör:** Élő adások navigációja, csatornalista és keresés, kedvencek, műsorújság (EPG), elalvásidőzítő & készenlét, mobil távirányító, telepíthető PWA zsebtévé, többnyelvű felület, billentyűzet és okostévé vezérlés, technikai statisztikák & hibajelentő, titkos felnőtt mód.
-  * **Interaktív Kereső és Kategóriaszűrők:** Valós idejű gépelési szűrőmező törlés gombbal, valamint kategória-chipek (Mind, Irányítás, Funkciók, Távirányító, Tippek & Trükkök).
-  * **Jövőbiztos és Dinamikus Architektúra:** A súgó adatai az `i18n.js` `HELP_GUIDE` adatbázisából töltődnek be. Ha a jövőben új funkciókkal bővül az alkalmazás, csupán az `i18n.js`-ben kell új témakört felvenni mind a 6 nyelven, és a felület automatikusan, sablonmódosítás nélkül azonnal megjeleníti azt.
-* **Update**: Service Worker gyorsítótár verzió léptetése (`zsirafvision-v4.0`) az azonnali és tiszta frissüléshez.
-
-### [v3.9] - 2026-10-29
-* **Fix**: **Mobil távirányító azonnali kapcsolódása (MQTT over WSS felhős híd)**:
-  * **Hiba oka:** Mobilhálózatokon (Telekom, Yettel, Vodafone 4G/5G és mobilnet) a szolgáltatók Symmetric NAT-ot / CGNAT-ot alkalmaznak, amely nyilvános TURN szerver hiányában megakadályozza a közvetlen WebRTC P2P kapcsolódást, emiatt a távirányító folyamatosan a sárga/piros `Kapcsolódás: [KÓD]` állapotban maradt.
-  * **Kétcsatornás megoldás (Dual-Channel):**
-    * **1. Elsődleges, azonnali felhős csatorna:** Biztonságos WebSocket MQTT (`wss://broker.hivemq.com:8884/mqtt` és `wss://broker.emqx.io:8084/mqtt`). Ez a szabványos TLS 443/8884 porton keresztül **100%-ban átüti a mobilszolgáltatói Symmetric NAT-ot, CGNAT-ot és a legszigorúbb tűzfalakat is**, <200 ms válaszidővel.
-    * **2. Másodlagos P2P csatorna:** A WebRTC / PeerJS csatorna párhuzamosan fut lokális hálózatokhoz.
-  * **Helyi könyvtár integráció:** Hozzáadva a hivatalos Eclipse Paho MQTT kliens (`js/paho-mqtt.min.js`), így külső CDN kiesés nélkül, offline PWA környezetben is azonnal működik.
-  * **UI & UX javítás:** A szobakód 4 betűs beviteli mezőre javítva (`PL. ETVM`), automatikus nagybetűs konverzióval és azonnali zöld visszajelzéssel (`TV Csatlakoztatva`).
-
-### [v3.8] - 2026-10-29
-* **Fix**: **Szobakód azonnali megjelenítése**: A TV párosító felugró ablakában a generált szobakód (pl. `B7K2`) mostantól azonnal, szinkron módon megjelenik a QR-kód alatt, nem vár a felhős PeerJS háttér-kapcsolat létrejöttére.
-* **Fix**: **Mobil távirányító P2P kapcsolat javítása**:
-  * Standardizált nagybetűs Peer ID azonosító (`zsiraf-tv-XXXX`) a TV és a mobil távirányító között az esetérzékenységi eltérések kizárására.
-  * Google és Twilio publikus STUN szerverek beépítése a gyors és tűzfalakon átívelő WebRTC kapcsolódáshoz.
-  * Kétirányú parancs-kompatibilitás (`cmd` és `action` mezők támogatása a távirányító eseménykezelőjében).
-  * Hangerő kijelzés javítása a távirányító CRT képernyőjén (megelőzve a túlszorzást).
-
-### [v3.7] - 2026-10-29
-* **Új**: **⭐ Kedvencek (Favorites) rendszer**: Egykattintásos csillagozás a TV OSD kijelzőjén és a csatornalistában minden adó mellett. Dedikált `⭐ Kedvencek` kategória fül az elmentett adók azonnali szűréséhez és gyors eléréséhez, folyamatos számlálóval és `localStorage` mentéssel.
-* **Új**: **🌙 Elalvásidőzítő (Sleep Timer) & Készenléti (Standby) mód**: Állítható időtartamok (15, 30, 45, 60, 90, 120 perc vagy kikapcsolva). Visszaszámláló kijelző a TV alsó vezérlősávjában és a modalban. Az utolsó 10 másodpercben lágy hangerő-lehalkítás (audio fade-out), majd a stream leállítása és készenléti mód aktiválása világító piros LED-del és bekapcsoló gombbal.
-* **Új**: **📱 Mobil Távirányító QR-kóddal (WebRTC / PeerJS)**: A TV alsó sávjában lévő `📱 Távirányító` gombra kattintva generálódik egy egyedi szobakód és QR-kód. A telefon kamerájával beolvasva megnyílik a kifejezetten mobil képernyőkre tervezett retro távirányító app (`remote.html`). Teljes körű vezérlés (CH+/CH-, VOL+/VOL-, Mute, 0-9 gombok, D-pad, EPG, Guide, Kedvenc, Teljes képernyő, Sleep) és kétirányú állapot-visszajelzés a telefon mini CRT kijelzőjére. **100%-ban felhős P2P WebRTC, nulla helyi szerverrel!**
-* **Új**: **📲 Tévé formájú telepíthető PWA mobilapp**: Progressive Web App konfiguráció (`manifest.json`, `sw.js`, 192x192 és 512x512 retro ikonok). Kezdőképernyőre helyezve böngészősávok nélkül, közvetlenül fekvő (landscape) teljes képernyős módban nyílik meg, igazi hordozható zsebtévé élményt adva.
-* **Bővítés**: Mind a 6 nyelv (`hu`, `en`, `de`, `fr`, `es`, `ru`) bővítve az új funkciók (Kedvencek, Elalvásidőzítő, Készenlét, Távirányító) felirataival.
-
-### [v3.6] - 2026-10-29
-* **Új**: **Utolsóként nézett csatorna és ország megjegyzése**: A lejátszó `localStorage` segítségével elmenti az utoljára nézett adót és forrást (`HU`, `WORLD`, `XXX`), és a legközelebbi indításkor pontosan azzal indul el, automatikusan beállítva az országválasztót is.
-* **Új**: **6 Nyelvű Kezelőfelület (i18n)**: Teljes felületi fordítás magyar (`hu`), angol (`en`), német (`de`), francia (`fr`), spanyol (`es`) és orosz (`ru`) nyelven. Két helyen elérhető gyorsváltóval (alsó vezérlősáv és csatornalista fejléc), valamint automatikus böngészőnyelv-felismeréssel.
-* **Új**: **Bővített műsorújság (EPG)**: Minden csatornához – beleértve a külföldi és nemzetközi adókat is – elérhető a strukturált, több idősávos műsorújság. A magyar XMLTV adatbázis mellett intelligens, valós idejű műsorfolyam-generátor biztosítja a műsorokat a kiválasztott nyelven.
-* **Fix**: **Mobilos billentyűzet felugrásának megakadályozása**: A csatornalista (`btnOpenGuide`) megnyitásakor eltávolításra került a `searchInput.focus()` hívás, így érintőképernyős eszközökön (mobil, tablet) nem ugrik fel zavaróan a virtuális billentyűzet.
-* **Modul**: Önálló, tisztán strukturált `i18n.js` modul bevezetése a könnyű bővíthetőségért.
-
-### [v3.5] - 2026-10-29
-* **Fix**: Samsung Smart TV (Tizen OS) „nincs kép, csak hang” hiba teljeskörű elhárítása.
-* **CSS**: `filter: drop-shadow` eltávolítása a TV káváról a hardveres videólyukasztás biztosításához; GPU layer promotion (`translateZ(0)`).
-* **JS**: `enableWorker: false` beállítása a Hls.js motorban a Smart TV-k megbízható demuxolásához.
-* **Watchdog**: Automatikus videófelügyelő, amely kép nélküli hang esetén natív TV HLS lejátszásra vált.
-* **Remote**: Tizen távirányító gombkódok (`10009` Return, `427`/`428` Channel Up/Down) integrálása.
-* **Doc**: Teljeskörű projekt- és hibajavítási dokumentáció a GitHubon.
-
-### [v3.4] - 2026-10-29
-* **Új**: 33 db ellenőrzött, valóban működő XXX (felnőtt) csatorna (Miami TV élő adások, Tiny4K 1080p mozi, Paradise Hill, Hentai).
-* **Proxy**: HTTP 206 Partial Content és `Range` fejléc továbbítás a Vercel proxyban azonnali puffereléshez és tekeréshez.
-* **Player**: Kettős lejátszási motor natív MP4 és HLS M3U8 formátumokhoz; kategóriaszűrés az XXX felületen.
-
-### [v3.3] - 2026-10-29
-* **Új**: Valós idejű EPG műsorújság a képernyő bal oldalán (64 csatornához pontos XMLTV adatok).
-* **Új**: Piros `HIBAJELENTŐ` gomb a TV káváján diagnosztikai adatok felküldésével a Vercel `/api/report` végpontra.
-* **Új**: Technikai adatok és szerverstátusz modal (`/api/stats`, ping, felbontás, bitráta).
-* **Új**: `iptv-org` globális forrás integrációja.
-
-### [v3.2] - 2026-10-29
-* **Fix**: Külső logók CORS és `OpaqueResponseBlocking` hibáinak javítása (`referrerPolicy: no-referrer`).
-* **Design**: Felesleges szövegek és feliratok eltávolítása a letisztult CRT televízió élményért.
-
-### [v3.1] - 2026-10-29
-* **Architektúra**: Áttérés a felhős Vercel Serverless proxyra a helyi gépen futó Python és alagút helyett.
-* **Fix**: Autoplay blokkolás feloldása (némított indítás és CRT Play Overlay gomb).
-
-### [v3.0] - 2026-10-28
-* **Kezdeti release**: 131 élő magyar IPTV csatorna, retro televíziós káva és OSD kijelző.
-
----
-
-Készült a Google DeepMind Antigravity segítségével.
+| Verzió | Dátum | Fő változás |
+|---|---|---|
+| v4.5 | 2026-10-30 | Biztonsági csomag (allowlist, aláírt URL-ek, CSP/SRI), dokumentáció |
+| v4.4 | 2026-10-30 | Render második proxy, keep-warm cron |
+| v4.3 | 2026-10-30 | Vercel → Cloudflare Worker |
+| v4.2 | 2026-10-29 | EPG élő műsor kiemelés |
+| v4.1 | 2026-10-29 | Súgó ablak javítás |
+| v4.0 | 2026-10-29 | Többnyelvű súgó |
+| v3.9 | 2026-10-29 | MQTT távirányító |
+| v3.8 | 2026-10-29 | Távirányító P2P javítások |
+| v3.7 | 2026-10-29 | Kedvencek, elalvásidőzítő, távirányító, PWA |
+| v3.6 | 2026-10-29 | 6 nyelv, utolsó csatorna, bővített EPG |
+| v3.5 | 2026-10-29 | Samsung Tizen javítás |
+| v3.4 | 2026-10-29 | Range/206, kettős lejátszómotor |
+| v3.3 | 2026-10-29 | EPG, hibajelentő, statisztika |
+| v3.2 | 2026-10-29 | Logó CORS javítás |
+| v3.1 | 2026-10-29 | Vercel proxy |
+| v3.0 | 2026-10-28 | Első kiadás |
