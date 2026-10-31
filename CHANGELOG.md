@@ -8,7 +8,16 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
-## [4.7.0] – 2026-10-31
+## [4.7.1] – 2026-10-31
+### Új
+- **Deno Deploy proxy** (`deno-proxy/main.ts`): a `server.py` proxy-módjának TypeScript portja, ugyanazokkal a biztonsági szabályokkal (HMAC-aláírás, privát IP tiltás, allowlist, méret/idő/típus korlát, lexanetwork TLS-kivétel, CORS). Cím: https://zsirafvision-proxy.zsirafvision.deno.net (EU, 100 GB/hó ingyen).
+- **Back4app backend** (https://zsirafvisionproxy-tblpw161.back4.app) – `server.py` Dockerben.
+- A Worker `PROXY_BACKENDS` listája: render + back4app + deno (mind 1-es prioritás).
+### Tesztelve
+- Deno: `GET /` marker OK; rossz aláírás → 403; `127.0.0.1` → 403; IP-címes csatorna (88.212.7.14, BBC Earth) playlist + szegmens 200; lexanetwork :1344 (ZegTV) playlist + szegmens 200.
+### Megjegyzés
+- Northflank és Railway: új regisztráció jelenleg tiltva; Zeabur 2026.12.31-én leáll – ezek kimaradtak.
+ – 2026-10-31
 ### Új
 - **Tartalék proxyk + automatikus átváltás** a Workerben: `PROXY_BACKENDS` lista (név, url, prioritás), 10 percenkénti egészség-ellenőrzés, halott backend (5xx/402/429/időtúllépés/„suspended” oldal) kihagyása, visszatérés után újra használat, azonos prioritáson körbeforgatás.
 - `/health` most JSON: verzió + backendek állapota; `/api/stats` → `proxyBackends`.

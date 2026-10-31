@@ -22,7 +22,7 @@
  */
 import HOSTS from '../public/allowed_hosts.json';
 
-const VERSION = '4.7.0';
+const VERSION = '4.7.1';
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
 // v4.7: tartalék proxyk listája – env.PROXY_BACKENDS (JSON: [{name,url,priority}]) felülírja
 const DEFAULT_BACKENDS = [{ name: 'render', url: 'https://zsirafvision-proxy2.onrender.com', priority: 1 }];

@@ -210,5 +210,8 @@ A TV mellett (jobb felső sarok, mobilon jobb alul) látszik, hányan néznek é
 - Ha egy régebbi ikon nem indul: töröld, frissítsd az oldalt a böngészőben, és add hozzá újra.
 
 
+## v4.7.1 – Deno Deploy + Back4app proxy
+Három proxy backend fut automatikus átváltással: Render, Back4app, Deno Deploy (`deno-proxy/`). Részletek: [docs/PROXY_BACKENDS.md](docs/PROXY_BACKENDS.md).
+
 ## v4.7.0 – tartalék proxyk
 Több ingyenes proxy automatikus átváltással: lásd [docs/PROXY_BACKENDS.md](docs/PROXY_BACKENDS.md).

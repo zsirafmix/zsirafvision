@@ -66,3 +66,19 @@ curl -s https://zsirafvision-proxy.gamsgoworld.workers.dev/api/viewers
 2. Ellenőrizd: `/health` → `signed=yes`.
 3. Vedd fel a `cloudflare-worker/wrangler.toml` `PROXY_BACKENDS` listájába, `WRANGLER_CACHE_DIR=/tmp/wc npx wrangler deploy`.
 Szolgáltatónkénti lépések: [PROXY_BACKENDS.md](PROXY_BACKENDS.md).
+
+## v4.7.1 – Deno Deploy proxy
+```bash
+curl -fsSL https://deno.land/install.sh | sh
+cd deno-proxy
+export DENO_DEPLOY_TOKEN=...            # console.deno.com → Account → Access tokens
+# első alkalommal (az app már létezik: zsirafvision-proxy):
+deno deploy create . -y --org zsirafvision --source local --app zsirafvision-proxy --runtime-mode dynamic --entrypoint main.ts --region eu
+deno deploy env add --secret RENDER_SIGN_KEY "<ugyanaz, mint a Workeren/Renderen>" -y
+# minden kódváltozás után:
+deno deploy . --prod -y
+curl https://zsirafvision-proxy.zsirafvision.deno.net/   # OK - ZsirafVision proxy v4.7.1 (signed=yes)
+```
+A `deno.json` tartalmazza az org/app nevét. Helyi futtatás: `RENDER_SIGN_KEY=... deno run -A main.ts` (port 8000).
+Az `allowed_hosts.json` másolata a `deno-proxy/` mappában van – allowlist frissítésekor ezt is másold át.
+Új backend felvétele: `cloudflare-worker/wrangler.toml` → `PROXY_BACKENDS`, majd `wrangler deploy`.

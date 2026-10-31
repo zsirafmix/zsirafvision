@@ -1,4 +1,4 @@
-# Tartalék proxyk és automatikus átváltás (v4.7.0)
+# Tartalék proxyk és automatikus átváltás (v4.7.1)
 
 ## Működés
 - A Worker az IP-címes / nem szabványos portú streameket 302-vel egy Python proxyhoz (`server.py`) irányítja.
@@ -14,8 +14,28 @@
 
 ## Új backend telepítése (bármely Docker/Procfile platform)
 A repóban van `Dockerfile` (port: `$PORT`, alapból 8080) és `Procfile`. Kötelező env változók:
-`PROXY_ONLY=1`, `RENDER_SIGN_KEY=<ugyanaz, mint a Workeren>`. Ellenőrzés: `https://<app>/health` → `OK - ZsirafVision proxy v4.7.0 (signed=yes)`.
+`PROXY_ONLY=1`, `RENDER_SIGN_KEY=<ugyanaz, mint a Workeren>`. Ellenőrzés: `https://<app>/health` → `OK - ZsirafVision proxy v4.7.x (signed=yes)`.
 Utána a `PROXY_BACKENDS` listába felvenni és `npx wrangler deploy`.
+
+## Aktív backendek (v4.7.1)
+| Név | URL | Platform | Megjegyzés |
+|---|---|---|---|
+| render | https://zsirafvision-proxy2.onrender.com | Render (server.py, Frankfurt) | 5 GB/hó forgalom |
+| back4app | https://zsirafvisionproxy-tblpw161.back4.app | Back4app Containers (server.py, Docker) | az ingyenes cím „ideiglenes” lehet |
+| deno | https://zsirafvision-proxy.zsirafvision.deno.net | Deno Deploy (`deno-proxy/main.ts`, EU) | 100 GB/hó; IP-címes és nem szabványos portú (pl. lexanetwork :1344) streameket is elér – tesztelve |
+
+Mindhárom `priority: 1`, a Worker körbeforgat köztük, és a halottat kihagyja.
+
+## Regisztrációs állapot (2026.10.31)
+- **Northflank:** „Signup is currently disabled” – új regisztráció tiltva.
+- **Railway:** új regisztrációk felfüggesztve (októberi üzemzavar utáni helyreállítás).
+- **Zeabur:** 2026.12.31-én leáll, új felhasználót nem fogad.
+- **Back4app:** regisztrálva (GitHub zsirafmix), fut.
+- **Deno Deploy:** regisztrálva (console.deno.com, org `zsirafvision`), fut.
+
+## Deno Deploy proxy (`deno-proxy/`)
+A `server.py` `PROXY_ONLY=1` módjának TypeScript portja (`Deno.serve`): azonos HMAC-aláírás (`url|exp|ua|ref`, SHA-256, 18 bájt, base64url), privát IP tiltás (DNS-feloldással, minden átirányításnál), host allowlist (csak kulcs nélkül), média content-type / 40 MB / 2 MB playlist / 15 s korlát, TLS-kivétel `.lexanetwork.com` + `TLS_INSECURE_HOSTS`, HLS playlist-átírás aláírt linkekkel, CORS, `GET /` → `OK - ZsirafVision proxy v4.7.1 (signed=yes)`.
+Eltérés: a ténylegesen kapcsolódott (peer) IP nem kérdezhető le Deno alatt, ezért a DNS-ellenőrzés helyettesíti.
 
 ## Szolgáltatók (2026. október, rangsor)
 | # | Szolgáltató | Ingyenes keret | Kártya | Belépés | Megjegyzés |
