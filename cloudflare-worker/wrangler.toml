@@ -28,4 +28,4 @@ new_sqlite_classes = ["ViewerCounter"]
 # v4.7: tartalék proxyk (prioritás: kisebb = előbb; azonos prioritáson körbeforgatás)
 # Új backend: add hozzá ide, majd `npx wrangler deploy`. Mindegyiken ugyanaz a RENDER_SIGN_KEY kell!
 [vars]
-PROXY_BACKENDS = '[{"name":"render","url":"https://zsirafvision-proxy2.onrender.com","priority":1}]'
+PROXY_BACKENDS = '[{"name":"render","url":"https://zsirafvision-proxy2.onrender.com","priority":1},{"name":"back4app","url":"https://zsirafvisionproxy-tblpw161.back4.app","priority":1}]'
