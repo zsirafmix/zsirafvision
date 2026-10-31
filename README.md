@@ -210,6 +210,9 @@ A TV mellett (jobb felső sarok, mobilon jobb alul) látszik, hányan néznek é
 - Ha egy régebbi ikon nem indul: töröld, frissítsd az oldalt a böngészőben, és add hozzá újra.
 
 
+## v4.7.2 – Hetzner proxy
+Mindhárom ingyenes proxy kimerült, ezért új elsődleges backend: Hetzner VPS (https://2-31-130-85.sslip.io, 8,24 EUR/hó). Render és Deno tartalékként (2-es prioritás). Lásd `docs/PROXY_BACKENDS.md`.
+
 ## v4.7.1 – Deno Deploy + Back4app proxy
 Három proxy backend fut automatikus átváltással: Render, Back4app, Deno Deploy (`deno-proxy/`). Részletek: [docs/PROXY_BACKENDS.md](docs/PROXY_BACKENDS.md).
 

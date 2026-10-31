@@ -1,4 +1,4 @@
-# Tartalék proxyk és automatikus átváltás (v4.7.1)
+# Tartalék proxyk és automatikus átváltás (v4.7.2)
 
 ## Működés
 - A Worker az IP-címes / nem szabványos portú streameket 302-vel egy Python proxyhoz (`server.py`) irányítja.
@@ -17,14 +17,29 @@ A repóban van `Dockerfile` (port: `$PORT`, alapból 8080) és `Procfile`. Köte
 `PROXY_ONLY=1`, `RENDER_SIGN_KEY=<ugyanaz, mint a Workeren>`. Ellenőrzés: `https://<app>/health` → `OK - ZsirafVision proxy v4.7.x (signed=yes)`.
 Utána a `PROXY_BACKENDS` listába felvenni és `npx wrangler deploy`.
 
-## Aktív backendek (v4.7.1)
-| Név | URL | Platform | Megjegyzés |
-|---|---|---|---|
-| render | https://zsirafvision-proxy2.onrender.com | Render (server.py, Frankfurt) | 5 GB/hó forgalom |
-| back4app | https://zsirafvisionproxy-tblpw161.back4.app | Back4app Containers (server.py, Docker) | az ingyenes cím „ideiglenes” lehet |
-| deno | https://zsirafvision-proxy.zsirafvision.deno.net | Deno Deploy (`deno-proxy/main.ts`, EU) | 100 GB/hó; IP-címes és nem szabványos portú (pl. lexanetwork :1344) streameket is elér – tesztelve |
+## Aktív backendek (v4.7.2)
+| Név | URL | Platform | Prioritás | Megjegyzés |
+|---|---|---|---|---|
+| hetzner | https://2-31-130-85.sslip.io | Hetzner Cloud VPS (server.py + Caddy) | 1 (elsődleges) | fizetős, 20 TB/hó forgalom |
+| render | https://zsirafvision-proxy2.onrender.com | Render (server.py, Frankfurt) | 2 (tartalék) | 5 GB/hó; 2026.10.31-én kimerült (503) |
+| deno | https://zsirafvision-proxy.zsirafvision.deno.net | Deno Deploy (`deno-proxy/main.ts`, EU) | 2 (tartalék) | 100 GB/hó; 2026.10.31-én felfüggesztve (USAGE_EXCEEDED) |
 
-Mindhárom `priority: 1`, a Worker körbeforgat köztük, és a halottat kihagyja.
+A back4app backend megszűnt (lejárt az ingyenes ideiglenes cím, az app törölve) – kikerült a listából.
+
+## Hetzner szerver (v4.7.2)
+- **Típus:** Hetzner Cloud CPX02 (x86), Ubuntu 24.04, **díj: 8,24 EUR/hó**, fizetés: Hetzner-egyenleg (PayPal / kártya), fiók: gamsgoworld@gmail.com
+- **IP:** 2.31.130.85 / 2a01:4f8:c015:48f1::1, hostnév: `2-31-130-85.sslip.io` (sslip.io wildcard DNS – a Worker nem tud nyers IP-t lekérni)
+- **Felépítés:** `server.py` (PROXY_ONLY=1, port 8080, csak localhoston elérhető) systemd szolgáltatásként (`zsirafvision.service`, `zv` felhasználó, `Restart=always`, bootkor indul) → **Caddy** automatikus Let's Encrypt TLS-sel a 443-as porton (`/etc/caddy/Caddyfile`).
+- **Titkok:** `/etc/zsirafvision/env` (600-as jog: `PROXY_ONLY`, `PORT`, `RENDER_SIGN_KEY`) – a repóban nincs.
+- **Védelem:** ufw (csak 22, 80, 443), unattended-upgrades (automatikus biztonsági frissítések).
+- **Belépés:** `ssh -i ~/.ssh/hetzner_zv root@2.31.130.85`
+- **Újratelepítés (új server.py):**
+  ```
+  scp -i ~/.ssh/hetzner_zv server.py root@2.31.130.85:/opt/zsirafvision/
+  ssh -i ~/.ssh/hetzner_zv root@2.31.130.85 systemctl restart zsirafvision
+  curl https://2-31-130-85.sslip.io/health   # OK - ZsirafVision proxy v4.7.2 (signed=yes)
+  ```
+- **Napló:** `journalctl -u zsirafvision -f`, `journalctl -u caddy -f`
 
 ## Regisztrációs állapot (2026.10.31)
 - **Northflank:** „Signup is currently disabled” – új regisztráció tiltva.

@@ -30,7 +30,7 @@ import urllib.parse
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-VERSION = "4.7.1"
+VERSION = "4.7.2"
 PORT = int(os.environ.get("PORT", 8888))
 # v4.7: bármely PaaS-on proxy-módban fut (Render, Koyeb, Fly, Railway, HF Spaces, Cloud Run...)
 PROXY_ONLY = bool(os.environ.get("RENDER") or os.environ.get("PROXY_ONLY"))

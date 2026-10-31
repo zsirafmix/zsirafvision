@@ -1,8 +1,8 @@
-// ZsirafVision v4.7.1 – Deno Deploy proxy (a server.py PROXY_ONLY=1 módjának portja)
+// ZsirafVision v4.7.2 – Deno Deploy proxy (a server.py PROXY_ONLY=1 módjának portja)
 // Env: RENDER_SIGN_KEY (kötelező élesben), TLS_INSECURE_HOSTS (opcionális, vesszővel)
 import hostsJson from "./allowed_hosts.json" with { type: "json" };
 
-const VERSION = "4.7.1";
+const VERSION = "4.7.2";
 const SIGN_KEY = Deno.env.get("RENDER_SIGN_KEY") ?? "";
 const SIGN_TTL = 6 * 3600;
 const DEFAULT_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";

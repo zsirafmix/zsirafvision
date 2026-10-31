@@ -8,7 +8,16 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
-## [4.7.1] – 2026-10-31
+## [4.7.2] – 2026-10-31
+### Javítva
+- **Nem ment a TV:** mindhárom ingyenes proxy leállt (Render 503 – elfogyott az 5 GB; Deno USAGE_EXCEEDED; Back4app ideiglenes címe lejárt).
+### Új
+- **Hetzner backend** (https://2-31-130-85.sslip.io): CPX02 VPS, Ubuntu 24.04, `server.py` PROXY_ONLY systemd szolgáltatásként + Caddy auto-TLS, ufw, unattended-upgrades. 8,24 EUR/hó. Részletek: `docs/PROXY_BACKENDS.md`.
+- `PROXY_BACKENDS`: hetzner (1), render (2), deno (2); back4app törölve.
+### Tesztelve
+- Hetzner közvetlenül: health OK (signed=yes), rossz aláírás 403, 127.0.0.1 403, IP-címes BBC Earth playlist + szegmens 200.
+- Workeren át csatornateszt: 115/122 csatorna OK, 7 csak playlist (forrásoldali hiba); a front end betölt (200).
+ – 2026-10-31
 ### Új
 - **Deno Deploy proxy** (`deno-proxy/main.ts`): a `server.py` proxy-módjának TypeScript portja, ugyanazokkal a biztonsági szabályokkal (HMAC-aláírás, privát IP tiltás, allowlist, méret/idő/típus korlát, lexanetwork TLS-kivétel, CORS). Cím: https://zsirafvision-proxy.zsirafvision.deno.net (EU, 100 GB/hó ingyen).
 - **Back4app backend** (https://zsirafvisionproxy-tblpw161.back4.app) – `server.py` Dockerben.

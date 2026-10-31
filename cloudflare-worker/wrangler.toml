@@ -1,4 +1,4 @@
-# ZsirafVision v4.7.1 – Cloudflare Worker (proxy + hibajelentő + stats)
+# ZsirafVision v4.7.2 – Cloudflare Worker (proxy + hibajelentő + stats)
 name = "zsirafvision-proxy"
 main = "worker.js"
 compatibility_date = "2024-11-01"
@@ -28,4 +28,4 @@ new_sqlite_classes = ["ViewerCounter"]
 # v4.7: tartalék proxyk (prioritás: kisebb = előbb; azonos prioritáson körbeforgatás)
 # Új backend: add hozzá ide, majd `npx wrangler deploy`. Mindegyiken ugyanaz a RENDER_SIGN_KEY kell!
 [vars]
-PROXY_BACKENDS = '[{"name":"render","url":"https://zsirafvision-proxy2.onrender.com","priority":1},{"name":"back4app","url":"https://zsirafvisionproxy-tblpw161.back4.app","priority":1},{"name":"deno","url":"https://zsirafvision-proxy.zsirafvision.deno.net","priority":1}]'
+PROXY_BACKENDS = '[{"name":"hetzner","url":"https://2-31-130-85.sslip.io","priority":1},{"name":"render","url":"https://zsirafvision-proxy2.onrender.com","priority":2},{"name":"deno","url":"https://zsirafvision-proxy.zsirafvision.deno.net","priority":2}]'
