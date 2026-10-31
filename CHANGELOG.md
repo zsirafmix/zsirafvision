@@ -8,6 +8,16 @@ Dátumok: Europe/Budapest időzóna.
 > A v3.0–v4.1 bejegyzések a korábbi fejlesztési napló alapján készültek; ezekhez nincs külön commit/tag.
 
 
+## [4.7.0] – 2026-10-31
+### Új
+- **Tartalék proxyk + automatikus átváltás** a Workerben: `PROXY_BACKENDS` lista (név, url, prioritás), 10 percenkénti egészség-ellenőrzés, halott backend (5xx/402/429/időtúllépés/„suspended” oldal) kihagyása, visszatérés után újra használat, azonos prioritáson körbeforgatás.
+- `/health` most JSON: verzió + backendek állapota; `/api/stats` → `proxyBackends`.
+- `server.py` hordozható: `PROXY_ONLY=1` env bármely platformon (nem csak Renderen), `Dockerfile`, `Procfile`, `.dockerignore`.
+- `docs/PROXY_BACKENDS.md`: szolgáltatók rangsora (2026), regisztrációs és telepítési lépések.
+### Megjegyzés
+- Render ingyenes forgalma 2026.04.23 óta 5 GB/hó – ezért kellenek a tartalékok.
+- Átváltás tesztelve: halott backend (0. prioritás) mellett a Worker a Renderre irányított.
+
 ## v4.6.1 – 2026-10-30 – PWA / kezdőképernyő-ikon javítás
 
 **Hiba:** a kezdőképernyőre tett ikonról az alkalmazás nem indult el (iPhone Safari és Android Chrome).

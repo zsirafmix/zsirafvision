@@ -208,3 +208,7 @@ A TV mellett (jobb felső sarok, mobilon jobb alul) látszik, hányan néznek é
 - **iPhone (Safari):** nyisd meg a https://zsirafmix.github.io/zsirafvision/public/ oldalt → Megosztás → *Főképernyőhöz adás*.
 - **Android (Chrome):** ⋮ menü → *Alkalmazás telepítése* / *Hozzáadás a kezdőképernyőhöz*.
 - Ha egy régebbi ikon nem indul: töröld, frissítsd az oldalt a böngészőben, és add hozzá újra.
+
+
+## v4.7.0 – tartalék proxyk
+Több ingyenes proxy automatikus átváltással: lásd [docs/PROXY_BACKENDS.md](docs/PROXY_BACKENDS.md).

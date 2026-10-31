@@ -1,5 +1,5 @@
 /**
- * ZsirafVision v4.5.1 – Cloudflare Worker (proxy + hibajelentő + stats)
+ * ZsirafVision v4.7.0 – Cloudflare Worker (proxy + hibajelentő + stats)
  *
  * Végpontok:
  *   GET  /api/proxy?url=<stream>&ua=<ua>&ref=<referer>[&exp=&sig=]  – stream proxy, M3U8 átírás
@@ -22,9 +22,62 @@
  */
 import HOSTS from '../public/allowed_hosts.json';
 
-const VERSION = '4.6.0';
+const VERSION = '4.7.0';
 const DEFAULT_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-const RENDER_PROXY = 'https://zsirafvision-proxy2.onrender.com';
+// v4.7: tartalék proxyk listája – env.PROXY_BACKENDS (JSON: [{name,url,priority}]) felülírja
+const DEFAULT_BACKENDS = [{ name: 'render', url: 'https://zsirafvision-proxy2.onrender.com', priority: 1 }];
+const HEALTH_KEY = 'backend-health';
+const HEALTH_CACHE_MS = 60000;
+let HEALTH = null, HEALTH_AT = 0, RR = 0;
+function backends(env) {
+  let list = DEFAULT_BACKENDS;
+  try { if (env.PROXY_BACKENDS) list = JSON.parse(env.PROXY_BACKENDS); } catch {}
+  return list.filter((b) => /^https:\/\//.test(b.url || '')).sort((a, b) => (a.priority ?? 99) - (b.priority ?? 99));
+}
+async function loadHealth(env) {
+  if (HEALTH && Date.now() - HEALTH_AT < HEALTH_CACHE_MS) return HEALTH;
+  HEALTH = (env.REPORTS && await env.REPORTS.get(HEALTH_KEY, 'json').catch(() => null)) || {};
+  HEALTH_AT = Date.now();
+  return HEALTH;
+}
+// Az első egészséges prioritási szint backendjei közt körbeforgat (sávszél-elosztás)
+async function pickBackend(env) {
+  const list = backends(env), h = await loadHealth(env);
+  const up = list.filter((b) => h[b.name]?.ok !== false);
+  if (!up.length) return list[0];
+  const best = up.filter((b) => (b.priority ?? 99) === (up[0].priority ?? 99));
+  return best[(RR++) % best.length];
+}
+async function probe(b) {
+  const t0 = Date.now();
+  try {
+    const r = await fetch(`${b.url}/health`, { signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'ZsirafVision-health' } });
+    const txt = (await r.text()).slice(0, 300);
+    const ok = r.ok && /ZsirafVision/i.test(txt) && !/suspend|exceeded|quota|disabled|payment/i.test(txt);
+    return { ok, status: r.status, ms: Date.now() - t0, at: new Date().toISOString(), info: ok ? txt.slice(0, 60) : txt.slice(0, 100) };
+  } catch (e) {
+    return { ok: false, status: 0, ms: Date.now() - t0, at: new Date().toISOString(), info: 'timeout/hiba' };
+  }
+}
+async function healthCheck(env) {
+  const list = backends(env), res = {};
+  await Promise.all(list.map(async (b) => {
+    let r = await probe(b);
+    if (!r.ok) { await new Promise((z) => setTimeout(z, 3000)); r = await probe(b); } // hidegindítás: 2. próba
+    res[b.name] = r;
+  }));
+  const old = (env.REPORTS && await env.REPORTS.get(HEALTH_KEY, 'json').catch(() => null)) || {};
+  const changed = list.some((b) => old[b.name]?.ok !== res[b.name].ok);
+  const stale = !old._at || Date.now() - Date.parse(old._at) > 3600e3;
+  res._at = new Date().toISOString();
+  if (env.REPORTS && (changed || stale)) await env.REPORTS.put(HEALTH_KEY, JSON.stringify(res)); // max ~1 írás/óra, ha nincs változás
+  HEALTH = res; HEALTH_AT = Date.now();
+  return res;
+}
+async function backendStatus(env) {
+  const h = await loadHealth(env);
+  return { checkedAt: h._at || null, backends: backends(env).map((b) => ({ name: b.name, url: b.url, priority: b.priority ?? 99, ...(h[b.name] || { ok: null, info: 'még nem ellenőrzött' }) })) };
+}
 const ALLOWED_HOSTS = new Set([...(HOSTS.channels || []), ...(HOSTS.world || [])].map((h) => h.toLowerCase()));
 const ALLOWED_ORIGINS = new Set(['https://zsirafmix.github.io']);
 const LOCAL_ORIGIN_RE = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
@@ -102,7 +155,7 @@ async function sigValid(env, url, exp, ua, ref, sig) {
 // ---------------------------------------------------------------------------
 export default {
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(fetch(`${RENDER_PROXY}/health`).catch(() => {})); // Render ébren tartása
+    ctx.waitUntil(healthCheck(env)); // v4.7: minden backend ellenőrzése + ébren tartás
   },
 
   async fetch(request, env, ctx) {
@@ -113,8 +166,9 @@ export default {
     try {
       switch (url.pathname) {
         case '/':
-        case '/health':
           return new Response(`OK – ZsirafVision Proxy v${VERSION}`, { headers: hdr({ 'Content-Type': 'text/plain; charset=utf-8' }) });
+        case '/health':
+          return json({ ok: true, version: VERSION, ...(await backendStatus(env)) });
         case '/api/proxy':
           return await handleProxy(request, url, env);
         case '/api/report':
@@ -129,6 +183,7 @@ export default {
             region: request.cf?.colo || 'n/a', country: request.cf?.country || 'n/a',
             uptimeSec: Math.round((Date.now() - STARTED) / 1000),
             reportsStorage: env.REPORTS ? 'kv' : 'nincs beállítva',
+            proxyBackends: await backendStatus(env),
           });
         default:
           return json({ error: 'Not Found' }, 404);
@@ -175,7 +230,8 @@ async function renderRedirect(env, target, ua, ref) {
   const exp = String(Math.floor(Date.now() / 1000) + SIGN_TTL_SEC);
   const sig = await sign(env, target, exp, ua, ref);
   if (sig) { p.set('exp', exp); p.set('sig', sig); }
-  return new Response(null, { status: 302, headers: hdr({ Location: `${RENDER_PROXY}/api/proxy?${p}`, 'Cache-Control': 'no-store' }) });
+  const be = await pickBackend(env);
+  return new Response(null, { status: 302, headers: hdr({ Location: `${be.url}/api/proxy?${p}`, 'Cache-Control': 'no-store' }) });
 }
 
 async function handleProxy(request, url, env) {

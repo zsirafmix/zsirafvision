@@ -30,8 +30,10 @@ import urllib.parse
 import urllib.request
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
-VERSION = "4.5.1"
+VERSION = "4.7.0"
 PORT = int(os.environ.get("PORT", 8888))
+# v4.7: bármely PaaS-on proxy-módban fut (Render, Koyeb, Fly, Railway, HF Spaces, Cloud Run...)
+PROXY_ONLY = bool(os.environ.get("RENDER") or os.environ.get("PROXY_ONLY"))
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 PUBLIC_DIR = os.path.join(ROOT_DIR, "public")
 SIGN_KEY = os.environ.get("RENDER_SIGN_KEY", "").encode()
@@ -185,8 +187,8 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
 
     def _route(self, is_head):
         parsed = urllib.parse.urlparse(self.path)
-        if parsed.path in ("/health", "/healthz") or (parsed.path == "/" and os.environ.get("RENDER")):
-            return self._text(200, f"OK - ZsirafVision proxy2 v{VERSION} (signed={'yes' if SIGN_KEY else 'no'})")
+        if parsed.path in ("/health", "/healthz") or (parsed.path == "/" and PROXY_ONLY):
+            return self._text(200, f"OK - ZsirafVision proxy v{VERSION} (signed={'yes' if SIGN_KEY else 'no'})")
         if parsed.path == "/api/proxy":
             if not self._origin_ok():
                 return self._text(403, "Tiltott origin")
@@ -199,7 +201,7 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
             if not target or len(target) > 4096:
                 return self._text(400, "Hianyzo vagy hibas url")
             return self.handle_proxy(target, g("ua"), g("ref"), g("exp"), g("sig"), is_head)
-        if os.environ.get("RENDER"):
+        if PROXY_ONLY:
             return self._text(404, "Not Found")  # Renderen csak proxy, statikus oldal nincs
         return super().do_HEAD() if is_head else super().do_GET()
 
@@ -210,7 +212,7 @@ class ZsirafVisionHandler(SimpleHTTPRequestHandler):
         self._route(False)
 
     def _base(self):
-        proto = self.headers.get("X-Forwarded-Proto") or ("https" if os.environ.get("RENDER") else "http")
+        proto = self.headers.get("X-Forwarded-Proto") or ("https" if PROXY_ONLY else "http")
         host = self.headers.get("X-Forwarded-Host") or self.headers.get("Host") or f"localhost:{PORT}"
         return f"{proto.split(',')[0].strip()}://{host}"
 

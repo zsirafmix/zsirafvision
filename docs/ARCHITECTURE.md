@@ -46,3 +46,7 @@ böngésző ──GET  /api/viewers (45 mp)────────────�
 - *DO előnye:* egy példány látja az összes nézőt → pontos szám; nincs tárhely-írás. Költség: minden jelzés 1 DO-kérés (ingyen napi 100 000 Worker + DO kérés közös kerettel). 50 egyidejű néző ≈ 72 000 jelzés/nap.
 - *Korlát:* ha a DO-t a Cloudflare kiüríti (tétlenség, újratelepítés), a számláló nulláról indul, és legfeljebb 60 mp alatt újra feltöltődik. Ez elfogadható egy „most néz” kijelzőnél.
 - Ablak: 120 mp (2 kihagyott jelzés után esik ki a néző); `stop: true` azonnal törli.
+
+
+## v4.7.0 – proxy failover
+Worker → `PROXY_BACKENDS` (prioritás + körbeforgatás) → server.py példányok (Render, …). Egészség: cron 10 percenként, állapot KV `backend-health`. Részletek: PROXY_BACKENDS.md.

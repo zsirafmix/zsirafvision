@@ -59,3 +59,10 @@ curl -s -H 'Origin: https://zsirafmix.github.io' -X POST https://zsirafvision-pr
 curl -s https://zsirafvision-proxy.gamsgoworld.workers.dev/api/viewers
 ```
 Új titok vagy környezeti változó nem kell.
+
+
+## v4.7.0 – új proxy backend
+1. Telepítsd a repót Dockerfile-lal (env: `PROXY_ONLY=1`, `RENDER_SIGN_KEY`).
+2. Ellenőrizd: `/health` → `signed=yes`.
+3. Vedd fel a `cloudflare-worker/wrangler.toml` `PROXY_BACKENDS` listájába, `WRANGLER_CACHE_DIR=/tmp/wc npx wrangler deploy`.
+Szolgáltatónkénti lépések: [PROXY_BACKENDS.md](PROXY_BACKENDS.md).
